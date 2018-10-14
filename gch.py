@@ -36,7 +36,7 @@ else:
     defaults['pull'] = 'False'
 
 # Explanation of the options showed in --help flag
-exp_i=f'run initializer or not.'.ljust(38)+f'>Default:{defaults["init"]}'
+exp_i=f'Run initializer or not.'.ljust(38)+f'>Default:{defaults["init"]}'
 exp_g=f'Path of dir that contains `.git`.'.ljust(38)+f'>Default:{defaults["gitpath"]}'
 exp_f=f'Path/Regex of staging file/dir.'.ljust(38)+f'>Default:{defaults["filepath"]}'
 exp_b=f'Commiting branch.'.ljust(38)+f'>Default:{defaults["branch"]}'
@@ -46,7 +46,7 @@ exp_c=f'Commit or not.'.ljust(38)+f'>Default:{defaults["commit"]}'
 exp_r=f'Reset all changes since last commit.'.ljust(38)+f'>Default:{defaults["reset"]}'
 exp_p=f'Push or not.'.ljust(38)+f'>Default:{defaults["push"]}'
 exp_e=f'Choose which remote repo.to push.'.ljust(38)+f'>Default:{defaults["remote"]}'
-exp_p2=f'git pull {defaults["remote"]} {defaults["branch"]}'.ljust(38)+f'>Default:False'
+exp_p2=f'Git pull {defaults["remote"]} {defaults["branch"]}'.ljust(38)+f'>Default:False'
 exp_s=f'Save settings'.ljust(38)+f'>Default:False'
 
 @click.command()
