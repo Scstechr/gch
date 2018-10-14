@@ -1,4 +1,5 @@
-Git Commit Handler - A tool to handle git related commands
+# Git Commit Handler
+A tool to handle git related commands
 
 - Executes `git` related commands as such:
 	- `git init`, `git commit`, `git diff`, `git add`, `git push`
