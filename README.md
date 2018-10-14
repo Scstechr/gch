@@ -1,24 +1,27 @@
+# Git Commit Handler
+A tool to handle git related commands
+
+- Executes `git` related commands as such:
+	- `git init`, `git commit`, `git diff`, `git add`, `git push`
+- Document available: :us: [English](doc/gch_doc_en.md) / :jp: [Japanese](doc/gch_doc_jp.md)
+	- :warning: It has not been updated for long time. Make an issue if any problem occurs.
+
 ### Requirements
 Please install all the packages listed in `requirements.txt`.
 
 ```bash
-git clone https://github.com/Scstechr/usefultools ~/.useful
-cd ~/.useful
+git clone https://github.com/Scstechr/gch ~/.gch
+cd ~/.gch
 pip install -r requirements.txt
 ```
 Also, be sure you have `Python 3.6.x` executable in any way.
 
-### List of tools
+### How to Use
 
-| name | filename | description |
-|:-----|:---------|:------------|
-| Git Commit Handler |`gch.py` | Handles git commands |
-| GCC Compiler + | `gcc.py` | Additional capability for compiling C codes |
-| Auto-Executor | `ae.py` | Automatically executes given command |
-| Color Check | `colors.py` | Displays list of colors to pick |
+#### Show help
 
-#### Git Commit Handler
 ```bash
+$ gch --help
 Usage: gch.py [OPTIONS]
 
 Options:
@@ -36,83 +39,52 @@ Options:
   --pull               git pull origin master                >Default:False
   --help               Show this message and exit.
 ```
-- Executes `git` related commands as such:
-	- `git init`, `git commit`, `git diff`, `git add`, `git push`
-- Document available: :us: [English](doc/gch_doc_en.md) / :jp: [Japanese](doc/gch_doc_jp.md)
-	- :warning: It has not been updated for long time. Make an issue if any problem occurs.
-
-#### GCC Compiler
-```bash
-$ gcc --help
-Usage: gcc.py [OPTIONS] FILENAME
-
-Options:
-  -d, --debug  LLDB MODE TRIGGER
-  -r, --run    RUN AFTER COMPILE
-  --help       Show this message and exit.
-```
-- Compiles C codes with options below and generates output file in form of `<something>.out`.
+#### Simple command
 
 ```bash
--O3 -Wall -mtune=native -march=native -o <output>
+$ gch -c
 ```
 
-- If debug mode is triggered, it compiles C codes with additional options listed below.
-Runs LLDB after compiling is done.
+or 
 
 ```bash
--pg -g -fprofile-arcs -ftest-coverage
+$ gch --commit
 ```
 
-Also, if `gcc-7` is executable, it uses instead of normal `gcc` (which might be alias of `clang`).
+This command executes `git status --short`, `git diff --stat`, `git add .` etc.
+(shown as a blue line while executed)
+Also, adds everything except configured in `.gitignore` or `gch -f` command.
 
+#### Linked commands
 
-#### Auto-Executor
-```bash
-$ ./ae.py --help
-Usage: ae.py [OPTIONS] EXECUTE SLEEP
-
-Options:
-  -r, --rep INTEGER  Maximum Repetition. Default set to Infinit.
-  --help             Show this message and exit.
-```
-- Automatically executes the command with some time gap in between.
-- Able to set number of repetition.
+Commands can be executed together in the manner below:
 
 ```bash
-$ ./ae.py 'ls' 2
-
-1st 2018-03-09 22:50:49 >> EXECUTE: ls
-
-LICENSE			ae.py			requirements.txt
-README.md		colors.py
-__pycache__		gch.py
-
-2nd 2018-03-09 22:50:51 >> EXECUTE: ls
-
-LICENSE			ae.py			requirements.txt
-README.md		colors.py
-__pycache__		gch.py
-
-3rd 2018-03-09 22:50:53 >> EXECUTE: ls
-
-LICENSE			ae.py			requirements.txt
-README.md		colors.py
-__pycache__		gch.py
-
-...(Ctrl-C to stop)
+$ gch -cp
 ```
+
+This executes `git commit` and `git push`.
+
+##### Further example
+
+###### `gch -cp -r localhost`
+`commit`, then `push` to the remote called `localhost`.
+###### `gch -cp -b test -d`
+Shows `diff` first, then `commit` and `push`.
 
 ### Recommended settings:
-Add these lines in `.bash_profile` and `source` it afterwards.
+Add these lines in `.bash_profile`/`.bashrc` and `source` it afterwards.
 
 ```bash:.bash_profile
-export "PATH=${HOME}/.useful:$PATH"
+export "PATH=${HOME}/.gch:$PATH"
 alias gch='gch.py'
-alias gcc='gcc.py' # be careful of this alias setting.
-alias ae='ae.py'
-alias col='colors.py'
 ```
 
+or
+
+```bash:add
+echo "PATH=${HOME}/.gch:$PATH" >> ~/.bashrc
+echo "alias gch='gch.py'" >> ~/.bash_profile
+```
 
 
