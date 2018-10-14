@@ -10,9 +10,9 @@ A tool to handle git related commands
 Please install all the packages listed in `requirements.txt`.
 
 ```bash
-git clone https://github.com/Scstechr/gch ~/.gch
-cd ~/.gch
-pip install -r requirements.txt
+$ git clone https://github.com/Scstechr/gch ~/.gch
+$ cd ~/.gch
+$ pip install -r requirements.txt
 ```
 Also, be sure you have `Python 3.6.x` executable in any way.
 
