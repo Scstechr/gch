@@ -5,6 +5,7 @@ A tool to handle git related commands
 	- `git init`, `git commit`, `git diff`, `git add`, `git push`
 - Document available: :us: [English](doc/gch_doc_en.md) / :jp: [Japanese](doc/gch_doc_jp.md)
 	- :warning: It has not been updated for long time. Make an issue if any problem occurs.
+- Blog Post (Japanese): [Qiita](https://qiita.com/Scstechr/items/53e3e326c4caa6dc2307) / [Qrunch](https://scstechr.qrunch.io/entries/Jmdclx72XYk2F5Pa)
 
 ### Requirements
 Please install all the packages listed in `requirements.txt`.
