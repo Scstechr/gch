@@ -7,7 +7,7 @@ A tool to handle git related commands
 	- :warning: It has not been updated for long time. Make an issue if any problem occurs.
 - Blog Post (Japanese): [Qiita](https://qiita.com/Scstechr/items/53e3e326c4caa6dc2307) / [Qrunch](https://scstechr.qrunch.io/entries/Jmdclx72XYk2F5Pa)
 
-### Requirements
+## Requirements
 Please install all the packages listed in `requirements.txt`.
 
 ```bash
@@ -17,9 +17,24 @@ $ pip install -r requirements.txt
 ```
 Also, be sure you have `Python 3.6.x` executable in any way.
 
-### How to Use
+## Recommended settings:
+Add these lines in `.bash_profile`/`.bashrc` and `source` it afterwards.
 
-#### Show help
+```bash:.bash_profile
+export "PATH=${HOME}/.gch:$PATH"
+alias gch='gch.py'
+```
+
+or
+
+```bash:add
+echo "PATH=${HOME}/.gch:$PATH" >> ~/.bashrc
+echo "alias gch='gch.py'" >> ~/.bash_profile
+```
+
+## How to Use
+
+### Show help
 
 ```bash
 $ gch --help
@@ -40,7 +55,7 @@ Options:
   --pull               git pull origin master                >Default:False
   --help               Show this message and exit.
 ```
-#### Simple command
+### Simple command
 
 ```bash
 $ gch -c
@@ -56,7 +71,7 @@ This command executes `git status --short`, `git diff --stat`, `git add .` etc.
 (shown as a blue line while executed)
 Also, adds everything except configured in `.gitignore` or `gch -f` command.
 
-#### Linked commands
+### Linked commands
 
 Commands can be executed together in the manner below:
 
@@ -66,26 +81,13 @@ $ gch -cp
 
 This executes `git commit` and `git push`.
 
-##### Further example
+#### Further example
 
-###### `gch -cp -r localhost`
+##### `gch -cp -r localhost`
 `commit`, then `push` to the remote called `localhost`.
-###### `gch -cp -b test -d`
+##### `gch -cp -b test -d`
 Shows `diff` first, then `commit` and `push`.
 
-### Recommended settings:
-Add these lines in `.bash_profile`/`.bashrc` and `source` it afterwards.
 
-```bash:.bash_profile
-export "PATH=${HOME}/.gch:$PATH"
-alias gch='gch.py'
-```
-
-or
-
-```bash:add
-echo "PATH=${HOME}/.gch:$PATH" >> ~/.bashrc
-echo "alias gch='gch.py'" >> ~/.bash_profile
-```
 
 
