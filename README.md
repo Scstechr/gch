@@ -67,9 +67,9 @@ or
 $ gch --commit
 ```
 
-This command executes `git status --short`, `git diff --stat`, `git add .` etc.
-(shown as a blue line while executed)
-Also, adds everything except configured in `.gitignore` or `gch -f` command.
+This command executes `git status --short`, `git diff --stat`, `git add .` etc.  
+(shown as a blue line while executed)  
+Also, adds everything except configured in `.gitignore` or `gch -f` command.  
 
 ### Linked commands
 
