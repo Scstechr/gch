@@ -21,15 +21,15 @@ Also, be sure you have `Python 3.6.x` executable in any way.
 Add these lines in `.bash_profile`/`.bashrc` and `source` it afterwards.
 
 ```bash:.bash_profile
-export "PATH=${HOME}/.gch:$PATH"
+export PATH="${HOME}/.gch:$PATH"
 alias gch='gch.py'
 ```
 
 or
 
 ```bash:add
-echo "PATH=${HOME}/.gch:$PATH" >> ~/.bashrc
-echo "alias gch='gch.py'" >> ~/.bash_profile
+echo 'PATH="${HOME}/.gch:$PATH"' >> ~/.bashrc
+echo 'alias gch="gch.py"' >> ~/.bash_profile
 ```
 
 ## How to Use
