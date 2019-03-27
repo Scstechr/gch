@@ -15,10 +15,11 @@ $ git clone https://github.com/Scstechr/gch ~/.gch
 $ cd ~/.gch
 $ pip install -r requirements.txt
 ```
-Also, be sure you have `Python 3.6.x` executable in any way.
+Also, be sure to have `Python 3.6.x` executable in any way.
 
-## Recommended settings:
-Add these lines in `.bash_profile`/`.bashrc` and `source` it afterwards.
+## Recommendation
+It is recommended to use `alias` in order to execute `gch` from anywhere.  
+Add these lines in `.bash_profile`/`.bashrc`
 
 ```bash:.bash_profile
 export PATH="${HOME}/.gch:$PATH"
@@ -31,6 +32,8 @@ or
 echo 'PATH="${HOME}/.gch:$PATH"' >> ~/.bashrc
 echo 'alias gch="gch.py"' >> ~/.bash_profile
 ```
+
+ and `source` it afterwards.
 
 ## How to Use
 
