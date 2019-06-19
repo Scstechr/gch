@@ -236,7 +236,12 @@ Clean State
 
 省略した場合，`git commit`は実行されません.
 
-#### `-r` or `--reset`
+#### `-r` or `--remote`
 
-それまでに`git add`したファイルがあった場合はそれらを取り消します．  
-これは`git reset --hard`と同様の操作なので実行前に確認が入ります．
+`push`する先の`remote`ブランチを切り替えます．
+
+#### `-s` or `--save`
+
+設定を`.default.txt`に保存します．
+設定をセーブして
+
