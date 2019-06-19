@@ -14,25 +14,31 @@ $ git pull origin master
 ```
 
 ### オプション
-```bash
+```sh
 $ gch --help
 Usage: gch.py [OPTIONS]
 
 Options:
-  -g, --gitpath PATH   Path of dir that contains `.git`. > Default: .
-  -f, --filepath PATH  Path of staging file/diry.        > Default: .
-  -b, --branch TEXT    Commiting branch.                 > Default: master
-  -p, --push           Push or not.                      > Default: False
-  -d, --detail         Detailed diff.                    > Default: False
-  -l, --log            Git log with option.              > Default: False
-  -c, --commit         Commit or not.                    > Default: False
-  -r, --reset          Reset (remove all add).           > Default: False
+  -i, --init           Run initializer or not.               >Default:False
+  -d, --detail         Detailed diff.                        >Default:False
+  -l, --log            Git log with option.                  >Default:False
+  -c, --commit         Commit or not.                        >Default:False
+  -r, --remote TEXT    Choose which remote repo.to push.     >Default:origin
+  -p, --push           Push or not.                          >Default:False
+  -g, --gitpath PATH   Path of dir that contains `.git`.     >Default:.
+  -f, --filepath TEXT  Path/Regex of staging file/dir.       >Default:.
+  -b, --branch TEXT    Commiting branch.                     >Default:master
+  -s, --save           Save settings                         >Default:False
+  --reset              Reset all changes since last commit.  >Default:False
+  --pull               Git pull origin master                >Default:False
   --help               Show this message and exit.
 ```
 
 
 
-`git clone`してインストールした後に`.bash_profile` に PATHを通した上で`alias gch='gch.py'`といった`alias`と組み合わせて使うことを推奨しています．__GCH__ で実行されるシェルのコマンドは以下のように可視化されて実行されます．
+`git clone`してインストールした後に`.bash_profile` に PATHを通した上で  
+`alias gch='gch.py'`といった`alias`と組み合わせて使うことを推奨しています．  
+__GCH__ で実行されるシェルのコマンドは以下のように可視化されて実行されます．
 ```bash
 >> EXECUTE: git status --short
 ```
@@ -41,9 +47,9 @@ Options:
 
 #### `-g` or `--gitpath`
 
-`git --git-dir=<path>`と同様の機能を有しています．
-ここで，どの`.git`を使うかパスで指定することができます．
-省略した場合，`.`にある`.git`を用いて動作を行います．
+`git --git-dir=<path>`と同様の機能を有しています．  
+ここで，どの`.git`を使うかパスで指定することができます．  
+省略した場合，`.`にある`.git`を用いて動作を行います．  
 
 ##### 指定したパスに`.git`が存在しない場合
 
@@ -71,8 +77,11 @@ Do you want to use emacs instead of vim as an editor? [y/N]: N
 [merge]
 	tool = vimdiff
 ```
-その後, レポジトリの初期設定を始めます．予め`~/.gitconfig`が存在する場合は上の設定をスキップします．
+
+この設定は別途`gch -i`を走らせることでも可能です．  
+その後, レポジトリの初期設定を始めます．予め`~/.gitconfig`が存在する場合は上の設定をスキップします．  
 この際，レポジトリ名を設定します．ここで入力したレポジトリ名は`README.md`のタイトルとして使用されます．
+
 ```bash
 Title of this repository(project): test_dir
 >> EXECUTE: git init
@@ -126,7 +135,7 @@ $ git branch
 * master
   test
 ```
-上記の状態(すなわち現在のブランチが`master`ブランチ)の場合，`-b master` あるいは `-b` を省略した場合ブランチの切り替えは行われません．
+上記の状態(すなわち現在のブランチが`master`ブランチ)の場合，`-b master` あるいは `-b` を省略した場合ブランチの切り替えは行われません．  
 一方で，`-b test`のように`commit`するブランチを指定し，かつ指定したブランチが現在のブランチと異なる場合，`BRANCH ISSUE!`が発生します．
 
 ```bash
@@ -139,10 +148,13 @@ Answer:
 ```
 このような選択が必要な場合，`Ctrl-C`を実行することでGCHの動作を中断することができます．
 
-:warning: __`merge`を実行する1つめの選択肢は，あらかじめ`merge conflict`が発生しないことが予測された場合を除き推奨されていません__.
-最新版ではパッチを適用することで事前に`conflict`が発生する場合は中断できるようになりました．
+:warning: __`merge`を実行する1つめの選択肢は，あらかじめ`merge conflict`が発生しないことが予測された場合を除き推奨されていません__.  
+最新版ではパッチを適用することで事前に`conflict`が発生する場合は中断できるようになりましたが，  
+それでも100%安全とは言えないのでこのツールを用いての`merge`はコンフリクトが発生しないことが自明でない限り避けてください．
 
-3を選択した場合，前回の`commit`から変更されたファイルが存在しない場合は指定したブランチに`checkout`します．前述の条件を満たさない場合，`BRANCH ISSUE!`が発生します．この際`git diff --stat`は自動的に実行されます.
+3を選択した場合，前回の`commit`から変更されたファイルが存在しない場合は指定したブランチに`checkout`します．  
+前述の条件を満たさない場合，`BRANCH ISSUE!`が発生します．  
+この際`git diff --stat`は自動的に実行されます.
 
 ```bash
 >> BRANCH ISSUE!
@@ -158,20 +170,73 @@ Theres some changes in branch `master`.
 Answer:
 ```
 
-1, 2を選択した場合，`commit`/`stash`後に指定したブランチに`checkout`します． 3を選択した場合，`git checkout -f <BRANCH>`が実行されます．このとき，前回の`commit`から変更した箇所は全て破棄されます．
+1, 2を選択した場合，`commit`/`stash`後に指定したブランチに`checkout`します．  
+3を選択した場合，`git checkout -f <BRANCH>`が実行されます．  
+このとき，前回の`commit`から変更した箇所は全て破棄されます．
 
 #### `-d` or `--detail`
 
-`git diff`が詳細になるオプションを有効にします. `diff-tools`として`vimdiff`を想定しています．オプションについては実行時に確認できます．
+`git diff`が詳細になるオプションを有効にします (オプションについては実行時に確認できます)．     
+
+##### 実行例
+```bash
+>> execute: git status --short
+ M a.c
+>> execute: git diff --stat
+ a.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+>> execute: git add .
+>> execute: git diff --cached --ignore-all-space --ignore-blank-lines
+diff --git a/a.c b/a.c
+index 1f56b61..4e02766 100644
+--- a/a.c
++++ b/a.c
+@@ -1,6 +1,12 @@
+ #include <stdio.h>
+
+ int main(){
++       int j = 0;
++
++       for(int i = 0; i < 10; i++){
++               printf("Hello World!\n");
++       }
++
+        return 0;
+ }
+
+>> execute: git reset
+Unstaged changes after reset:
+M	a.c
+>> execute: git add /Users/moinaga/labwork/sample
+Commit Message:
+```
 
 #### `-l` or `--log`
 
-作者が考える最善なオプションを付加された`git log`を実行します．オプションについては実行時に確認できます．
-
+作者が考える最善なオプションを付加された`git log`を実行します．  
+オプションについては実行時に確認できます．
+##### 実行例
+```
+$ gch -l
+>> execute: git status --short
+>> execute: git log --stat --oneline --graph --decorate
+* f1ab259 (HEAD -> master) for loop of hello world
+|  a.c | 6 ++++++
+|  1 file changed, 6 insertions(+)
+* 30513c8 add a
+|  a.c | 6 ++++++
+|  1 file changed, 6 insertions(+)
+* 1944b89 initial
+   .gitignore | 8 ++++++++
+   README.md  | 1 +
+   2 files changed, 9 insertions(+)
+Clean State
+```
 #### `-c` or `--commit`
 
 省略した場合，`git commit`は実行されません.
 
 #### `-r` or `--reset`
 
-それまでに`git add`したファイルがあった場合はそれらを取り消します．
+それまでに`git add`したファイルがあった場合はそれらを取り消します．  
+これは`git reset --hard`と同様の操作なので実行前に確認が入ります．
