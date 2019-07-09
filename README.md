@@ -44,18 +44,21 @@ $ gch --help
 Usage: gch.py [OPTIONS]
 
 Options:
-  -i, --init           run initializer or not.               >Default:False
-  -d, --detail         Detailed diff.                        >Default:False
+  -c, --commit         Commit
+  -p, --push           Push.
+  -i, --init           Run initializer                       >Default:False
+  -v, --verbose        Verbose option.                       >Default:False
   -l, --log            Git log with option.                  >Default:False
-  -c, --commit         Commit or not.                        >Default:False
   -r, --remote TEXT    Choose which remote repo.to push.     >Default:origin
-  -p, --push           Push or not.                          >Default:False
-  -g, --gitpath PATH   Path of dir that contains `.git`.     >Default:.
+  -g, --gitpath PATH   Path of dir that contains `.git`.
+                       >Default:/Users/moinaga/.gch
   -f, --filepath TEXT  Path/Regex of staging file/dir.       >Default:.
   -b, --branch TEXT    Commiting branch.                     >Default:master
   -s, --save           Save settings                         >Default:False
-  --reset              Reset all changes since last commit.  >Default:False
-  --pull               git pull origin master                >Default:False
+  -d, --diff           Open diff tool                        >Default:False
+  -u, --update         Update gch                            >Default:False
+  --reset              Reset all changes since last commit.  >Default:None
+  --pull               Pull from <origin> <master>.          >Default:False
   --help               Show this message and exit.
 ```
 ### Simple command
