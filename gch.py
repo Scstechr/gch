@@ -12,6 +12,7 @@ import click
 from pysrc import issues
 from pysrc.qs import getAnswer, isExist 
 from pysrc.git import *
+from pysrc.diff import diffhash
 
 issues.version(3)
 from pathlib import Path
@@ -93,6 +94,9 @@ def main(init,
     defaults['remote'] = remote
     defaults['pull'] = pull
     defaults['update'] = update
+
+    if reset:
+        exit(0)
 
     if update:
         if click.confirm(f'Update? (will execute pull from origin repository of gch)'):

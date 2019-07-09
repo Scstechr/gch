@@ -116,3 +116,16 @@ def initialize(flag=False):
                             f'echo "# {title}" >> README.md'])
             issues.execute(['git add -f .gitignore'])
 
+def update():
+    if click.confirm(f'Update? (will execute pull from origin repository of gch)'):
+        exepath = Path(__file__).parent
+        current = Path('.')
+        chdir(exepath)
+        issues.execute(['pwd',
+                        f'git checkout master',
+                        f'git pull origin master',
+                        ])
+        #issues.execute(#['cd ~/.gch'])
+        chdir(current)
+    else:
+        issues.abort()
