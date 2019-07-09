@@ -114,7 +114,7 @@ def diffhash(detail, head):
     vsize = shutil.get_terminal_size()[1]
     hsize = shutil.get_terminal_size()[0]
     options = []
-    if isExist(f'git status --short'):
+    if isExist(f'git status --short') or head:
         options += ['HEAD']
     else:
         click.echo('Clean State')
