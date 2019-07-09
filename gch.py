@@ -109,33 +109,48 @@ def main(init,
         exit(1)
 
     if reset:
-        click.echo(f'[RESET MODE]')
-        opt = ['hard reset','open diff finder']
+        issues.warning('Options with [HARD] must be done with caution')
+        opt = ['[SOFT] Undo last commit (soft)']
+        opt.append('[HARD] Undo a last commit')
+        opt.append('[HARD] Undo changes from a last commit')
+        opt.append('[HARD] Undo changes from a past commit')
+        opt.append('[HARD] Undo most resent reset')
         ans = getAnswer(opt)
-        if ans == 1:
-            if click.confirm("Are you sure you want to reset?"):
-                issues.execute(['git reset --hard'])
-        elif ans == 2:
-            dhash = diffhash(detail=True, head=True)
-            if click.confirm(f"Checkout to {dhash}? (this will make another branch for safety)"):
-                branch = dhash
-                if not isExist(f'git status --short'):
-                    issues.execute([f'git checkout -b {branch}'])
-                else:
-                    click.echo(f'\nTheres some changes not commited..')
-                    issues.execute([f'git diff --stat'])
-                    qs =     [f'Commit changes before checkout']
-                    qs.append(f'Stash changes before checkout')
-                    qs.append(f'Force Checkout before checkout')
-                    ans = getAnswer(qs)
-                    if ans == 1:
-                        issues.execute([f'git add .',f'git diff --stat'])
-                        Commit()
-                        issues.execute([f'git checkout -b {branch}'])
-                    elif ans == 2:
-                        issues.execute([f'git stash',f'git checkout -b {branch}'])
+        if click.confirm("Are you sure you want to reset?"):
+            if ans == 1:
+                issues.execute(['git reset --soft HEAD^'])
+            elif ans == 2:
+                issues.execute(['git reset --hard HEAD^'])
+            elif ans == 3:
+                issues.execute(['git reset --hard HEAD'])
+            elif ans == 4:
+                issues.warning('Select hash from diff tool...')
+                dhash = diffhash(detail=True, head=True)
+                while(1):
+                    if click.confirm("Is this the correct hash you want to go back?"):
+                        break
+                    dhash = diffhash(detail=True, head=True)
+                if click.confirm(f"Go back (reset) to {dhash}?"):
+                    if not isExist(f'git status --short'):
+                        issues.execute([f'git reset --hard {dhash}'])
                     else:
-                        issues.execute([f'git checkout -f -b {branch}'])
+                        click.echo(f'\nTheres some changes not commited..')
+                        issues.execute([f'git diff --stat'])
+                        qs =     [f'Commit changes before reset']
+                        qs.append(f'Stash changes before reset')
+                        qs.append(f'Force Checkout before reset')
+                        ans = getAnswer(qs)
+                        if ans == 1:
+                            issues.execute([f'git add .',f'git diff --stat'])
+                            Commit()
+                            issues.execute([f'git reset --hard {dhash}'])
+                        elif ans == 2:
+                            issues.execute([f'git stash',f'git reset --hard {dhash}'])
+                        else:
+                            issues.execute([f'git reset --hard {dhash}'])
+            elif ans == 5:
+                issues.execute([f'git reset --hard ORIG_HEAD'])
+
 
     issues.execute(['git status --short'])
 
