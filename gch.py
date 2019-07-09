@@ -56,7 +56,7 @@ exp_e=f'Choose which remote repo.to push.'.ljust(38)+f'>Default:{defaults["remot
 exp_p2=f'Pull from <{defaults["remote"]}> <{defaults["branch"]}>.'.ljust(38)+f'>Default:False'
 exp_s=f'Save settings'.ljust(38)+f'>Default:False'
 exp_u=f'Update gch'.ljust(38)+f'>Default:False'
-exp_d2=f'Diff tool with checkouts'.ljust(38)+f'>Default:False'
+exp_d2=f'Open diff tool'.ljust(38)+f'>Default:False'
 
 @click.command()
 @click.option('-i', '--init',     is_flag=defaults['init'],     help=exp_i)
@@ -102,6 +102,11 @@ def main(init,
     defaults['remote'] = remote
     defaults['pull'] = pull
     defaults['update'] = update
+    defaults['diff'] = diff
+
+    if diff:
+        diffhash(detail=detail, head=False)
+        exit(1)
 
     if reset:
         click.echo(f'[RESET MODE]')
@@ -114,22 +119,22 @@ def main(init,
             dhash = diffhash(detail=True, head=True)
             if click.confirm(f"Checkout to {dhash}?"):
                 if not isExist(f'git status --short'):
-                    issues.execute([f'git checkout {branch}'])
+                    issues.execute([f'git checkout {dhash}'])
                 else:
                     click.echo(f'\nTheres some changes not commited..')
                     issues.execute([f'git diff --stat'])
                     qs =     [f'Commit changes before checkout']
                     qs.append(f'Stash changes before checkout')
                     qs.append(f'Force Checkout before checkout')
-                    answer_2 = getAnswer(qs)
-                    if answer_2 == 1:
+                    ans = getAnswer(qs)
+                    if ans == 1:
                         issues.execute([f'git add .',f'git diff --stat'])
                         Commit()
-                        issues.execute([f'git checkout {branch}'])
-                    elif answer_2 == 2:
-                        issues.execute([f'git stash',f'git checkout {branch}'])
+                        issues.execute([f'git checkout {dhash}'])
+                    elif ans == 2:
+                        issues.execute([f'git stash',f'git checkout {dhash}'])
                     else:
-                        issues.execute([f'git checkout -f {branch}'])
+                        issues.execute([f'git checkout -f {dhash}'])
 
     issues.execute(['git status --short'])
 

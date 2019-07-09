@@ -54,7 +54,7 @@ def page(selected, pages, pagenum):
     select = 0
     while(1):
         hr()
-        print('selected:', selected) if len(selected) else print('')
+        print('selected:', selected)
         hr()
         pagelen = len(pages[pagenum])
         if select > pagelen:
