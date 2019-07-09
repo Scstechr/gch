@@ -106,7 +106,8 @@ hint: (e.g., 'git pull ...') before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 ```
 
-このように警告が出ます．この場合は`gch —pull`などで`remote`のブランチとローカルのブランチを`merge`する必要があります．  
+このように警告が出ます．  
+この場合は`gch —pull`などで`remote`のブランチとローカルのブランチを`merge`する必要があります．  
 `gch`ではこのような`CONFLICT`や`merge`に対してはまだ実装していないので，  
 `git pull`/`git rebase`/`git merge`について調べて対処してください．
 
