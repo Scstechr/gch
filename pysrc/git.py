@@ -1,6 +1,8 @@
 import click
 import sys, subprocess as sp
 from os import path, chdir, getcwd
+from pathlib import Path
+from urllib.parse import urlparse
 
 from . import issues
 from . import qs
@@ -123,7 +125,7 @@ def initialize(flag=False):
                             f'echo "# {title}" >> README.md'])
             issues.execute(['git add -f .gitignore'])
 
-def update():
+def Update():
     if click.confirm(f'Update? (will execute pull from origin repository of gch)'):
         exepath = Path(__file__).parent
         current = Path('.')
@@ -137,7 +139,7 @@ def update():
     else:
         issues.abort()
 
-def reset():
+def Reset():
     if click.confirm("Are you sure you want to reset?"):
         issues.warning('Options with [HARD] must be done with caution')
         opt = ['[SOFT] Undo last commit (soft)']
@@ -179,5 +181,30 @@ def reset():
                         issues.execute([f'git reset --hard {dhash}'])
         elif ans == 5:
             issues.execute([f'git reset --hard ORIG_HEAD'])
+
+
+def url_valid(x):
+    try:
+        result = urlparse(x)
+        return all([result.scheme, result.netloc, result.path])
+    except:
+        return False
+
+def Push(remote, branch):
+    remotelst = sp.getoutput(f'git remote -v').split('\n')
+    remotelst = [r.split('\t')[0] for idx, r in enumerate(remotelst) if idx%2]
+    if remote in remotelst:
+        issues.execute([f'git push -u {remote} {branch}'])
+    else:
+        issues.warning(f'Remote repository `{remote}` not found')
+        if click.confirm(f'Add?'):
+            while(1):
+                remote_url = click.prompt("URL", type=str)
+                if url_valid(remote_url):
+                    issues.execute([f'git remote add {remote} {remote_url}'])
+                    issues.execute([f'git push -u {remote} {branch}'])
+                else:
+                    issues.warning('Not valid URL')
+
 
 

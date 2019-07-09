@@ -11,11 +11,10 @@ import click
 
 from pysrc import issues
 from pysrc.qs import getAnswer, isExist 
-import pysrc.git as git
+from pysrc.git import *
 from pysrc.diff import diffhash
 
 issues.version(3)
-from pathlib import Path
 
 defaults = {}
 defaults['init'] = 'False'
@@ -109,23 +108,12 @@ def main(init,
         exit(1)
 
     if reset:
-        git.reset()
+        Reset()
 
     issues.execute(['git status --short'])
 
     if update:
-        if click.confirm(f'Update? (will execute pull from origin repository of gch)'):
-            exepath = Path(__file__).parent
-            current = Path('.')
-            chdir(exepath)
-            issues.execute(['pwd',
-                            f'git checkout master',
-                            f'git pull origin master',
-                            ])
-            #issues.execute(#['cd ~/.gch'])
-            chdir(current)
-        else:
-            issues.abort()
+        Update()
 
 
     if len(branch) == 0:
@@ -137,7 +125,7 @@ def main(init,
             issues.execute([f'echo "{str(k)}:{str(v)}" >> {defaultspath}'])
 
     if init:
-        git.initialize(flag=True)
+        initialize(flag=True)
     #conversion to absolute path
     gitpath = path.abspath(gitpath)
     filepath = path.abspath(filepath)
@@ -148,7 +136,7 @@ def main(init,
     if not path.exists(gitfolder):
         issues.warning(f'It seems path:`{gitpath}` does not have `.git` folder.')
         if click.confirm(f'Initialize?'):
-            git.initialize()
+            initialize()
         else:
             issues.abort()
 
@@ -157,32 +145,30 @@ def main(init,
         issues.execute([logcmd])
     # Commit or not
 
-    if git.CheckState():
+    if CheckState():
         issues.execute([f'git diff --stat'])
         if verbose:
             issues.execute([f'git add .', diffcmd, f'git reset'])
         if commit:
             issues.execute([f'git add {filepath}'])
-            git.Commit()
+            Commit()
 
     if pull:
         issues.execute([f'git pull {remote} {branch}'])
 
     if isExist('git branch'):
-        current_branch = git.getCurrentBranch()
+        current_branch = getCurrentBranch()
         if len(branch):
             if current_branch != branch:
                 issues.branch()
-                branch = git.setBranch(branch, filepath)
+                branch = setBranch(branch, filepath)
         
 
     # Push or not
-    if not push:
-        issues.ok('No push')
-    elif not isExist(f'git remote -v'):
-        issues.warning('Remote repository not found')
+    if push:
+        Push(remote, branch)
     else:
-        issues.execute([f'git push -u {remote} {branch}'])
+        issues.ok('No push')
 
 if __name__ == "__main__":
     main()
