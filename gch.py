@@ -111,7 +111,7 @@ def main(init,
             if click.confirm("Are you sure you want to reset?"):
                 issues.execute(['git reset --hard'])
         elif ans == 2:
-            dhash = diffhash(True, True)
+            dhash = diffhash(detail=True, head=True)
             if click.confirm(f"Checkout to {dhash}?"):
                 if not isExist(f'git status --short'):
                     issues.execute([f'git checkout {branch}'])
