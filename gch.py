@@ -178,10 +178,9 @@ def main(init,
 
     # Push or not
     if not push:
-        pass
-        click.echo('** no push **')
+        issues.ok('No push')
     elif not isExist(f'git remote -v'):
-        click.echo('** no remote repository **')
+        issues.warning('Remote repository not found')
     else:
         issues.execute([f'git push -u {remote} {branch}'])
 
