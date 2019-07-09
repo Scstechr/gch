@@ -65,21 +65,23 @@ Options:
 
 # `gch`を用いた場合の一連の流れ
 
-必要なら`-g`/`—gitpath`で`.git`ディレクトリのパスを指定してください．(デフォルト:`.`)[(詳細)](https://github.com/Scstechr/gch/blob/master/doc/jp/jp_gitpath.md)
-
+必要に応じて下記の指定を行ってください．
+- `-g`/`—gitpath`で`.git`ディレクトリのパスを指定(デフォルト:`.`)[(詳細)](https://github.com/Scstechr/gch/blob/master/doc/jp/jp_gitpath.md)
+- `-b`/`--branch`で`commit`するブランチを指定．(デフォルト:`master`)[(詳細)](https://github.com/Scstechr/gch/blob/master/doc/jp/jp_branch.md)
 
 ## (0) `init`
-`-g`で指定したパスに`.git`がない場合は初期化(`-i`/`--initialize`)が実行されます．
+`-g`で指定したパスに`.git`がない場合は初期化(`-i`/`--initialize`)が実行されます．[(詳細)](https://github.com/Scstechr/gch/blob/master/doc/jp/jp_init.md)
+
 
 ## (1) `-c`/`—commit`で`commit`する．[(詳細)](https://github.com/Scstechr/gch/blob/master/doc/jp/jp_commit_filepath.md)
 必要に応じて`-b`/`-f`/`-g`を併用してください．
-- `-b`/`--branch`で`commit`するブランチを指定．(デフォルト:`master`)[(詳細)](https://github.com/Scstechr/gch/blob/master/doc/jp/jp_branch.md)
+- `-b`/`--branch`で`commit`するブランチを指定．(デフォルト:`master`)
 - `-f`/`--filepath`で`add`するファイル/パスを指定．(デフォルト:`.`)
 - `-g`/`—gitpath`で`.git`ディレクトリのパスを指定．(デフォルト:`.`)
 
 ## (2) `-p`/`—push`で`push`する．[(詳細)](https://github.com/Scstechr/gch/blob/master/doc/jp/jp_push_remote.md)
 必要に応じて`-b`/`-r`/`-g`を併用してください．
-- `-b`/`--branch`で`push`するブランチを指定．(デフォルト:`master`)[(詳細)](https://github.com/Scstechr/gch/blob/master/doc/jp/jp_branch.md)
+- `-b`/`--branch`で`push`するブランチを指定．(デフォルト:`master`)
 - `-r`/`--remote`で`push`する`remote`レポジトリを指定．(デフォルト:`origin`)
 - `-g`/`—gitpath`で`.git`ディレクトリのパスを指定．(デフォルト:`.`)
 
