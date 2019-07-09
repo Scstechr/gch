@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 
 from . import issues
 from . import qs
+from . import diff
 
 getAnswer = qs.getAnswer
 isExist = qs.isExist
@@ -156,13 +157,14 @@ def Reset():
             issues.execute(['git reset --hard HEAD'])
         elif ans == 4:
             issues.warning('Select hash from diff tool...')
-            author = ''
-            commit_message = click.prompt("Commit Message", type=str)
-            dhash = diffhash(detail=True, head=True, author=True)
+            flag = False
+            if click.confirm('Do you want to name specific author?'):
+                flag = True
+            dhash = diff.diffhash(detail=True, head=True, author=flag)
             while(1):
                 if click.confirm("Is this the correct hash you want to go back?"):
                     break
-                dhash = diffhash(detail=True, head=True, author=True)
+                dhash = diff.diffhash(detail=True, head=True, author=flag)
             if click.confirm(f"Go back (reset) to {dhash}?"):
                 if not isExist(f'git status --short'):
                     issues.execute([f'git reset --hard {dhash}'])

@@ -71,7 +71,7 @@ def page(selected, pages, pagenum):
         for i in range(lpp-pagelen):
             print('\033[2K')
         hr()
-        print(f'\t[{pagenum+1}/{len(pages)}]')
+        print(f'[{pagenum+1}/{len(pages)}]')
         hr()
         if len(selected) != 2:
             ret = wait_key()
@@ -113,6 +113,15 @@ def book(selected, options):
         pages = [options]
     page(selected, pages, 0)
 
+def authorcheck(opt, name):
+    author_str = opt.strip()
+    author_str = opt.split(']')[1]
+    author_str = author_str[:author_str.rfind(' :')][1:]
+    if author_str == name:
+        return True
+    else:
+        return False
+
 def diffhash(detail, head, author):
     vsize = shutil.get_terminal_size()[1]
     hsize = shutil.get_terminal_size()[0]
@@ -120,7 +129,7 @@ def diffhash(detail, head, author):
     if isExist(f'git status --short') or head:
         options += ['HEAD']
     else:
-        click.echo('Clean State')
+        issues.ok('Clean State')
 
     threshold = 100
     fstring = '(%ad) [%h] %an :%s' if hsize > threshold else '(%ad) [%h] : %s'
@@ -129,9 +138,14 @@ def diffhash(detail, head, author):
     options = [f'{opt[:hsize-5]}...' if len(opt) > hsize - 2 else opt for opt in options]
     if author:
         ret_author = click.prompt("Name specific author", type=str)
-        options = [opt for opt in options if opt.find(ret_author) > 0 ]
-    if len(options) == 0:
-        issues.warning('No log found')
+        if len(ret_author):
+            if options[0] == 'HEAD':
+                options = [opt for opt in options[1:] if authorcheck(opt, ret_author)]
+                options = ['HEAD'] + options
+            else:
+                options = [opt for opt in options if authorcheck(opt, ret_author)]
+    if len(options) < 2:
+        issues.warning('No log found for comparing')
         sys.exit(1)
     selected = []
     if head and 'HEAD' in options:
@@ -144,7 +158,7 @@ def diffhash(detail, head, author):
         ret_diffhash = selected[0] if selected[0] != 'HEAD' else selected[1]
         issues.execute([f'git diff --stat {ret_diffhash}'])
         if detail:
-            issues.execute([f'git diff --ignore-blank-lines -U1 {diffhash}'])
+            issues.execute([f'git diff --ignore-blank-lines -U1 {ret_diffhash}'])
     else:
         issues.execute([f'git diff --stat {selected[0]}..{selected[1]}'])
         if detail:
@@ -154,7 +168,7 @@ def diffhash(detail, head, author):
 @click.command()
 @click.option('-d', '--detail', is_flag='False', help='detailed diff')
 @click.option('-h', '--head', is_flag='False', help='include head')
-@click.option('-a', '--author',   default='',    help='specify author')
+@click.option('-a', '--author', is_flag='False', help='name specific author')
 def main(detail, head, author):
     diffhash(detail, head, author)
 

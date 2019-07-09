@@ -104,7 +104,10 @@ def main(init,
     defaults['diff'] = diff
 
     if diff:
-        diffhash(detail=verbose, head=False, author=True)
+        flag = False
+        if click.confirm('Do you want to name specific author?'):
+            flag = True
+        diffhash(detail=verbose, head=False, author=flag)
         exit(1)
 
     if reset:
