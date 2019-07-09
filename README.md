@@ -4,7 +4,7 @@ A tool to handle git related commands
 - Execute `git` related commands such as:
 	- `git init`, `git commit`, `git diff`, `git add`, `git push`
 - Documents available in: :us: [English](doc/gch_doc_en.md) / :jp: [Japanese](doc/gch_doc_jp.md)
-	- :warning: It has not been updated for long time. Make an issue if any problem occurs.
+	- :warning: Note that English version has not been updated for a long time.
 - Blog Post (Japanese): [Qiita](https://qiita.com/Scstechr/items/53e3e326c4caa6dc2307) / [Qrunch](https://scstechr.qrunch.io/entries/Jmdclx72XYk2F5Pa)
 
 ## Requirements
@@ -15,10 +15,11 @@ $ git clone https://github.com/Scstechr/gch ~/.gch
 $ cd ~/.gch
 $ pip install -r requirements.txt
 ```
-Also, be sure to have `Python 3.6.x` executable in any way.
+Also, be sure to have `Python 3.6.x` executable. 
+(It does not work with `Python 3.7.x` or `Python 2.x`)
 
 ## Recommendation
-It is recommended to use `alias` in order to execute `gch` from anywhere.  
+It is recommended to use `alias` in order to execute `gch`/`difftool` from anywhere.  
 Add these lines in `.bash_profile`/`.bashrc`
 
 ```bash:.bashrc
@@ -27,15 +28,7 @@ alias gch='gch.py'
 alias difftool='difftool.py'
 ```
 
-or
-
-```bash:add
-echo 'PATH="${HOME}/.gch:$PATH"' >> ~/.bashrc
-echo 'alias gch="gch.py"' >> ~/.bash_profile
-echo 'alias difftool="difftool.py"' >> ~/.bash_profile
-```
-
- and `source` it afterwards.
+and `source` it afterwards.
 
 ## How to Use
 
