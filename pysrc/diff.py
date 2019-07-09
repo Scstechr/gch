@@ -76,7 +76,7 @@ def page(selected, pages, pagenum):
         if len(selected) != 2:
             ret = wait_key()
             while(1):
-                if ret in ['j', 'k', 'h', 'l', '\n']:
+                if ret in ['j', 'k', 'h', 'l', 'q', '\n']:
                     break
                 else:
                     ret = wait_key()
@@ -89,6 +89,9 @@ def page(selected, pages, pagenum):
             pagenum -= 1
         elif ret == 'l' and pagenum < len(pages) - 1:
             pagenum += 1
+        elif ret == 'q':
+            if click.confirm('Do you want to exit diff hash tool?'):
+                sys.exit(0)
         elif ret == '\n':
             if len(selected) == 2:
                 break
@@ -110,7 +113,7 @@ def book(selected, options):
         pages = [options]
     page(selected, pages, 0)
 
-def diffhash(detail, head):
+def diffhash(detail, head, author):
     vsize = shutil.get_terminal_size()[1]
     hsize = shutil.get_terminal_size()[0]
     options = []
@@ -124,29 +127,36 @@ def diffhash(detail, head):
     dateset = 'local' if hsize > threshold else 'relative'
     options += sp.getoutput(f'git log --date={dateset} --pretty=format:"{fstring}"').split('\n')
     options = [f'{opt[:hsize-5]}...' if len(opt) > hsize - 2 else opt for opt in options]
+    if author:
+        ret_author = click.prompt("Name specific author", type=str)
+        options = [opt for opt in options if opt.find(ret_author) > 0 ]
+    if len(options) == 0:
+        issues.warning('No log found')
+        sys.exit(1)
     selected = []
     if head and 'HEAD' in options:
         selected.append('HEAD')
         options = options[1:]
     book(selected, options)
 
-    diffhash = ''
+    ret_diffhash = ''
     if 'HEAD' in selected:
-        diffhash = selected[0] if selected[0] != 'HEAD' else selected[1]
-        issues.execute([f'git diff --stat {diffhash}'])
+        ret_diffhash = selected[0] if selected[0] != 'HEAD' else selected[1]
+        issues.execute([f'git diff --stat {ret_diffhash}'])
         if detail:
             issues.execute([f'git diff --ignore-blank-lines -U1 {diffhash}'])
     else:
         issues.execute([f'git diff --stat {selected[0]}..{selected[1]}'])
         if detail:
             issues.execute([f'git diff --ignore-blank-lines -U1 {selected[0]}..{selected[1]}'])
-    return diffhash
+    return ret_diffhash
 
 @click.command()
 @click.option('-d', '--detail', is_flag='False', help='detailed diff')
 @click.option('-h', '--head', is_flag='False', help='include head')
-def main(detail, head):
-    diffhash(detail, head)
+@click.option('-a', '--author',   default='',    help='specify author')
+def main(detail, head, author):
+    diffhash(detail, head, author)
 
 if __name__ == '__main__':
     main()

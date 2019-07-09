@@ -156,11 +156,13 @@ def Reset():
             issues.execute(['git reset --hard HEAD'])
         elif ans == 4:
             issues.warning('Select hash from diff tool...')
-            dhash = diffhash(detail=True, head=True)
+            author = ''
+            commit_message = click.prompt("Commit Message", type=str)
+            dhash = diffhash(detail=True, head=True, author=True)
             while(1):
                 if click.confirm("Is this the correct hash you want to go back?"):
                     break
-                dhash = diffhash(detail=True, head=True)
+                dhash = diffhash(detail=True, head=True, author=True)
             if click.confirm(f"Go back (reset) to {dhash}?"):
                 if not isExist(f'git status --short'):
                     issues.execute([f'git reset --hard {dhash}'])

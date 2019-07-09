@@ -104,7 +104,7 @@ def main(init,
     defaults['diff'] = diff
 
     if diff:
-        diffhash(detail=verbose, head=False)
+        diffhash(detail=verbose, head=False, author=True)
         exit(1)
 
     if reset:
