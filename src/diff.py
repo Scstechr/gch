@@ -12,9 +12,9 @@ import cursor
 import termios
 import shutil
 
-from pysrc import issues
-from pysrc.qs import getAnswer, isExist 
-from pysrc.git import *
+from . import issues
+from .qs import getAnswer, isExist 
+from .git import *
 
 
 def wait_key():

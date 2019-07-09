@@ -9,10 +9,10 @@ import sys, subprocess as sp
 from os import path, chdir, getcwd
 import click
 
-from pysrc import issues
-from pysrc.qs import getAnswer, isExist 
-from pysrc.git import *
-from pysrc.diff import diffhash
+from src import issues
+from src.qs import getAnswer, isExist 
+from src.git import *
+from src.diff import diffhash
 
 issues.version(3)
 
