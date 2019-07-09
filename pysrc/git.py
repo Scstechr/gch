@@ -16,6 +16,7 @@ def CheckState():
     if isExist(f'git status --short'):
         return True
     else:
+        issues.ok('Clean State')
         return False
 
 def Commit():

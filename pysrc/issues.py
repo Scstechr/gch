@@ -10,6 +10,8 @@ def abort():
     sys.exit()
 def warning(string=None):
     click.echo(f'\n\033[91m>> warning!: {string}\033[0m')
+def ok(string=None):
+    click.echo(f'\n\033[92m>> {string}\033[0m')
 def execute(command_list, run=True):
     ''' Execute bash commands through shell '''
     for command in command_list:

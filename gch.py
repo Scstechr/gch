@@ -164,8 +164,6 @@ def main(init,
         if commit:
             issues.execute([f'git add {filepath}'])
             git.Commit()
-    else:
-        click.echo('Clean State')
 
     if pull:
         issues.execute([f'git pull {remote} {branch}'])
