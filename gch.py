@@ -14,26 +14,27 @@ from pysrc.qs import getAnswer, isExist
 from pysrc.git import *
 
 issues.version(3)
+from pathlib import Path
 
 defaults = {}
+defaults['init'] = 'False'
+defaults['gitpath'] = '.'
+defaults['filepath'] = '.'
+defaults['branch'] = 'master'
+defaults['detail'] = 'False'
+defaults['log'] = 'False'
+defaults['commit'] = 'False'
+defaults['reset'] = 'False'
+defaults['push'] = 'False'
+defaults['remote'] = 'origin'
+defaults['pull'] = 'False'
+defaults['update'] = 'False'
 defaultspath = path.join(".", ".defaults.txt")
 if path.exists(defaultspath):
     with open(defaultspath, 'r') as readfile:
         for line in readfile:
             k, v = line.replace('\n','').split(":")
             defaults[str(k)] = str(v)
-else:
-    defaults['init'] = 'False'
-    defaults['gitpath'] = '.'
-    defaults['filepath'] = '.'
-    defaults['branch'] = 'master'
-    defaults['detail'] = 'False'
-    defaults['log'] = 'False'
-    defaults['commit'] = 'False'
-    defaults['reset'] = 'False'
-    defaults['push'] = 'False'
-    defaults['remote'] = 'origin'
-    defaults['pull'] = 'False'
 
 # Explanation of the options showed in --help flag
 exp_i=f'Run initializer or not.'.ljust(38)+f'>Default:{defaults["init"]}'
@@ -48,6 +49,7 @@ exp_p=f'Push or not.'.ljust(38)+f'>Default:{defaults["push"]}'
 exp_e=f'Choose which remote repo.to push.'.ljust(38)+f'>Default:{defaults["remote"]}'
 exp_p2=f'Pull from <{defaults["remote"]}> <{defaults["branch"]}>.'.ljust(38)+f'>Default:False'
 exp_s=f'Save settings'.ljust(38)+f'>Default:False'
+exp_u=f'Update gch'.ljust(38)+f'>Default:False'
 
 @click.command()
 @click.option('-i', '--init',     is_flag=defaults['init'],     help=exp_i)
@@ -62,7 +64,21 @@ exp_s=f'Save settings'.ljust(38)+f'>Default:False'
 @click.option('-s', '--save',     is_flag='False',              help=exp_s)
 @click.option('--reset',          is_flag=defaults['reset'],   type=str, help=exp_r)
 @click.option('--pull',           is_flag=defaults['pull'],   type=str, help=exp_p2)
-def main(init, detail, log, commit, remote, push, gitpath, filepath, branch, save, reset, pull):
+@click.option('-u', '--update',   is_flag=defaults['update'],   type=str, help=exp_u)
+def main(init,
+         detail,
+         log,
+         commit,
+         remote,
+         push,
+         gitpath,
+         filepath,
+         branch,
+         save,
+         reset,
+         pull,
+         update
+         ):
 #def main(init, detail, log, commit, reset, push, save, gitpath, filepath, branch, remote, pull):
 
     defaults['init'] = init
@@ -76,6 +92,21 @@ def main(init, detail, log, commit, remote, push, gitpath, filepath, branch, sav
     defaults['push'] = push
     defaults['remote'] = remote
     defaults['pull'] = pull
+    defaults['update'] = update
+
+    if update:
+        if click.confirm(f'Update? (will execute pull from origin repository of gch)'):
+            exepath = Path(__file__).parent
+            issues.execute([f'cd {exepath}',
+                            f'git reset --hard',
+                            f'git checkout master',
+                            f'git pull origin master',
+                            f'cd -'
+                            ])
+            #issues.execute(['cd ~/.gch'])
+        else:
+            issues.abort()
+
 
     if len(branch) == 0:
         issues.execute(['git branch'])
