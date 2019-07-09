@@ -142,12 +142,12 @@ def Update():
 
 def Reset():
     if click.confirm("Are you sure you want to reset?"):
-        issues.warning('Options with [HARD] must be done with caution')
-        opt = ['[SOFT] Undo last commit (soft)']
-        opt.append('[HARD] Undo a last commit')
-        opt.append('[HARD] Undo changes from a last commit')
-        opt.append('[HARD] Undo changes from a past commit')
-        opt.append('[HARD] Undo most resent reset')
+        issues.warning('Options with `--hard` must be done with caution')
+        opt = ['\033[3mgit reset --soft HEAD^\033[0m      > Undo last commit (soft)']
+        opt.append('\033[3mgit reset \033[91m--hard\033[0m\033[3m HEAD^\033[0m      > Undo a last commit')
+        opt.append('\033[3mgit reset \033[91m--hard\033[0m\033[3m HEAD\033[0m       > Undo changes from a last commit')
+        opt.append('\033[3mgit reset \033[91m--hard\033[0m\033[3m <hash>\033[0m     > Undo changes from a past commit')
+        opt.append('\033[3mgit reset \033[91m--hard\033[0m\033[3m ORIG_HEAD\033[0m  > Undo cmost recent reset')
         ans = getAnswer(opt)
         if ans == 1:
             issues.execute(['git reset --soft HEAD^'])
