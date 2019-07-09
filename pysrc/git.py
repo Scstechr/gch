@@ -12,6 +12,12 @@ def b(string):
     ''' String Format for Branch Name '''
     return f'\033[3m\033[33m{string}\033[0m'
 
+def CheckState():
+    if isExist(f'git status --short'):
+        return True
+    else:
+        return False
+
 def Commit():
     ''' Commit '''
     commit_message = click.prompt("Commit Message", type=str)

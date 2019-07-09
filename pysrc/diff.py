@@ -110,9 +110,6 @@ def book(selected, options):
         pages = [options]
     page(selected, pages, 0)
 
-@click.command()
-@click.option('-d', '--detail', is_flag='False', help='detailed diff')
-@click.option('-h', '--head', is_flag='False', help='include head')
 def diffhash(detail, head):
     vsize = shutil.get_terminal_size()[1]
     hsize = shutil.get_terminal_size()[0]
@@ -145,5 +142,11 @@ def diffhash(detail, head):
             issues.execute([f'git diff --ignore-blank-lines -U1 {selected[0]}..{selected[1]}'])
     return diffhash
 
+@click.command()
+@click.option('-d', '--detail', is_flag='False', help='detailed diff')
+@click.option('-h', '--head', is_flag='False', help='include head')
+def main(detail, head):
+    diffhash(detail, head)
+
 if __name__ == '__main__':
-    getdiffhash()
+    main()
