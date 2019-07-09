@@ -1,7 +1,5 @@
 __GCH__ (Git Commit Handler, 以下:`gch`)  の公式ドキュメントです.
 
-[TOC]
-
 # インストール
 ```bash
 $ git clone https://github.com/Scstechr/usefultools.git ~/.useful
