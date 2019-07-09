@@ -11,11 +11,18 @@ import sys
 import cursor
 import termios
 import shutil
+import os
 
 from . import issues
 from .qs import getAnswer, isExist 
 from .git import *
 
+class CursorOff(object):
+    def __enter__(self):
+        cursor.hide()
+         
+    def __exit__(self, *args):
+        cursor.show()
 
 def wait_key():
     ''' Wait for a key press on the console and return it. '''
@@ -54,11 +61,9 @@ def page(selected, pages, pagenum):
     select = 0
     while(1):
         hr()
+        pagelen = len(pages[pagenum])
         print('selected:', selected)
         hr()
-        pagelen = len(pages[pagenum])
-        if select > pagelen:
-            select = pagelen - 1;
         for idx, opt in enumerate(pages[pagenum]):
             commit_hash = ch_gen(opt)
             print('\033[2K', end='')
@@ -89,9 +94,10 @@ def page(selected, pages, pagenum):
             pagenum -= 1
         elif ret == 'l' and pagenum < len(pages) - 1:
             pagenum += 1
+            if select > len(pages[pagenum]):
+               select = len(pages[pagenum]) - 1
         elif ret == 'q':
-            if click.confirm('Do you want to exit diff hash tool?'):
-                sys.exit(0)
+            sys.exit(0)
         elif ret == '\n':
             if len(selected) == 2:
                 break
@@ -123,46 +129,65 @@ def authorcheck(opt, name):
         return False
 
 def diffhash(detail, head, author):
-    vsize = shutil.get_terminal_size()[1]
-    hsize = shutil.get_terminal_size()[0]
-    options = []
-    if isExist(f'git status --short') or head:
-        options += ['HEAD']
-    else:
-        issues.ok('Clean State')
-
-    threshold = 100
-    fstring = '(%ad) [%h] %an :%s' if hsize > threshold else '(%ad) [%h] : %s'
-    dateset = 'local' if hsize > threshold else 'relative'
-    options += sp.getoutput(f'git log --date={dateset} --pretty=format:"{fstring}"').split('\n')
-    options = [f'{opt[:hsize-5]}...' if len(opt) > hsize - 2 else opt for opt in options]
-    if author:
-        ret_author = click.prompt("Name specific author", type=str)
-        if len(ret_author):
-            if options[0] == 'HEAD':
-                options = [opt for opt in options[1:] if authorcheck(opt, ret_author)]
-                options = ['HEAD'] + options
-            else:
-                options = [opt for opt in options if authorcheck(opt, ret_author)]
-    if len(options) < 2:
-        issues.warning('No log found for comparing')
-        sys.exit(1)
-    selected = []
-    if head and 'HEAD' in options:
-        selected.append('HEAD')
-        options = options[1:]
-    book(selected, options)
-
     ret_diffhash = ''
-    if 'HEAD' in selected:
-        ret_diffhash = selected[0] if selected[0] != 'HEAD' else selected[1]
-        issues.execute([f'git diff --stat {ret_diffhash}'])
-        if detail:
-            issues.execute([f'git diff --ignore-blank-lines -U1 {ret_diffhash}'])
-    else:
-        issues.execute([f'git diff --stat {selected[0]}..{selected[1]}'])
-        if detail:
-            issues.execute([f'git diff --ignore-blank-lines -U1 {selected[0]}..{selected[1]}'])
+    while(1):
+        vsize = shutil.get_terminal_size()[1]
+        hsize = shutil.get_terminal_size()[0]
+        options = []
+        if isExist(f'git status --short') or head:
+            options += ['HEAD']
+        else:
+            issues.ok('Clean State')
+
+        threshold = 100
+        fstring = '(%ad) [%h] %an :%s' if hsize > threshold else '(%ad) [%h] : %s'
+        dateset = 'local' if hsize > threshold else 'relative'
+        options += sp.getoutput(f'git log --date={dateset} --pretty=format:"{fstring}"').split('\n')
+        options = [f'{opt[:hsize-5]}...' if len(opt) > hsize - 2 else opt for opt in options]
+        if author:
+            ret_author = click.prompt("Name specific author", type=str)
+            if len(ret_author):
+                if options[0] == 'HEAD':
+                    options = [opt for opt in options[1:] if authorcheck(opt, ret_author)]
+                    options = ['HEAD'] + options
+                else:
+                    options = [opt for opt in options if authorcheck(opt, ret_author)]
+        if len(options) < 2:
+            issues.warning('No log found for comparing')
+            sys.exit(1)
+        selected = []
+        if head and 'HEAD' in options:
+            selected.append('HEAD')
+            options = options[1:]
+        with CursorOff():
+            book(selected, options)
+
+        ret_diffhash = ''
+
+        detail = []
+        if 'HEAD' in selected:
+            ret_diffhash = selected[0] if selected[0] != 'HEAD' else selected[1]
+            issues.execute([f'git diff --stat {ret_diffhash}'])
+            detail += sp.getoutput(f'git diff --stat {ret_diffhash}').split('\n')
+            issues.execute([f'git diff --stat {ret_diffhash}'])
+            if detail:
+                detail += sp.getoutput(f'git diff --ignore-blank-lines -U1 {ret_diffhash}').split('\n')
+                issues.execute([f'git diff --ignore-blank-lines -U1 {ret_diffhash}'])
+        else:
+            detail += sp.getoutput(f'git diff --stat {selected[0]}..{selected[1]}').split('\n')
+            issues.execute([f'git diff --stat {selected[0]}..{selected[1]}'])
+            if detail:
+                detail += sp.getoutput(f'git diff --ignore-blank-lines -U1 {selected[0]}..{selected[1]}').split('\n')
+                issues.execute([f'git diff --ignore-blank-lines -U1 {selected[0]}..{selected[1]}'])
+        if head:
+            break
+        else:
+            if click.confirm('\nDo you want to exit diff hash tool?'):
+                sys.exit(0)
+            else:
+                for i in range(vsize):
+                    print(f'\033[2K\033[1A', end='')
+
     return ret_diffhash
 
 @click.command()
