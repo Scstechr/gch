@@ -77,8 +77,8 @@ Options:
 - `-f`/`--filepath`で`add`するファイル/パスを指定．(デフォルト:`.`)
 - `-g`/`—gitpath`で`.git`ディレクトリのパスを指定．(デフォルト:`.`)
 
-## (2) `-p`/`—push`で`push`する．
-必要に応じて`-b`/`-r`/`-g`を併用してください．[(詳細)](https://github.com/Scstechr/gch/blob/master/doc/jp/jp_push_remote.md)
+## (2) `-p`/`—push`で`push`する．[(詳細)](https://github.com/Scstechr/gch/blob/master/doc/jp/jp_push_remote.md)
+必要に応じて`-b`/`-r`/`-g`を併用してください．
 - `-b`/`--branch`で`push`するブランチを指定．(デフォルト:`master`)[(詳細)](https://github.com/Scstechr/gch/blob/master/doc/jp/jp_branch.md)
 - `-r`/`--remote`で`push`する`remote`レポジトリを指定．(デフォルト:`origin`)
 - `-g`/`—gitpath`で`.git`ディレクトリのパスを指定．(デフォルト:`.`)
