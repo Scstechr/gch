@@ -117,9 +117,10 @@ def main(init,
                 issues.execute(['git reset --hard'])
         elif ans == 2:
             dhash = diffhash(detail=True, head=True)
-            if click.confirm(f"Checkout to {dhash}? (this will make another branch)"):
+            if click.confirm(f"Checkout to {dhash}? (this will make another branch for safety)"):
+                branch = dhash
                 if not isExist(f'git status --short'):
-                    issues.execute([f'git checkout -b {dhash}'])
+                    issues.execute([f'git checkout -b {branch}'])
                 else:
                     click.echo(f'\nTheres some changes not commited..')
                     issues.execute([f'git diff --stat'])
@@ -130,11 +131,11 @@ def main(init,
                     if ans == 1:
                         issues.execute([f'git add .',f'git diff --stat'])
                         Commit()
-                        issues.execute([f'git checkout -b {dhash}'])
+                        issues.execute([f'git checkout -b {branch}'])
                     elif ans == 2:
-                        issues.execute([f'git stash',f'git checkout -b {dhash}'])
+                        issues.execute([f'git stash',f'git checkout -b {branch}'])
                     else:
-                        issues.execute([f'git checkout -f -b {dhash}'])
+                        issues.execute([f'git checkout -f -b {branch}'])
 
     issues.execute(['git status --short'])
 
