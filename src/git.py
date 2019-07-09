@@ -143,19 +143,23 @@ def Update():
 def Reset():
     if click.confirm("Are you sure you want to reset?"):
         issues.warning('Options with `--hard` must be done with caution')
-        opt = ['\033[3mgit reset --soft HEAD^\033[0m      > Undo last commit (soft)']
-        opt.append('\033[3mgit reset \033[91m--hard\033[0m\033[3m HEAD^\033[0m      > Undo a last commit')
-        opt.append('\033[3mgit reset \033[91m--hard\033[0m\033[3m HEAD\033[0m       > Undo changes from a last commit')
-        opt.append('\033[3mgit reset \033[91m--hard\033[0m\033[3m <hash>\033[0m     > Undo changes from a past commit')
-        opt.append('\033[3mgit reset \033[91m--hard\033[0m\033[3m ORIG_HEAD\033[0m  > Undo cmost recent reset')
+        opt=[]
+        opt.append('\033[3mgit commit --amend\033[0m          > Change message of last commit')
+        opt.append('\033[3mgit reset --soft HEAD^\033[0m      > Undo last commit (soft)')
+        opt.append('\033[3mgit reset \033[91m--hard\033[0m\033[3m HEAD^\033[0m      > Undo last commit')
+        opt.append('\033[3mgit reset \033[91m--hard\033[0m\033[3m HEAD\033[0m       > Undo changes from last commit')
+        opt.append('\033[3mgit reset \033[91m--hard\033[0m\033[3m <hash>\033[0m     > Undo changes from past commit')
+        opt.append('\033[3mgit reset \033[91m--hard\033[0m\033[3m ORIG_HEAD\033[0m  > Undo most recent reset')
         ans = getAnswer(opt)
         if ans == 1:
-            issues.execute(['git reset --soft HEAD^'])
+            issues.execute(['git commit --amend'])
         elif ans == 2:
-            issues.execute(['git reset --hard HEAD^'])
+            issues.execute(['git reset --soft HEAD^'])
         elif ans == 3:
-            issues.execute(['git reset --hard HEAD'])
+            issues.execute(['git reset --hard HEAD^'])
         elif ans == 4:
+            issues.execute(['git reset --hard HEAD'])
+        elif ans == 5:
             issues.warning('Select hash from diff tool...')
             flag = False
             if click.confirm('Do you want to name specific author?'):
