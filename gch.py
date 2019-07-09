@@ -77,6 +77,9 @@ def main(init, detail, log, commit, remote, push, gitpath, filepath, branch, sav
     defaults['remote'] = remote
     defaults['pull'] = pull
 
+    if len(branch) == 0:
+        issues.execute(['git branch'])
+
     if save:
         issues.execute([f'rm {defaultspath}'])
         for k, v in defaults.items():
@@ -124,9 +127,10 @@ def main(init, detail, log, commit, remote, push, gitpath, filepath, branch, sav
 
     if isExist('git branch'):
         current_branch = getCurrentBranch()
-        if current_branch != branch:
-            issues.branch()
-            branch = setBranch(branch, filepath)
+        if len(branch):
+            if current_branch != branch:
+                issues.branch()
+                branch = setBranch(branch, filepath)
         
 
     # Push or not
