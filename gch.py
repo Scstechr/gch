@@ -146,7 +146,6 @@ def main(init,
 
     if log:
         issues.execute([logcmd])
-    # Commit or not
 
     if CheckState():
         issues.execute([f'git diff --stat'])
