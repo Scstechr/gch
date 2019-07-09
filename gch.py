@@ -22,7 +22,7 @@ defaults['init'] = 'False'
 defaults['gitpath'] = '.'
 defaults['filepath'] = '.'
 defaults['branch'] = 'master'
-defaults['detail'] = 'False'
+defaults['verbose'] = 'False'
 defaults['log'] = 'False'
 defaults['commit'] = 'False'
 defaults['reset'] = 'False'
@@ -47,7 +47,7 @@ exp_i=f'Run initializer or not.'.ljust(38)+f'>Default:{defaults["init"]}'
 exp_g=f'Path of dir that contains `.git`.'.ljust(38)+f'>Default:{defaults["gitpath"]}'
 exp_f=f'Path/Regex of staging file/dir.'.ljust(38)+f'>Default:{defaults["filepath"]}'
 exp_b=f'Commiting branch.'.ljust(38)+f'>Default:{defaults["branch"]}'
-exp_d=f'Detailed diff.'.ljust(38)+f'>Default:{defaults["detail"]}'
+exp_d=f'Detailed diff.'.ljust(38)+f'>Default:{defaults["verbose"]}'
 exp_l=f'Git log with option.'.ljust(38)+f'>Default:{defaults["log"]}'
 exp_c=f'Commit or not.'.ljust(38)+f'>Default:{defaults["commit"]}'
 exp_r=f'Reset all changes since last commit.'.ljust(38)+f'>Default:{defaults["reset"]}'
@@ -60,7 +60,7 @@ exp_d2=f'Open diff tool'.ljust(38)+f'>Default:False'
 
 @click.command()
 @click.option('-i', '--init',     is_flag=defaults['init'],     help=exp_i)
-@click.option('-d', '--detail',   is_flag=defaults['detail'],   help=exp_d)
+@click.option('-v', '--verbose',   is_flag=defaults['verbose'],   help=exp_d)
 @click.option('-l', '--log',      is_flag=defaults['log'],      help=exp_l)
 @click.option('-c', '--commit',   is_flag=defaults['commit'],   help=exp_c)
 @click.option('-r', '--remote',   default=defaults['remote'],    help=exp_e)
@@ -72,9 +72,9 @@ exp_d2=f'Open diff tool'.ljust(38)+f'>Default:False'
 @click.option('--reset',          is_flag=defaults['reset'],    type=str, help=exp_r)
 @click.option('--pull',           is_flag=defaults['pull'],     type=str, help=exp_p2)
 @click.option('-u', '--update',   is_flag=defaults['update'],   type=str, help=exp_u)
-@click.option('--diff',           is_flag=defaults['diff'],     type=str, help=exp_d2)
+@click.option('-d', '--diff',     is_flag=defaults['diff'],     type=str, help=exp_d2)
 def main(init,
-         detail,
+         verbose,
          log,
          commit,
          remote,
@@ -88,13 +88,13 @@ def main(init,
          update,
          diff
          ):
-#def main(init, detail, log, commit, reset, push, save, gitpath, filepath, branch, remote, pull):
+#def main(init, verbose, log, commit, reset, push, save, gitpath, filepath, branch, remote, pull):
 
     defaults['init'] = init
     defaults['gitpath'] = path.abspath(gitpath)
     defaults['filepath'] = filepath
     defaults['branch'] = branch
-    defaults['detail'] = detail 
+    defaults['verbose'] = verbose 
     defaults['log'] = log
     defaults['commit'] = commit
     defaults['reset'] = reset
@@ -105,7 +105,7 @@ def main(init,
     defaults['diff'] = diff
 
     if diff:
-        diffhash(detail=detail, head=False)
+        diffhash(detail=verbose, head=False)
         exit(1)
 
     if reset:
@@ -184,7 +184,7 @@ def main(init,
 
     if CheckState():
         issues.execute([f'git diff --stat'])
-        if detail:
+        if verbose:
             issues.execute([f'git add .', diffcmd, f'git reset'])
         if commit:
             issues.execute([f'git add {filepath}'])
