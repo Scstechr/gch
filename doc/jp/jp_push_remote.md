@@ -5,25 +5,24 @@
 | `-p`/`--push`   | `push`に用いられるフラグ          |   -   | - |
 | `-r`/`--remote` | push`する`remote`レポジトリの指定 |    文字列  | `origin` |
 
-### 使用例
-
-#### `-r`/`—remote`で指定した`remote`レポジトリがなかった場合
-
+### 実行例
 ```bash
 $ gch -p
 ```
-あるいは，`remote`レポジトリを指定して
+あるいは，`-r`/`--remote`でリモートレポジトリを指定して
 ```bash
 $ gch -p -r develop
 ```
-などを実行したとき，`remote`レポジトリがみつからないなら新たに追加するかどうか聞かれます．
+`push`します．
+このとき，`-g`/`--gitpath`でどの`.git`ディレクトリを使うか指定できます．
+
+#### `-r`/`—remote`で指定した`remote`レポジトリがなかった場合
+`remote`レポジトリがみつからないなら新たに追加するかどうか聞かれます．
 ```
 >> warning!: Remote repository `origin` not found
 Add? [y/N]:
 ```
-
 追加する場合はURLを入力します．
-
 ```bash
 URL: https://github.com/Scstechr/testr.git
 >> execute: git remote add origin https://github.com/Scstechr/testr.git
