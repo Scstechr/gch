@@ -122,7 +122,8 @@ def initialize(flag=False):
         if not path.exists(readmepath):
             title = click.prompt('Title of this repository(project)').upper()
             issues.execute(['git init', 'touch .gitignore', 'touch README.md',\
-                            'echo ".*" >> .gitignore', f'echo ".*" >> ~/.gitignore_global',\
+                            'echo ".*" >> .gitignore', \
+                            'echo ".default.txt" >> .gitignore', \
                             f'echo "# {title}" >> README.md'])
             issues.execute(['git add -f .gitignore'])
 
@@ -164,11 +165,11 @@ def Reset():
             flag = False
             if click.confirm('Do you want to name specific author?'):
                 flag = True
-            dhash = diff.diffhash(detail=True, head=True, author=flag)
+            dhash = diff.diffhash(verbose=True, head=True, author=flag)
             while(1):
                 if click.confirm("Is this the correct hash you want to go back?"):
                     break
-                dhash = diff.diffhash(detail=True, head=True, author=flag)
+                dhash = diff.diffhash(verbose=True, head=True, author=flag)
             if click.confirm(f"Go back (reset) to {dhash}?"):
                 if not isExist(f'git status --short'):
                     issues.execute([f'git reset --hard {dhash}'])
@@ -211,8 +212,10 @@ def Push(remote, branch):
                 if url_valid(remote_url):
                     issues.execute([f'git remote add {remote} {remote_url}'])
                     issues.execute([f'git push -u {remote} {branch}'])
+                    break
                 else:
                     issues.warning('Not valid URL')
+
 
 
 

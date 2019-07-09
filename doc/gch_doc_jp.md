@@ -1,5 +1,5 @@
 # GCH: Git Commit Handler
-__GCH__ (Git Commit Handler)の公式ドキュメントです.
+__GCH__ (Git Commit Handler, 以下:`gch`)  の公式ドキュメントです.
 
 ### インストール
 ```bash
@@ -8,9 +8,26 @@ $ cd ~/.useful
 $ pip install -r requirements.txt
 ```
 
-#### アップデート方法
+### 推奨の使用方法
+
+ `alias` を設定することで `gch` をどこからでも実行できるようにすると良いです．  
+
+```bash:.bash_profile
+export PATH="${HOME}/.gch:$PATH"
+alias gch='gch.py'
+```
+
+上記を `~/.bashrc`に追加するか，下記を実行すし`source ~/.bashrc` するとできます．
+
+```bash:add
+echo 'PATH="${HOME}/.gch:$PATH"' >> ~/.bashrc
+echo 'alias gch="gch.py"' >> ~/.bash_profile
+```
+
+`gch`のアップデート方法は今までよりも簡単になりました．
+
 ```bash
-$ git pull origin master
+$ gch -u 
 ```
 
 ### オプション
@@ -19,105 +36,63 @@ $ gch --help
 Usage: gch.py [OPTIONS]
 
 Options:
-  -i, --init           Run initializer or not.               >Default:False
-  -d, --detail         Detailed diff.                        >Default:False
+  -i, --init           Run initializer                       >Default:False
+  -v, --verbose        Verbose option.                       >Default:False
   -l, --log            Git log with option.                  >Default:False
-  -c, --commit         Commit or not.                        >Default:False
   -r, --remote TEXT    Choose which remote repo.to push.     >Default:origin
-  -p, --push           Push or not.                          >Default:False
   -g, --gitpath PATH   Path of dir that contains `.git`.     >Default:.
   -f, --filepath TEXT  Path/Regex of staging file/dir.       >Default:.
   -b, --branch TEXT    Commiting branch.                     >Default:master
+  -c, --commit         Commit
+  -p, --push           Push.
   -s, --save           Save settings                         >Default:False
+  -d, --diff           Open diff tool                        >Default:False
+  -u, --update         Update gch                            >Default:False
   --reset              Reset all changes since last commit.  >Default:False
-  --pull               Git pull origin master                >Default:False
+  --pull               Pull from <origin> <master>.          >Default:False
   --help               Show this message and exit.
 ```
 
 
+`gch`で実行されるシェルのコマンドは以下のように可視化されて実行されます．
 
-`git clone`してインストールした後に`.bash_profile` に PATHを通した上で  
-`alias gch='gch.py'`といった`alias`と組み合わせて使うことを推奨しています．  
-__GCH__ で実行されるシェルのコマンドは以下のように可視化されて実行されます．
 ```bash
 >> EXECUTE: git status --short
 ```
-すなわち，ユーザ自身が上記のコマンドをシェルで実行することをGCHは代行しているといえます．
+すなわち，ユーザ自身が上記のコマンドをシェルで実行することを`gch`は代行しているといえます．
+実行中は`CTRL-C`で処理を中断することができます．
 
+## `gch`を用いた場合の一連の流れ
 
-#### `-g` or `--gitpath`
+必要なら`-g`/`—gitpath`で`.git`ディレクトリのパスを指定してください．(デフォルト:`.`)
+#### (0) `init`
+`-g`で指定したパスに`.git`がない場合は初期化(`-i`/`--initialize`)が実行されます．
 
-`git --git-dir=<path>`と同様の機能を有しています．  
-ここで，どの`.git`を使うかパスで指定することができます．  
-省略した場合，`.`にある`.git`を用いて動作を行います．  
+#### (1) `-c`/`—commit`で`commit`する．
+必要に応じて`-b`/`-f`/`-g`を併用してください．
+- `-b`/`--branch`で`commit`するブランチを指定．(デフォルト:`master`)
+- `-f`/`--filepath`で`add`するファイル/パスを指定．(デフォルト:`.`)
+- `-g`/`—gitpath`で`.git`ディレクトリのパスを指定．(デフォルト:`.`)
 
-##### 指定したパスに`.git`が存在しない場合
+#### (2) `-p`/`—push`で`push`する．
+必要に応じて`-b`/`-r`/`-g`を併用してください．
+- `-b`/`--branch`で`push`するブランチを指定．(デフォルト:`master`)
+- `-r`/`--remote`で`push`する`remote`レポジトリを指定．(デフォルト:`origin`)
+- `-g`/`—gitpath`で`.git`ディレクトリのパスを指定．(デフォルト:`.`)
 
-```bash
-$ gch
+さらに，以下を使い分けることでさらに効率よく`git`が使えます．
+####　その他
+##### `git`関連
+- `-l`/`—log`で`git log`表示．（`vim`を`CTRL-C`で抜けると`reset`が必要）
+- `-d`/`—diff`で`git diff`用のツールを起動．
+- `—reset`で`git reset`用のツールを起動．
+- `—pull`で`git pull`をする（非推奨）．
 
->> WARNING!: It seems path:`<PATH>` does not have `.git` folder.
-Initialize? [y/N]:
-```
-`y`を入力した場合 かつ `~/.gitconfig`が存在しない場合は`username`, `email`, `editor`, `diff-tool`の設定を行います．
-
-```bash
-~/.gitconfig file does not exist. => Start Initialization!
-username: Scstechr
-email: teufelkonig@gmail.com
->> EXECUTE: git config --global user.name "Scstechr"
->> EXECUTE: git config --global user.email teufelkonig@gmail.com
-Do you want to use emacs instead of vim as an editor? [y/N]: N
-# using vimdiff as a merge tool
->> EXECUTE: git config --global merge.tool vimdiff
->> EXECUTE: cat ~/.gitconfig
-[user]
-	name = Scstechr
-	email = teufelkonig@gmail.com
-[merge]
-	tool = vimdiff
-```
-
-この設定は別途`gch -i`を走らせることでも可能です．  
-その後, レポジトリの初期設定を始めます．予め`~/.gitconfig`が存在する場合は上の設定をスキップします．  
-この際，レポジトリ名を設定します．ここで入力したレポジトリ名は`README.md`のタイトルとして使用されます．
-
-```bash
-Title of this repository(project): test_dir
->> EXECUTE: git init
-Initialized empty Git repository in /Users/moinaga/test_dir/.git/
->> EXECUTE: touch .gitignore
->> EXECUTE: touch README.md
->> EXECUTE: echo ".*" >> .gitignore
->> EXECUTE: echo "# TEST_DIR" >> README.md
->> EXECUTE: git status --short
-?? README.md
->> EXECUTE: git diff --stat
-** no push **
-```
-初期化と同時に`*.`を書き込んだ`.gitignore`とレポジトリ名が入った`README.md`が生成されていることがわかると思います．
-
-##### 指定したパスに`.git`が存在する場合
-###### 構成例
-```bash
--- Main
-     |--.git/
-     |--tests/
-     |    |--.git/  
-     |    |--.gitignore  
-     |    |--README.md  
-     |    +--test.c
-     |--.gitignore  
-     |--README.md  
-     +--main.c  
-```
-
-ユーザがどのフォルダにいるかで動作が異なります．
-- `Main`にいた場合:
-  1. `-g`が省略された場合, `Main/.git`を用います．
-- `Main/tests`にいた場合:
-  1. `-g`が省略された場合, `Main/test/.git`を用います.
-  2. `-g ..`とパスを指定した場合， `Main/.git`を用います.
+##### `gch`関連
+- `-s`/`--save`で直前の設定を`.defaults.txt`に保存．
+- `-v`/`--verbose`で情報量を増やす．
+- `-u`/`—update`で`gch`自体をアップデートする．
+- `-—help`で`gch`の全てのオプションを表示する．
 
 #### `-f` or `--filepath`
 
@@ -173,75 +148,3 @@ Answer:
 1, 2を選択した場合，`commit`/`stash`後に指定したブランチに`checkout`します．  
 3を選択した場合，`git checkout -f <BRANCH>`が実行されます．  
 このとき，前回の`commit`から変更した箇所は全て破棄されます．
-
-#### `-d` or `--detail`
-
-`git diff`が詳細になるオプションを有効にします (オプションについては実行時に確認できます)．     
-
-##### 実行例
-```bash
->> execute: git status --short
- M a.c
->> execute: git diff --stat
- a.c | 6 ++++++
- 1 file changed, 6 insertions(+)
->> execute: git add .
->> execute: git diff --cached --ignore-all-space --ignore-blank-lines
-diff --git a/a.c b/a.c
-index 1f56b61..4e02766 100644
---- a/a.c
-+++ b/a.c
-@@ -1,6 +1,12 @@
- #include <stdio.h>
-
- int main(){
-+       int j = 0;
-+
-+       for(int i = 0; i < 10; i++){
-+               printf("Hello World!\n");
-+       }
-+
-        return 0;
- }
-
->> execute: git reset
-Unstaged changes after reset:
-M	a.c
->> execute: git add /Users/moinaga/labwork/sample
-Commit Message:
-```
-
-#### `-l` or `--log`
-
-作者が考える最善なオプションを付加された`git log`を実行します．  
-オプションについては実行時に確認できます．
-##### 実行例
-```
-$ gch -l
->> execute: git status --short
->> execute: git log --stat --oneline --graph --decorate
-* f1ab259 (HEAD -> master) for loop of hello world
-|  a.c | 6 ++++++
-|  1 file changed, 6 insertions(+)
-* 30513c8 add a
-|  a.c | 6 ++++++
-|  1 file changed, 6 insertions(+)
-* 1944b89 initial
-   .gitignore | 8 ++++++++
-   README.md  | 1 +
-   2 files changed, 9 insertions(+)
-Clean State
-```
-#### `-c` or `--commit`
-
-省略した場合，`git commit`は実行されません.
-
-#### `-r` or `--remote`
-
-`push`する先の`remote`ブランチを切り替えます．
-
-#### `-s` or `--save`
-
-設定を`.default.txt`に保存します．
-設定をセーブして
-

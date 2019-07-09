@@ -58,8 +58,6 @@ exp_u=f'Update gch'.ljust(38)+f'>Default:False'
 exp_d=f'Open diff tool'.ljust(38)+f'>Default:False'
 
 @click.command()
-@click.option('-c', '--commit',   is_flag=defaults['commit'],   help=exp_c)
-@click.option('-p', '--push',     is_flag=defaults['push'],     help=exp_p)
 @click.option('-i', '--init',     is_flag=defaults['init'],     help=exp_i)
 @click.option('-v', '--verbose',   is_flag=defaults['verbose'],   help=exp_v)
 @click.option('-l', '--log',      is_flag=defaults['log'],      help=exp_l)
@@ -67,6 +65,8 @@ exp_d=f'Open diff tool'.ljust(38)+f'>Default:False'
 @click.option('-g', '--gitpath',  default=defaults['gitpath'],  type=click.Path(exists=True), help=exp_g)
 @click.option('-f', '--filepath', default=defaults['filepath'], type=str, help=exp_f)
 @click.option('-b', '--branch',   default=defaults['branch'],   type=str, help=exp_b)
+@click.option('-c', '--commit',   is_flag=defaults['commit'],   help=exp_c)
+@click.option('-p', '--push',     is_flag=defaults['push'],     help=exp_p)
 @click.option('-s', '--save',     is_flag='False',              help=exp_s)
 @click.option('-d', '--diff',     is_flag=defaults['diff'],     type=str, help=exp_d)
 @click.option('-u', '--update',   is_flag=defaults['update'],   type=str, help=exp_u)
@@ -103,6 +103,20 @@ def main(init,
     defaults['update'] = update
     defaults['diff'] = diff
 
+
+    chdir(gitpath)
+
+
+    gitfolder = path.join(gitpath, '.git')
+    if not path.exists(gitfolder):
+        issues.warning(f'It seems path:`{gitpath}` does not have `.git` folder.')
+        if click.confirm(f'Initialize?'):
+            initialize(flag=False)
+        else:
+            issues.abort()
+    if init:
+        initialize(flag=True)
+
     if diff:
         flag = False
         if click.confirm('Do you want to name specific author?'):
@@ -126,22 +140,9 @@ def main(init,
         for k, v in defaults.items():
             issues.execute([f'echo "{str(k)}:{str(v)}" >> {defaultspath}'])
 
-    if init:
-        initialize(flag=True)
     #conversion to absolute path
     gitpath = path.abspath(gitpath)
     filepath = path.abspath(filepath)
-
-    chdir(gitpath)
-
-    gitfolder = path.join(gitpath, '.git')
-    if not path.exists(gitfolder):
-        issues.warning(f'It seems path:`{gitpath}` does not have `.git` folder.')
-        if click.confirm(f'Initialize?'):
-            initialize()
-        else:
-            issues.abort()
-
 
     if log:
         issues.execute([logcmd])
