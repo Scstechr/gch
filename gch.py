@@ -107,8 +107,7 @@ def main(init,
         flag = False
         if click.confirm('Do you want to name specific author?'):
             flag = True
-        diffhash(detail=verbose, head=False, author=flag)
-        exit(1)
+        diffhash(verbose=verbose, head=False, author=flag)
 
     if reset:
         Reset()
