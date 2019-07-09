@@ -11,7 +11,7 @@ import click
 
 from pysrc import issues
 from pysrc.qs import getAnswer, isExist 
-from pysrc.git import *
+import pysrc.git as git
 from pysrc.diff import diffhash
 
 issues.version(3)
@@ -109,33 +109,7 @@ def main(init,
         exit(1)
 
     if reset:
-        click.echo(f'[RESET MODE]')
-        opt = ['hard reset','open diff finder']
-        ans = getAnswer(opt)
-        if ans == 1:
-            if click.confirm("Are you sure you want to reset?"):
-                issues.execute(['git reset --hard'])
-        elif ans == 2:
-            dhash = diffhash(detail=True, head=True)
-            if click.confirm(f"Checkout to {dhash}? (this will make another branch for safety)"):
-                branch = dhash
-                if not isExist(f'git status --short'):
-                    issues.execute([f'git checkout -b {branch}'])
-                else:
-                    click.echo(f'\nTheres some changes not commited..')
-                    issues.execute([f'git diff --stat'])
-                    qs =     [f'Commit changes before checkout']
-                    qs.append(f'Stash changes before checkout')
-                    qs.append(f'Force Checkout before checkout')
-                    ans = getAnswer(qs)
-                    if ans == 1:
-                        issues.execute([f'git add .',f'git diff --stat'])
-                        Commit()
-                        issues.execute([f'git checkout -b {branch}'])
-                    elif ans == 2:
-                        issues.execute([f'git stash',f'git checkout -b {branch}'])
-                    else:
-                        issues.execute([f'git checkout -f -b {branch}'])
+        git.reset()
 
     issues.execute(['git status --short'])
 
@@ -163,7 +137,7 @@ def main(init,
             issues.execute([f'echo "{str(k)}:{str(v)}" >> {defaultspath}'])
 
     if init:
-        initialize(flag=True)
+        git.initialize(flag=True)
     #conversion to absolute path
     gitpath = path.abspath(gitpath)
     filepath = path.abspath(filepath)
@@ -174,7 +148,7 @@ def main(init,
     if not path.exists(gitfolder):
         issues.warning(f'It seems path:`{gitpath}` does not have `.git` folder.')
         if click.confirm(f'Initialize?'):
-            initialize()
+            git.initialize()
         else:
             issues.abort()
 
@@ -183,13 +157,13 @@ def main(init,
         issues.execute([logcmd])
     # Commit or not
 
-    if CheckState():
+    if git.CheckState():
         issues.execute([f'git diff --stat'])
         if verbose:
             issues.execute([f'git add .', diffcmd, f'git reset'])
         if commit:
             issues.execute([f'git add {filepath}'])
-            Commit()
+            git.Commit()
     else:
         click.echo('Clean State')
 
@@ -197,11 +171,11 @@ def main(init,
         issues.execute([f'git pull {remote} {branch}'])
 
     if isExist('git branch'):
-        current_branch = getCurrentBranch()
+        current_branch = git.getCurrentBranch()
         if len(branch):
             if current_branch != branch:
                 issues.branch()
-                branch = setBranch(branch, filepath)
+                branch = git.setBranch(branch, filepath)
         
 
     # Push or not
