@@ -89,6 +89,9 @@ def main(init,
          ):
 #def main(init, verbose, log, commit, reset, push, save, gitpath, filepath, branch, remote, pull):
 
+    if update:
+        Update()
+
     defaults['init'] = init
     defaults['gitpath'] = path.abspath(gitpath)
     defaults['filepath'] = filepath
@@ -127,9 +130,6 @@ def main(init,
         Reset()
 
     issues.execute(['git status --short'])
-
-    if update:
-        Update()
 
 
     if len(branch) == 0:

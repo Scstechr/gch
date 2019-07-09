@@ -129,7 +129,7 @@ def initialize(flag=False):
 
 def Update():
     if click.confirm(f'Update? (will execute pull from origin repository of gch)'):
-        exepath = Path(__file__).parent
+        exepath = Path(__file__).parents[1]
         current = Path('.')
         chdir(exepath)
         issues.execute(['pwd',
@@ -139,6 +139,7 @@ def Update():
                         ])
         #issues.execute(#['cd ~/.gch'])
         chdir(current)
+        sys.exit(0)
     else:
         issues.abort()
 
