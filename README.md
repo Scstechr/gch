@@ -21,9 +21,10 @@ Also, be sure to have `Python 3.6.x` executable in any way.
 It is recommended to use `alias` in order to execute `gch` from anywhere.  
 Add these lines in `.bash_profile`/`.bashrc`
 
-```bash:.bash_profile
+```bash:.bashrc
 export PATH="${HOME}/.gch:$PATH"
 alias gch='gch.py'
+alias difftool='difftool.py'
 ```
 
 or
@@ -31,6 +32,7 @@ or
 ```bash:add
 echo 'PATH="${HOME}/.gch:$PATH"' >> ~/.bashrc
 echo 'alias gch="gch.py"' >> ~/.bash_profile
+echo 'alias difftool="difftool.py"' >> ~/.bash_profile
 ```
 
  and `source` it afterwards.

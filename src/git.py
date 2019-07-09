@@ -135,6 +135,7 @@ def Update():
         issues.execute(['pwd',
                         f'git checkout master',
                         f'git pull origin master',
+                        f'pip install -r requirements.txt'
                         ])
         #issues.execute(#['cd ~/.gch'])
         chdir(current)

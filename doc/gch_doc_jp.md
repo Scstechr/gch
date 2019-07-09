@@ -14,6 +14,7 @@ $ pip install -r requirements.txt
 ```bash:.bash_profile
 export PATH="${HOME}/.gch:$PATH"
 alias gch='gch.py'
+alias difftool='difftool.py'
 ```
 
 上記を `~/.bashrc`に追加するか，下記を実行すし`source ~/.bashrc` するとできます．
@@ -21,6 +22,7 @@ alias gch='gch.py'
 ```bash:add
 echo 'PATH="${HOME}/.gch:$PATH"' >> ~/.bashrc
 echo 'alias gch="gch.py"' >> ~/.bash_profile
+echo 'alias difftool="difftool.py"' >> ~/.bash_profile
 ```
 
 `gch`のアップデート方法は今までよりも簡単になりました．
