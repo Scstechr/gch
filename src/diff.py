@@ -55,36 +55,40 @@ def hr():
     hsize = shutil.get_terminal_size()[0]
     print(''.join(['\u2500' for _ in range(hsize)]),flush=True)
 
-def page(selected, pages, pagenum):
+def page(verbose, selected, pages):
     vsize = shutil.get_terminal_size()[1]
     hsize = shutil.get_terminal_size()[0]
     lpp = int(vsize / 2); #lines per page
     select = 0
+    pagenum = 0
     while(1):
         hr()
         pagelen = len(pages[pagenum])
-        print('selected:', selected)
+        print('\033[2K\033[92mSELECTED:', selected, end ='\033[0m ')
+        print('| \033[91m[VERBOSE]\033[0m') if verbose else print()
         hr()
         for idx, opt in enumerate(pages[pagenum]):
             commit_hash = ch_gen(opt)
-            if len(opt) > hsize - 2:
+            if len(opt) > hsize - 4:
                 opt = opt[:hsize-5] + '...'
             print('\033[2K', end='')
             if len(selected) != 2:
-                print('> ', end='') if idx == select else print('', end='')
+                print('>', end='') if idx == select else print('', end='')
             if commit_hash in selected:
-                print('\033[2m', opt, '\033[0m')
+                print(f'\033[2m{opt}\033[0m')
             else:
                 print(opt)
         for i in range(lpp-pagelen):
             print('\033[2K')
         hr()
-        print(f'[{pagenum+1}/{len(pages)}]')
+        print(f'[{pagenum+1}/{len(pages)}]', end = ' ')
+        print(f'| \033[93m[hjkl]:[\u2190\u2193\u2191\u2192]', end = '')
+        print(f',q:QUIT,v:VERBOSE,s/Enter:SELECT\033[0m')
         hr()
         if len(selected) != 2:
             ret = wait_key()
             while(1):
-                if ret in ['j', 'k', 'h', 'l', 'q', '\n']:
+                if ret in ['j', 'k', 'h', 'l', 'q', 'v', 's', '\n']:
                     break
                 else:
                     ret = wait_key()
@@ -101,17 +105,22 @@ def page(selected, pages, pagenum):
                select = len(pages[pagenum]) - 1
         elif ret == 'q':
             sys.exit(0)
-        elif ret == '\n':
+        elif ret == 'v':
+            verbose = False if verbose else True
+        elif ret in ['\n', 's'] :
             if len(selected) == 2:
                 break
             else:
                 commit_hash = ch_gen(pages[pagenum][select])
                 if commit_hash not in selected:
                     selected.append(commit_hash)
+                else:
+                    selected.pop()
 
         print(f'\033[{lpp+6}A', end='')
+    return verbose
         
-def book(selected, options):
+def book(verbose, selected, options):
     vsize = shutil.get_terminal_size()[1]
     lpp = int(vsize / 2); #lines per page
     pages = []
@@ -120,7 +129,7 @@ def book(selected, options):
             pages.append(options[i:i+lpp])
     else:
         pages = [options]
-    page(selected, pages, 0)
+    return page(verbose, selected, pages)
 
 def diffhash(verbose, head, author):
     ret_diffhash = ''
@@ -160,7 +169,7 @@ def diffhash(verbose, head, author):
             selected.append('HEAD')
             options = options[1:]
         with CursorOff():
-            book(selected, options)
+            verbose = book(verbose, selected, options)
 
         ret_diffhash = ''
 
