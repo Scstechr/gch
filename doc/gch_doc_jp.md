@@ -9,7 +9,7 @@ $ pip install -r requirements.txt
 
 # 推奨の使用方法
 
- `alias` を設定することで `gch` をどこからでも実行できるようにすると良いです．  
+ `alias` を設定することで `gch`/`difftool`をどこからでも実行できるようにすると良いです．  
 
 ```bash:.bash_profile
 export PATH="${HOME}/.gch:$PATH"
@@ -17,7 +17,7 @@ alias gch='gch.py'
 alias difftool='difftool.py'
 ```
 
-上記を `~/.bashrc`に追加するか，下記を実行すし`source ~/.bashrc` するとできます．
+上記を `~/.bashrc`に追加するか，下記を実行し`source ~/.bashrc` するとできます．
 
 ```bash:add
 echo 'PATH="${HOME}/.gch:$PATH"' >> ~/.bashrc
