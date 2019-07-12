@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 '''
 ==================
-Git Log Handler
+Git Diff Handler
 ==================
 '''
 
@@ -55,6 +55,26 @@ def hr():
     hsize = shutil.get_terminal_size()[0]
     print(''.join(['\u2500' for _ in range(hsize)]),flush=True)
 
+def decorate(string):
+    hsize = shutil.get_terminal_size()[0]
+    line = string if len(string) < hsize*0.8 else f'{string[:int(hsize*0.95)]} ...'
+    line = string.split(')')
+    try:
+        ret = f'{line[0].split("(")[0]}\033[0m({line[0].split("(")[1]})\033[0m '
+        line = ')'.join(line[1:])
+        line = line.split(']')
+        chash = f'{line[0][2:]}'
+        ret += f'\033[31m{line[0][1:]}]\033[0m '
+        line = ']'.join(line[1:])
+        line = line.split('>')
+        ret += f'\033[36m{line[0][1:]}>\033[0m'
+        line = '>'.join(line[1:])
+        ret += f'\033[3m{line}\033[0m'
+    except:
+        ret = string
+        chash = ''
+    return ret, chash
+
 def page(verbose, selected, pages):
     vsize = shutil.get_terminal_size()[1]
     hsize = shutil.get_terminal_size()[0]
@@ -68,16 +88,15 @@ def page(verbose, selected, pages):
         print('| \033[91m[VERBOSE]\033[0m') if verbose else print()
         hr()
         for idx, opt in enumerate(pages[pagenum]):
-            commit_hash = ch_gen(opt)
+            line, commit_hash = decorate(opt)
             if len(opt) > hsize - 4:
                 opt = opt[:hsize-5] + '...'
             print('\033[2K', end='')
-            if len(selected) != 2:
-                print('>', end='') if idx == select else print('', end='')
+            print('>', end=' ') if idx == select else print(' ', end=' ')
             if commit_hash in selected:
                 print(f'\033[2m{opt}\033[0m')
             else:
-                print(opt)
+                print(line)
         for i in range(lpp-pagelen):
             print('\033[2K')
         hr()
@@ -144,7 +163,7 @@ def diffhash(verbose, head, author):
 
         threshold = 100
         randstr = ''.join([random.choice(string.ascii_letters + string.digits) for i in range(8)])
-        fstring = randstr.join(['(%ad)','[%h]','[%t]','%an', '%s'])
+        fstring = randstr.join(['(%ad)','[%h]','<%an>', '%s'])
         dateset = 'local' if hsize > threshold else 'relative'
         options += sp.getoutput(f'git log --date={dateset} --pretty=format:"{fstring}"').split('\n')
         tempopt = []
@@ -152,7 +171,7 @@ def diffhash(verbose, head, author):
             tempopt.append('HEAD')
         for opt in options[len(tempopt):]:
             opt = opt.split(randstr)
-            authr = opt[3]
+            authr = opt[2][1:-1]
             optstr = ' '.join(opt)
             if author:
                 if ret_author == authr:
