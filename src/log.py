@@ -68,9 +68,10 @@ def page(option):
     start = 0
     end = lpp if len(option) > lpp else len(option)
     check = [idx for idx, _ in enumerate(option) if _.count('*')]
+    selected = []
     while(1):
         hr()
-        print("LOG VIEWER")
+        print("LOG VIEWER | SELECTED:", selected)
         hr()
         for idx, line in enumerate(option[start:end]):
             print('\033[2K\033[0m', end='')

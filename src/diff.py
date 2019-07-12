@@ -112,10 +112,18 @@ def page(verbose, selected, pages):
                 else:
                     ret = wait_key()
 
-        if ret == 'j' and select < pagelen - 1:
-            select += 1
-        elif ret == 'k' and select > 0:
-            select -= 1
+        if ret == 'j':
+            if select < pagelen - 1:
+                select += 1
+            elif pagenum < len(pages) - 1:
+                pagenum += 1
+                select = 0
+        elif ret == 'k':
+            if select > 0:
+                select -= 1
+            elif pagenum > 0:
+                pagenum -= 1
+                select = pagelen - 1
         elif ret == 'h' and pagenum > 0:
             pagenum -= 1
         elif ret == 'l' and pagenum < len(pages) - 1:
