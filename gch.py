@@ -30,6 +30,7 @@ defaults['remote'] = 'origin'
 defaults['pull'] = 'False'
 defaults['update'] = 'False'
 defaults['diff'] = 'False'
+defaults['checkout'] = 'False'
 defaultspath = path.join(".", ".defaults.txt")
 if path.exists(defaultspath):
     with open(defaultspath, 'r') as readfile:
@@ -52,14 +53,15 @@ exp_v=f'Verbose option.'.ljust(38)+f'>Default:{defaults["verbose"]}'
 exp_l=f'Git log with option.'.ljust(38)+f'>Default:{defaults["log"]}'
 exp_r=f'Reset all changes since last commit.'.ljust(38)+f'>Default:{defaults["reset"]}'
 exp_e=f'Choose which remote repo.to push.'.ljust(38)+f'>Default:{defaults["remote"]}'
-exp_p2=f'Pull from <{defaults["remote"]}> <{defaults["branch"]}>.'.ljust(38)+f'>Default:False'
+exp_p2=f'Fetch + Merge from <{defaults["remote"]}> <{defaults["branch"]}>.'.ljust(38)+f'>Default:False'
 exp_s=f'Save settings'.ljust(38)+f'>Default:False'
 exp_u=f'Update gch'.ljust(38)+f'>Default:False'
 exp_d=f'Open diff tool'.ljust(38)+f'>Default:False'
+exp_c2=f'Checkout per file/directory'.ljust(38)+f'>Default:False'
 
 @click.command()
 @click.option('-i', '--init',     is_flag=defaults['init'],     help=exp_i)
-@click.option('-v', '--verbose',   is_flag=defaults['verbose'],   help=exp_v)
+@click.option('-v', '--verbose',  is_flag=defaults['verbose'],   help=exp_v)
 @click.option('-l', '--log',      is_flag=defaults['log'],      help=exp_l)
 @click.option('-r', '--remote',   default=defaults['remote'],    help=exp_e)
 @click.option('-g', '--gitpath',  default=defaults['gitpath'],  type=click.Path(exists=True), help=exp_g)
@@ -71,6 +73,7 @@ exp_d=f'Open diff tool'.ljust(38)+f'>Default:False'
 @click.option('-d', '--diff',     is_flag=defaults['diff'],     type=str, help=exp_d)
 @click.option('-u', '--update',   is_flag=defaults['update'],   type=str, help=exp_u)
 @click.option('--reset',          is_flag=defaults['reset'],    type=str, help=exp_r)
+@click.option('--checkout',       is_flag=defaults['checkout'],    type=str, help=exp_c2)
 @click.option('--pull',           is_flag=defaults['pull'],     type=str, help=exp_p2)
 def main(init,
          verbose,
@@ -85,6 +88,7 @@ def main(init,
          reset,
          pull,
          update,
+         checkout,
          diff
          ):
 #def main(init, verbose, log, commit, reset, push, save, gitpath, filepath, branch, remote, pull):
