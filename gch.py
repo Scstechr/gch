@@ -7,12 +7,14 @@ Git Commit Handler
 
 import sys, subprocess as sp
 from os import path, chdir, getcwd
+import os
 import click
 
 from src import issues
 from src.qs import getAnswer, isExist 
 from src.git import *
 from src.diff import diffhash
+from src.log import displog
 
 issues.version(3)
 
@@ -97,7 +99,7 @@ def main(init,
         Update()
 
     defaults['init'] = init
-    defaults['gitpath'] = path.abspath(gitpath)
+    defaults['gitpath'] = os.path.abspath(gitpath)
     defaults['filepath'] = filepath
     defaults['branch'] = branch
     defaults['verbose'] = verbose 
@@ -109,10 +111,6 @@ def main(init,
     defaults['pull'] = pull
     defaults['update'] = update
     defaults['diff'] = diff
-
-
-    chdir(gitpath)
-
 
     gitfolder = path.join(gitpath, '.git')
     if not path.exists(gitfolder):
@@ -133,11 +131,20 @@ def main(init,
     if reset:
         Reset()
 
-    issues.execute(['git status --short'])
-
-
     if len(branch) == 0:
         issues.execute(['git branch'])
+
+    if isExist('git branch'):
+        current_branch = getCurrentBranch()
+        if len(branch):
+            if current_branch != branch:
+                issues.branch()
+                branch = setBranch(branch, filepath)
+        
+    if checkout:
+        pass
+        
+    issues.execute(['git status --short'])
 
     if save:
         issues.execute([f'rm {defaultspath}'])
@@ -149,7 +156,10 @@ def main(init,
     filepath = path.abspath(filepath)
 
     if log:
-        issues.execute([logcmd])
+        if click.confirm('Execute continuous log viewer?'):
+            displog()
+        else:
+            issues.execute([logcmd])
 
     if CheckState():
         issues.execute([f'git diff --stat'])
@@ -159,16 +169,10 @@ def main(init,
             issues.execute([f'git add {filepath}'])
             Commit()
 
-    if pull:
-        issues.execute([f'git pull {remote} {branch}'])
 
-    if isExist('git branch'):
-        current_branch = getCurrentBranch()
-        if len(branch):
-            if current_branch != branch:
-                issues.branch()
-                branch = setBranch(branch, filepath)
-        
+    if pull:
+        issues.execute([f'git fetch {remote} {branch}',
+                         'git merge {remote} {branch}'])
 
     # Push or not
     if push:

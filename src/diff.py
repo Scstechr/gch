@@ -73,7 +73,109 @@ def decorate(string):
     except:
         ret = string
         chash = ''
+        if string.count('HEAD'):
+            chash = 'HEAD'
     return ret, chash
+
+def contpage(verbose, selected, option):
+    vsize = shutil.get_terminal_size()[1]
+    hsize = shutil.get_terminal_size()[0]
+    lpp = int(vsize / 2); #lines per page
+    select = 0
+    pagenum = 0
+    start = 0
+    end = lpp if len(option) > lpp else len(option)
+    check = [idx for idx, _ in enumerate(option) if _.count('*')]
+    while(1):
+        hr()
+        print('\033[2K\033[92mSELECTED:', selected, end ='\033[0m ')
+        print('| \033[91m[VERBOSE]\033[0m') if verbose else print()
+        hr()
+        for idx, line in enumerate(option[start:end]):
+            print('\033[2K\033[0m', end='')
+            print('> ',end='') if start+idx==select else print('  ', end='')
+            line, chash = decorate(line)
+            if chash in selected:
+                print(f'\033[2m{line}\033[0m')
+            else:
+                print(line)
+            #print(line, end='\033[0m\n')
+        hr()
+        print(f'| \033[93m[hj]:[\u2190\u2193]', end = '')
+        print(f',q:QUIT,v:VERBOSE,s/Enter:SELECT\033[0m')
+        hr()
+        if len(selected) == 2:
+            break
+        ret = wait_key()
+        while(1):
+            if ret in ['j', 'k', 'l', 'h', 'q', 's', '\n']:
+                break
+            else:
+                ret = wait_key()
+
+        if ret == 'j':
+            if select < len(option) - 1:
+                select += 1
+            k = 0
+            while(option[select].count('*')==0):
+                select+=1
+                k += 1
+            if select >= end and end < len(option):
+                end += 1 + k
+                start += 1 + k
+        elif ret == 'k':
+            if select > 0:
+                select -= 1
+            k = 0
+            while(option[select].count('*')==0):
+                select-=1
+                k += 1
+            if select < start:
+                end -= (1 + k)
+                start -= (1 + k)
+        elif ret == 'q':
+            sys.exit(0)
+        elif ret == 'v':
+            verbose = False if verbose else True
+        elif ret in ['\n', 's'] :
+            if len(selected) == 2:
+                break
+            else:
+                _, chash = decorate(option[select])
+                if chash not in selected:
+                    selected.append(chash)
+                else:
+                    selected.pop()
+        print(f'\033[{lpp+7}A')
+    return verbose
+
+def logviewer(head, verbose):
+    logcmd2 =  "git log --graph --all --pretty=format:'(%cr) [%h] <%an> %s' --abbrev-commit --date=relative --decorate=full "
+    options = sp.getoutput(logcmd2).split('\n')
+    if isExist(f'git status --short'):
+        options = ['* HEAD'] + options
+    while(1):
+        vsize = shutil.get_terminal_size()[1]
+        hsize = shutil.get_terminal_size()[0]
+        selected = []
+        if head:
+            selected += ['HEAD']
+        with CursorOff():
+            contpage(verbose, selected, options)
+
+        ret_diffhash = execdiff(verbose, selected)
+
+        if head:
+            break
+        else:
+            if click.confirm('\nDo you want to exit diff hash tool?'):
+                sys.exit(0)
+            else:
+                for i in range(vsize):
+                    print(f'\033[2K', end='')
+
+    return ret_diffhash
+
 
 def page(verbose, selected, pages):
     vsize = shutil.get_terminal_size()[1]
@@ -88,12 +190,12 @@ def page(verbose, selected, pages):
         print('| \033[91m[VERBOSE]\033[0m') if verbose else print()
         hr()
         for idx, opt in enumerate(pages[pagenum]):
-            line, commit_hash = decorate(opt)
+            line, chash = decorate(opt)
             if len(opt) > hsize - 4:
                 opt = opt[:hsize-5] + '...'
             print('\033[2K', end='')
             print('>', end=' ') if idx == select else print(' ', end=' ')
-            if commit_hash in selected:
+            if chash in selected:
                 print(f'\033[2m{opt}\033[0m')
             else:
                 print(line)
@@ -138,9 +240,9 @@ def page(verbose, selected, pages):
             if len(selected) == 2:
                 break
             else:
-                commit_hash = ch_gen(pages[pagenum][select])
-                if commit_hash not in selected:
-                    selected.append(commit_hash)
+                chash = ch_gen(pages[pagenum][select])
+                if chash not in selected:
+                    selected.append(chash)
                 else:
                     selected.pop()
 
@@ -157,6 +259,19 @@ def book(verbose, selected, options):
     else:
         pages = [options]
     return page(verbose, selected, pages)
+
+def execdiff(verbose, selected):
+    ret_diffhash = ''
+    if 'HEAD' in selected:
+        ret_diffhash = selected[0] if selected[0] != 'HEAD' else selected[1]
+        issues.execute([f'git diff --stat {ret_diffhash}'])
+        if verbose:
+            issues.execute([f'git diff --ignore-blank-lines -U1 {ret_diffhash}'])
+    else:
+        issues.execute([f'git diff --stat {selected[0]}..{selected[1]}'])
+        if verbose:
+            issues.execute([f'git diff --ignore-blank-lines -U1 {selected[0]}..{selected[1]}'])
+    return ret_diffhash
 
 def diffhash(verbose, head, author):
     ret_diffhash = ''
@@ -198,17 +313,7 @@ def diffhash(verbose, head, author):
         with CursorOff():
             verbose = book(verbose, selected, options)
 
-        ret_diffhash = ''
-
-        if 'HEAD' in selected:
-            ret_diffhash = selected[0] if selected[0] != 'HEAD' else selected[1]
-            issues.execute([f'git diff --stat {ret_diffhash}'])
-            if verbose:
-                issues.execute([f'git diff --ignore-blank-lines -U1 {ret_diffhash}'])
-        else:
-            issues.execute([f'git diff --stat {selected[0]}..{selected[1]}'])
-            if verbose:
-                issues.execute([f'git diff --ignore-blank-lines -U1 {selected[0]}..{selected[1]}'])
+        ret_diffhash = execdiff(verbose, selected)
         if head:
             break
         else:
