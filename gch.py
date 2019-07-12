@@ -158,10 +158,7 @@ def main(init,
     filepath = path.abspath(filepath)
 
     if log:
-        if click.confirm('Execute continuous log viewer?'):
-            displog()
-        else:
-            issues.execute([logcmd])
+        issues.execute([logcmd])
 
     if CheckState():
         issues.execute([f'git diff --stat'])
