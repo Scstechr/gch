@@ -13,8 +13,7 @@ import click
 from src import issues
 from src.qs import getAnswer, isExist 
 from src.git import *
-from src.diff import diffhash
-from src.log import displog
+from src.diff import diffhash, logviewer
 
 issues.version(3)
 
@@ -123,10 +122,13 @@ def main(init,
         initialize(flag=True)
 
     if diff:
-        flag = False
-        if click.confirm('Do you want to name specific author?'):
-            flag = True
-        diffhash(verbose=verbose, head=False, author=flag)
+        if click.confirm('Do you want to use diff-column viewer1?'):
+            flag = False
+            if click.confirm('Do you want to name specific author?'):
+                flag = True
+            diffhash(verbose=verbose, head=False, author=flag)
+        else:
+            logviewer(verbose=verbose, head=False)
 
     if reset:
         Reset()

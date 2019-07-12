@@ -94,9 +94,10 @@ def contpage(verbose, selected, option):
         for idx, line in enumerate(option[start:end]):
             print('\033[2K\033[0m', end='')
             print('> ',end='') if start+idx==select else print('  ', end='')
+            orig = line
             line, chash = decorate(line)
             if chash in selected:
-                print(f'\033[2m{line}\033[0m')
+                print(f'\033[2m{orig}\033[0m')
             else:
                 print(line)
             #print(line, end='\033[0m\n')
@@ -108,7 +109,7 @@ def contpage(verbose, selected, option):
             break
         ret = wait_key()
         while(1):
-            if ret in ['j', 'k', 'l', 'h', 'q', 's', '\n']:
+            if ret in ['j', 'k', 'v', 'q', 's', '\n']:
                 break
             else:
                 ret = wait_key()
@@ -149,11 +150,12 @@ def contpage(verbose, selected, option):
         print(f'\033[{lpp+7}A')
     return verbose
 
-def logviewer(head, verbose):
+def logviewer(verbose, head):
     logcmd2 =  "git log --graph --all --pretty=format:'(%cr) [%h] <%an> %s' --abbrev-commit --date=relative --decorate=full "
     options = sp.getoutput(logcmd2).split('\n')
     if isExist(f'git status --short'):
         options = ['* HEAD'] + options
+
     while(1):
         vsize = shutil.get_terminal_size()[1]
         hsize = shutil.get_terminal_size()[0]
@@ -161,7 +163,7 @@ def logviewer(head, verbose):
         if head:
             selected += ['HEAD']
         with CursorOff():
-            contpage(verbose, selected, options)
+            verbose = contpage(verbose, selected, options)
 
         ret_diffhash = execdiff(verbose, selected)
 
