@@ -122,7 +122,7 @@ def main(init,
         initialize(flag=True)
 
     if diff:
-        if click.confirm('Do you want to use diff-column viewer1?'):
+        if click.confirm('Do you want to use diff-column viewer?'):
             flag = False
             if click.confirm('Do you want to name specific author?'):
                 flag = True
