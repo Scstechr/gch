@@ -56,8 +56,6 @@ def hr():
     print(''.join(['\u2500' for _ in range(hsize)]),flush=True)
 
 def decorate(string):
-    hsize = shutil.get_terminal_size()[0]
-    line = string if len(string) < hsize*0.8 else f'{string[:int(hsize*0.95)]} ...'
     line = string.split(')')
     try:
         ret = f'{line[0].split("(")[0]}\033[0m({line[0].split("(")[1]})\033[0m '
@@ -77,16 +75,21 @@ def decorate(string):
             chash = 'HEAD'
     return ret, chash
 
-def contpage(verbose, selected, option):
+def setlength():
     vsize = shutil.get_terminal_size()[1]
     hsize = shutil.get_terminal_size()[0]
-    lpp = int(vsize / 2); #lines per page
+    width = hsize - 7
+    return int(vsize/2), width
+
+def contpage(verbose, selected, option):
+    lpp, width = setlength()
     select = 0
     pagenum = 0
     start = 0
     end = lpp if len(option) > lpp else len(option)
     check = [idx for idx, _ in enumerate(option) if _.count('*')]
     while(1):
+        lpp, width = setlength()
         hr()
         print('\033[2K\033[92mSELECTED:', selected, end ='\033[0m ')
         print('| \033[91m[VERBOSE]\033[0m') if verbose else print()
@@ -94,6 +97,7 @@ def contpage(verbose, selected, option):
         for idx, line in enumerate(option[start:end]):
             print('\033[2K\033[0m', end='')
             print('> ',end='') if start+idx==select else print('  ', end='')
+            line = line if len(line) < width else f'{line[:int(width)]} ...'
             orig = line
             line, chash = decorate(line)
             if chash in selected:
@@ -180,21 +184,19 @@ def logviewer(verbose, head):
 
 
 def page(verbose, selected, pages):
-    vsize = shutil.get_terminal_size()[1]
-    hsize = shutil.get_terminal_size()[0]
-    lpp = int(vsize / 2); #lines per page
     select = 0
     pagenum = 0
     while(1):
+        lpp, width = setlength()
         hr()
         pagelen = len(pages[pagenum])
         print('\033[2K\033[92mSELECTED:', selected, end ='\033[0m ')
         print('| \033[91m[VERBOSE]\033[0m') if verbose else print()
         hr()
         for idx, opt in enumerate(pages[pagenum]):
+            if len(opt) > width:
+                opt = opt[:width-5] + '...'
             line, chash = decorate(opt)
-            if len(opt) > hsize - 4:
-                opt = opt[:hsize-5] + '...'
             print('\033[2K', end='')
             print('>', end=' ') if idx == select else print(' ', end=' ')
             if chash in selected:
