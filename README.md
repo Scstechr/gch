@@ -7,28 +7,12 @@ A tool to handle git related commands
 	- :warning: Note that English version has not been updated for a long time.
 - Blog Post (Japanese): [Qiita](https://qiita.com/Scstechr/items/53e3e326c4caa6dc2307) / [Qrunch](https://scstechr.qrunch.io/entries/Jmdclx72XYk2F5Pa)
 
-## Requirements
-Please install all the packages listed in `requirements.txt`.
+## Install
 
 ```bash
-$ git clone https://github.com/Scstechr/gch ~/.gch
-$ cd ~/.gch
-$ pip install -r requirements.txt
+$ brew tap scstechr/gch
+$ brew install gch
 ```
-Also, be sure to have `Python 3.6.x` executable. 
-(It does not work with `Python 3.7.x` or `Python 2.x`)
-
-## Recommendation
-It is recommended to use `alias` in order to execute `gch`/`difftool` from anywhere.  
-Add these lines in `.bash_profile`/`.bashrc`
-
-```bash:.bashrc
-export PATH="${HOME}/.gch:$PATH"
-alias gch='gch.py'
-alias difftool='difftool.py'
-```
-
-and `source` it afterwards.
 
 ## How to Use
 
