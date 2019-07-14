@@ -2,39 +2,14 @@ __GCH__ (Git Commit Handler, 以下:`gch`)  の公式ドキュメントです.
 
 # インストール
 ```bash
-$ git clone https://github.com/Scstechr/usefultools.git ~/.useful
-$ cd ~/.useful
-$ pip install -r requirements.txt
-```
-
-# 推奨の使用方法
-
- `alias` を設定することで `gch`/`difftool`をどこからでも実行できるようにすると良いです．  
-
-```bash:.bash_profile
-export PATH="${HOME}/.gch:$PATH"
-alias gch='gch.py'
-alias difftool='difftool.py'
-```
-
-上記を `~/.bashrc`に追加するか，下記を実行し`source ~/.bashrc` するとできます．
-
-```bash:add
-echo 'PATH="${HOME}/.gch:$PATH"' >> ~/.bashrc
-echo 'alias gch="gch.py"' >> ~/.bash_profile
-echo 'alias difftool="difftool.py"' >> ~/.bash_profile
-```
-
-`gch`のアップデート方法は今までよりも簡単になりました．
-
-```bash
-$ gch -u 
+$ brew tap scstechr/gch
+$ brew install gch
 ```
 
 ## オプション
 ```sh
-$ gch --help
-Usage: gch.py [OPTIONS]
+$gch --help
+Usage: gch [OPTIONS]
 
 Options:
   -i, --init           Run initializer                       >Default:False
@@ -48,9 +23,9 @@ Options:
   -p, --push           Push.
   -s, --save           Save settings                         >Default:False
   -d, --diff           Open diff tool                        >Default:False
-  -u, --update         Update gch                            >Default:False
+  --version            Check version of gch                  >Default:False
   --reset              Reset all changes since last commit.  >Default:False
-  --pull               Pull from <origin> <master>.          >Default:False
+  --pull               Fetch + Merge from <origin> <master>. >Default:False
   --help               Show this message and exit.
 ```
 
@@ -96,5 +71,4 @@ Options:
 ### `gch`関連
 - `-s`/`--save`で直前の設定を`.defaults.txt`に保存．[(詳細)](https://github.com/Scstechr/gch/blob/master/doc/jp/jp_other.md)
 - `-v`/`--verbose`で情報量を増やす．[(詳細)](https://github.com/Scstechr/gch/blob/master/doc/jp/jp_verbose.md)
-- `-u`/`—update`で`gch`自体をアップデートする．[(詳細)](https://github.com/Scstechr/gch/blob/master/doc/jp/jp_other.md)
 - `-—help`で`gch`の全てのオプションを表示する．
