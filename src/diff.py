@@ -21,6 +21,10 @@ from .git import *
 class CursorOff(object):
     def __enter__(self):
         cursor.hide()
+#        vsize = shutil.get_terminal_size()[1]
+#        print(f'\33[{vsize};0f', end='')
+#        for i in range(vsize+1):
+#            print(f'\033[1F\033[2K', end ='')
          
     def __exit__(self, *args):
         cursor.show()
@@ -81,8 +85,8 @@ def decorate(string):
 def setlength():
     vsize = shutil.get_terminal_size()[1]
     hsize = shutil.get_terminal_size()[0]
-    width = hsize - 5
-    return int(vsize*0.7), width
+    width = hsize - 10
+    return int(vsize-8), width
 
 def contpage(verbose, selected, option):
     lpp, width = setlength()

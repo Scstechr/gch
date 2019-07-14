@@ -5,6 +5,7 @@ Git Commit Handler
 ==================
 '''
 
+VERSION = 1.3
 import sys, subprocess as sp
 from os import path, chdir, getcwd
 import os
@@ -56,9 +57,8 @@ exp_r=f'Reset all changes since last commit.'.ljust(38)+f'>Default:{defaults["re
 exp_e=f'Choose which remote repo.to push.'.ljust(38)+f'>Default:{defaults["remote"]}'
 exp_p2=f'Fetch + Merge from <{defaults["remote"]}> <{defaults["branch"]}>.'.ljust(38)+f'>Default:False'
 exp_s=f'Save settings'.ljust(38)+f'>Default:False'
-exp_u=f'Update gch'.ljust(38)+f'>Default:False'
 exp_d=f'Open diff tool'.ljust(38)+f'>Default:False'
-exp_c2=f'Checkout per file/directory'.ljust(38)+f'>Default:False'
+exp_c2=f'Checkout file/directory'.ljust(38)+f'>Default:False'
 
 @click.command()
 @click.option('-i', '--init',     is_flag=defaults['init'],     help=exp_i)
@@ -72,7 +72,6 @@ exp_c2=f'Checkout per file/directory'.ljust(38)+f'>Default:False'
 @click.option('-p', '--push',     is_flag=defaults['push'],     help=exp_p)
 @click.option('-s', '--save',     is_flag='False',              help=exp_s)
 @click.option('-d', '--diff',     is_flag=defaults['diff'],     type=str, help=exp_d)
-@click.option('-u', '--update',   is_flag=defaults['update'],   type=str, help=exp_u)
 @click.option('--reset',          is_flag=defaults['reset'],    type=str, help=exp_r)
 @click.option('--checkout',       is_flag=defaults['checkout'],    type=str, help=exp_c2)
 @click.option('--pull',           is_flag=defaults['pull'],     type=str, help=exp_p2)
@@ -88,14 +87,10 @@ def main(init,
          save,
          reset,
          pull,
-         update,
          checkout,
          diff
          ):
 #def main(init, verbose, log, commit, reset, push, save, gitpath, filepath, branch, remote, pull):
-
-    if update:
-        Update()
 
     defaults['init'] = init
     defaults['gitpath'] = os.path.abspath(gitpath)
