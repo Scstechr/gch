@@ -4,4 +4,5 @@ build
 release
 *.tar.gz
 *.spec
+*.sh
 
