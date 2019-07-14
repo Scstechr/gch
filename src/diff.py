@@ -73,13 +73,16 @@ def decorate(string):
         chash = ''
         if string.count('HEAD'):
             chash = 'HEAD'
+
+    ast = ret.find('*') + 1
+    ret = ret[:ast].replace('*','\033[1m*\033[0m') + ret[ast:]
     return ret, chash
 
 def setlength():
     vsize = shutil.get_terminal_size()[1]
     hsize = shutil.get_terminal_size()[0]
-    width = hsize - 7
-    return int(vsize/2), width
+    width = hsize - 5
+    return int(vsize*0.7), width
 
 def contpage(verbose, selected, option):
     lpp, width = setlength()
@@ -229,7 +232,7 @@ def page(verbose, selected, pages):
                 select -= 1
             elif pagenum > 0:
                 pagenum -= 1
-                select = pagelen - 1
+                select = lpp - 1
         elif ret == 'h' and pagenum > 0:
             pagenum -= 1
         elif ret == 'l' and pagenum < len(pages) - 1:
@@ -254,8 +257,7 @@ def page(verbose, selected, pages):
     return verbose
         
 def book(verbose, selected, options):
-    vsize = shutil.get_terminal_size()[1]
-    lpp = int(vsize / 2); #lines per page
+    lpp, width = setlength()
     pages = []
     if len(options) > lpp:
         for i in range(0, len(options), lpp):
