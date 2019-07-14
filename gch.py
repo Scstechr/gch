@@ -5,6 +5,7 @@ Git Commit Handler
 ==================
 '''
 
+VERSION = 1.4
 import sys, subprocess as sp
 from os import path, chdir, getcwd
 import os
@@ -29,8 +30,8 @@ defaults['reset'] = 'False'
 defaults['push'] = 'False'
 defaults['remote'] = 'origin'
 defaults['pull'] = 'False'
-defaults['update'] = 'False'
 defaults['diff'] = 'False'
+defaults['version'] = 'False'
 defaultspath = path.join(".", ".defaults.txt")
 if path.exists(defaultspath):
     with open(defaultspath, 'r') as readfile:
@@ -56,6 +57,7 @@ exp_e=f'Choose which remote repo.to push.'.ljust(38)+f'>Default:{defaults["remot
 exp_p2=f'Fetch + Merge from <{defaults["remote"]}> <{defaults["branch"]}>.'.ljust(38)+f'>Default:False'
 exp_s=f'Save settings'.ljust(38)+f'>Default:False'
 exp_d=f'Open diff tool'.ljust(38)+f'>Default:False'
+exp_v2=f'Check version of gch'.ljust(38)+f'>Default:False'
 
 @click.command()
 @click.option('-i', '--init',     is_flag=defaults['init'],     help=exp_i)
@@ -69,6 +71,7 @@ exp_d=f'Open diff tool'.ljust(38)+f'>Default:False'
 @click.option('-p', '--push',     is_flag=defaults['push'],     help=exp_p)
 @click.option('-s', '--save',     is_flag='False',              help=exp_s)
 @click.option('-d', '--diff',     is_flag=defaults['diff'],     type=str, help=exp_d)
+@click.option('--version',        is_flag=defaults['reset'],    type=str, help=exp_v2)
 @click.option('--reset',          is_flag=defaults['reset'],    type=str, help=exp_r)
 @click.option('--pull',           is_flag=defaults['pull'],     type=str, help=exp_p2)
 def main(init,
@@ -83,6 +86,7 @@ def main(init,
          save,
          reset,
          pull,
+         version,
          diff
          ):
 #def main(init, verbose, log, commit, reset, push, save, gitpath, filepath, branch, remote, pull):
@@ -98,8 +102,11 @@ def main(init,
     defaults['push'] = push
     defaults['remote'] = remote
     defaults['pull'] = pull
-    defaults['update'] = update
     defaults['diff'] = diff
+
+    if version:
+        print(" gch version :", VERSION)
+        sys.exit(0)
 
     gitfolder = path.join(gitpath, '.git')
     if not path.exists(gitfolder):
@@ -132,9 +139,6 @@ def main(init,
             if current_branch != branch:
                 issues.branch()
                 branch = setBranch(branch, filepath)
-        
-    if checkout:
-        pass
         
     issues.execute(['git status --short'])
 
