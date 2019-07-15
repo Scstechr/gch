@@ -20,7 +20,7 @@ $ brew install gch
 
 ```bash
 $ gch --help
-Usage: gch.py [OPTIONS]
+Usage: gch [OPTIONS]
 
 Options:
   -i, --init           Run initializer                       >Default:False
@@ -34,9 +34,9 @@ Options:
   -p, --push           Push.
   -s, --save           Save settings                         >Default:False
   -d, --diff           Open diff tool                        >Default:False
-  -u, --update         Update gch                            >Default:False
+  --version            Check version of gch                  >Default:False
   --reset              Reset all changes since last commit.  >Default:False
-  --pull               Pull from <origin> <master>.          >Default:False
+  --pull               Fetch + Merge from <origin> <master>. >Default:False
   --help               Show this message and exit.
 ```
 ### Simple command
