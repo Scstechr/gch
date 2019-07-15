@@ -5,7 +5,6 @@ Git Commit Handler
 ==================
 '''
 
-VERSION = 1.6
 import sys, subprocess as sp
 from os import path, chdir, getcwd
 import os
@@ -16,6 +15,8 @@ from src.qs import getAnswer, isExist
 from src.git import *
 from src.diff import diffhash, logviewer
 
+from src import VERSION
+GCH_VERSION = VERSION
 issues.version(3)
 
 defaults = {}
@@ -105,7 +106,7 @@ def main(init,
     defaults['diff'] = diff
 
     if version:
-        print(" gch version :", VERSION)
+        print(" gch version :", GCH_VERSION)
         sys.exit(0)
 
     gitfolder = path.join(gitpath, '.git')

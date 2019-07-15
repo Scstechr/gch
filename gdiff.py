@@ -5,11 +5,12 @@ Git Diff Tool
 ==================
 '''
 
-VERSION = 1.6
 import click
 
 import sys
 from src.diff import diffhash, logviewer
+from src import VERSION
+GDIFF_VERSION = VERSION
 
 @click.command()
 @click.option('-v', '--verbose', is_flag='False', help='Detailed diff.')
@@ -19,7 +20,7 @@ from src.diff import diffhash, logviewer
 @click.option('--version', is_flag='False', help='Check version of gdiff.')
 def main(verbose, head, author, log, version):
     if version:
-        print(" gdiff version :", VERSION)
+        print(" gdiff version :", GDIFF_VERSION)
         sys.exit(0)
     if log:
         logviewer(verbose, head)
