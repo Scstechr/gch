@@ -158,7 +158,7 @@ def contpage(verbose, selected, option):
                     selected.append(chash)
                 else:
                     selected.pop()
-        print(f'\033[{lpp+7}A')
+        print(f'\033[{lpp+8}A')
     return verbose
 
 def logviewer(verbose, head):
@@ -166,6 +166,9 @@ def logviewer(verbose, head):
     options = sp.getoutput(logcmd2).split('\n')
     if isExist(f'git status --short'):
         options = ['* HEAD'] + options
+    if len(options) < 1:
+        issues.warning('No log found!')
+        sys.exit(0)
 
     while(1):
         vsize = shutil.get_terminal_size()[1]
