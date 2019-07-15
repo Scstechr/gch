@@ -112,6 +112,10 @@ def contpage(verbose, selected, option):
             else:
                 print(line)
             #print(line, end='\033[0m\n')
+        if len(option)<lpp:
+            for i in range(lpp-len(option)):
+                print('\033[2K')
+
         hr()
         print(f'| \033[93m[hj]:[\u2190\u2193]', end = '')
         print(f',q:QUIT,v:VERBOSE,s/Enter:SELECT\033[0m')
@@ -164,11 +168,11 @@ def contpage(verbose, selected, option):
 def logviewer(verbose, head):
     logcmd2 =  "git log --graph --all --pretty=format:'(%cr) [%h] <%an> %s' --abbrev-commit --date=relative --decorate=full "
     options = sp.getoutput(logcmd2).split('\n')
-    if isExist(f'git status --short'):
-        options = ['* HEAD'] + options
     if len(options) < 1:
         issues.warning('No log found!')
         sys.exit(0)
+    if isExist(f'git status --short'):
+        options = ['* HEAD'] + options
 
     while(1):
         vsize = shutil.get_terminal_size()[1]
@@ -302,6 +306,9 @@ def diffhash(verbose, head, author):
         fstring = randstr.join(['(%ad)','[%h]','<%an>', '%s'])
         dateset = 'local' if hsize > threshold else 'relative'
         options += sp.getoutput(f'git log --date={dateset} --pretty=format:"{fstring}"').split('\n')
+        if len(options) < 1:
+            issues.warning('No log found!')
+            sys.exit(0)
         tempopt = []
         if options[0] == 'HEAD':
             tempopt.append('HEAD')
