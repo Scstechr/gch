@@ -5,7 +5,7 @@ Git Diff Tool
 ==================
 '''
 
-VERSION = 1.4
+VERSION = 1.6
 import click
 
 import sys

@@ -5,7 +5,7 @@ Git Commit Handler
 ==================
 '''
 
-VERSION = 1.4
+VERSION = 1.6
 import sys, subprocess as sp
 from os import path, chdir, getcwd
 import os
