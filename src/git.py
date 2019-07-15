@@ -127,22 +127,6 @@ def initialize(flag=False):
                             f'echo "# {title}" >> README.md'])
             issues.execute(['git add -f .gitignore'])
 
-def Update():
-    if click.confirm(f'Update? (will execute pull from origin repository of gch)'):
-        exepath = Path(__file__).parents[1]
-        current = Path('.')
-        chdir(exepath)
-        issues.execute(['pwd',
-                        f'git checkout master',
-                        f'git pull origin master',
-                        f'pip install -r {exepath}/requirements.txt'
-                        ])
-        #issues.execute(#['cd ~/.gch'])
-        chdir(current)
-        sys.exit(0)
-    else:
-        issues.abort()
-
 def Reset():
     if click.confirm("Are you sure you want to reset?"):
         issues.warning('Options with `--hard` must be done with caution')
