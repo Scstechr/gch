@@ -6,6 +6,8 @@
 
 `git log`を実行します．
 
+![Fig](https://github.com/Scstechr/gch/blob/master/fig/gchlog.gif)
+
 ```bash
 $ gch -l
 >> execute: git status --short
