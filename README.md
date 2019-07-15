@@ -15,7 +15,7 @@ $ brew install gch
 ```
 
 ### Click Runtime Error:
-There exists an Runtime error such as:
+There exists a runtime error such as:
 ```bash
 $ gch
 Traceback (most recent call last):
