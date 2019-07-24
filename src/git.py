@@ -112,20 +112,32 @@ def initialize(flag=False):
         issues.execute([f'cat ~/.gitconfig'])
         globalsetting()
         sys.exit()
+    # git config
+    gitconfigpath = path.join(path.expanduser('~'), '.gitconfig')
+    if not path.exists(gitconfigpath):
+        click.echo("~/.gitconfig file does not exist. => Start Initialization!")
+        globalsetting()
+
+    issues.execute(['git init'])
+
+    # README.md
+    readmepath = path.join(getcwd(), 'README.md')
+    title = click.prompt('Title of this repository(project)').upper()
+    if path.exists(readmepath):
+        if click.confirm('Do you want to remove the existing README.md?'):
+            issues.execute([f'rm README.md'])
+            issues.execute([f'echo "# {title}" >> README.md'])
     else:
-        # git confi
-        gitconfigpath = path.join(path.expanduser('~'), '.gitconfig')
-        if not path.exists(gitconfigpath):
-            click.echo("~/.gitconfig file does not exist. => Start Initialization!")
-            globalsetting()
-        readmepath = path.join(getcwd(), 'README.md')
-        if not path.exists(readmepath):
-            title = click.prompt('Title of this repository(project)').upper()
-            issues.execute(['git init', 'touch .gitignore', 'touch README.md',\
-                            'echo ".*" >> .gitignore', \
-                            'echo ".default.txt" >> .gitignore', \
-                            f'echo "# {title}" >> README.md'])
-            issues.execute(['git add -f .gitignore'])
+        issues.execute(['touch README.md'])
+        issues.execute([f'echo "# {title}" >> README.md'])
+
+    # .gitignore
+    ignorepath = path.join(getcwd(), '.gitignore')
+    if not path.exists(readmepath):
+        issues.execute(['touch .gitignore'])
+        issues.execute([f'echo ".*" >> .gitignore'])
+        issues.execute([f'echo ".default.txt" >> .gitignore'])
+    issues.execute(['git add -f .gitignore'])
 
 def Reset():
     if click.confirm("Are you sure you want to reset?"):

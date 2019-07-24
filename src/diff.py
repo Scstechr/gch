@@ -165,11 +165,18 @@ def contpage(verbose, selected, option):
         print(f'\033[{lpp+8}A')
     return verbose
 
+def gfcheck():
+    lsgit = sp.getoutput('ls .git').split('\n')
+    if len(lsgit)==1:
+        issues.warning('No log found!')
+        sys.exit(0)
+
 def logviewer(verbose, head):
+    gfcheck()
     logcmd2 =  "git log --graph --all --pretty=format:'(%cr) [%h] <%an> %s' --abbrev-commit --date=relative --decorate=full "
     options = sp.getoutput(logcmd2).split('\n')
-    if len(options) < 1:
-        issues.warning('No log found!')
+    if len(options) < 2:
+        issues.warning('No log to compare!')
         sys.exit(0)
     if isExist(f'git status --short'):
         options = ['* HEAD'] + options
@@ -291,6 +298,7 @@ def execdiff(verbose, selected):
     return ret_diffhash
 
 def diffhash(verbose, head, author):
+    gfcheck()
     ret_diffhash = ''
     if author:
         ret_author = click.prompt("Name specific author", type=str)
@@ -306,8 +314,8 @@ def diffhash(verbose, head, author):
         fstring = randstr.join(['(%ad)','[%h]','<%an>', '%s'])
         dateset = 'local' if hsize > threshold else 'relative'
         options += sp.getoutput(f'git log --date={dateset} --pretty=format:"{fstring}"').split('\n')
-        if len(options) < 1:
-            issues.warning('No log found!')
+        if len(options) < 2:
+            issues.warning('No log to compare!')
             sys.exit(0)
         tempopt = []
         if options[0] == 'HEAD':
