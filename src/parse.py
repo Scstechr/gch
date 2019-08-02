@@ -4,7 +4,9 @@ from .arg import ReturnArgdict
 VERSION = '1.20'
 
 def Version(string):
-    print(string, f"v{VERSION}\nmacOS version\nbuilt on Python 3.6.8")
+    print(string, f"v{VERSION}")
+    print("Build    : Python 3.6.8, PyInstaller 3.5")
+    print("Platform : Darwin-16.7.0-x86_64-i386-64bit")
     sys.exit(0)
 
 def Parser(mode):
