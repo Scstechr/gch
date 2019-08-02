@@ -8,7 +8,6 @@ Git Commit Handler
 import sys, subprocess as sp
 from os import path, chdir, getcwd
 import os
-import click
 
 from src import issues
 from src.qs import getAnswer, isExist , confirm
