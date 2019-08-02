@@ -14,6 +14,11 @@ $ brew tap scstechr/gch
 $ brew install gch
 ```
 
+### Update
+
+```bash
+$ brew upgrade gch
+```
 ## How to Use
 
 ### Show help
