@@ -19,13 +19,15 @@ def isExist(command):
 
 def confirm(string):
     flag = True
+    ret = input(string+' [y/n]:')
     while(1):
-        ret = input(string+' [y/n]:')
         if ret in ['yes', 'y']:
             break
-        if ret in ['no', 'n']:
+        if ret in ['no', 'n', '']:
             flag = False
             break
+        print('\033[1A',end='')
+        ret = input(string+' [y/n]:')
     return flag
 
 
