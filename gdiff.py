@@ -5,24 +5,25 @@ Git Diff Tool
 ==================
 '''
 
-import click
-
-import sys
 from src.diff import diffhash, logviewer
-from src import VERSION
-GDIFF_VERSION = VERSION
+from src.parse import Parser, Version
+from src.arg import Help
+from src import issues
 
-@click.command()
-@click.option('-v', '--verbose', is_flag='False', help='Detailed diff.')
-@click.option('-h', '--head', is_flag='False', help='Include HEAD^ from the beginning.')
-@click.option('-a', '--author', is_flag='False', help='Name specific author.')
-@click.option('-l', '--log', is_flag='False', help='User log ver. instead.')
-@click.option('--version', is_flag='False', help='Check version of gdiff.')
-def main(verbose, head, author, log, version):
-    if version:
-        print(" gdiff version :", GDIFF_VERSION)
-        sys.exit(0)
-    if log:
+MODE = 1
+
+issues.version(3)
+
+def main():
+    d = Parser(MODE)
+    verbose = d['verbose']
+    head    = d['head']
+    author  = d['author']
+    if d['help']:
+        Help(MODE)
+    if d['version']:
+        Version('GDIFF - Git DIFF viewer')
+    if d['log']:
         logviewer(verbose, head)
 
     else:

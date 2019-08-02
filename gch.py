@@ -14,10 +14,9 @@ from src import issues
 from src.qs import getAnswer, isExist 
 from src.git import *
 from src.diff import diffhash, logviewer
-from src.parse import Parser, Help
+from src.parse import Parser, Version
+from src.arg import Help
 
-from src import VERSION
-GCH_VERSION = VERSION
 issues.version(3)
 
 # git commands 
@@ -25,29 +24,28 @@ diffcmd = 'git diff --cached --ignore-all-space --ignore-blank-lines'
 logcmd =  'git log --stat --oneline --graph --decorate'
 
 def main():
-    d = Parser()
+    d = Parser(0)
 
-    init = d['init']
-    gitpath = d['gitpath']
+    init     = d['init']
+    gitpath  = d['gitpath']
     filepath = d['filepath']
-    branch = d['branch']
-    verbose = d['verbose']
-    log = d['log']
-    commit = d['commit']
-    reset = d['reset']
-    push = d['push']
-    remote = d['remote']
-    pull = d['pull']
-    diff = d['diff']
-    version = d['version']
-    save = d['save']
+    branch   = d['branch']
+    verbose  = d['verbose']
+    log      = d['log']
+    commit   = d['commit']
+    reset    = d['reset']
+    push     = d['push']
+    remote   = d['remote']
+    pull     = d['pull']
+    diff     = d['diff']
+    version  = d['version']
+    save     = d['save']
 
     if d['help']:
-        Help()
+        Help(0)
 
     if version:
-        print(" gch version :", GCH_VERSION)
-        sys.exit(0)
+        Version('GCH - Git Commit Handler')
 
     gitfolder = path.join(gitpath, '.git')
     if not path.exists(gitfolder):
