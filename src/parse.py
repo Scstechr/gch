@@ -142,7 +142,6 @@ def Parser():
                     print("ARG ERROR!", last_arg)
                     sys.exit(1)
                 d[Name] = argv[idx+1]
-#print(argdict)
     for key, val in argdict.items():
         ProperName = val['ProperName']
         if ProperName not in d.keys():
