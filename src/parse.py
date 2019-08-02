@@ -1,7 +1,7 @@
 from os import path
 import sys
 from .arg import ReturnArgdict
-VERSION = '1.20'
+VERSION = '1.10'
 
 def Version(string):
     print(string, f"v{VERSION}")
