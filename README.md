@@ -80,6 +80,6 @@ This executes `git commit` and `git push`.
 Shows `diff` first, then `commit` and `push`.
 
 ### Other
-The [original version of gch](https://github.com/Scstechr/usefultools/blob/master/gch.py) as a part of [usefultools](https://github.com/Scstechr/usefultools)
+The [original version of gch](https://github.com/Scstechr/usefultools/blob/master/gch.py) (and its [history](https://github.com/Scstechr/usefultools/commits/master/gch.py)) as a part of [usefultools](https://github.com/Scstechr/usefultools)
 
 
