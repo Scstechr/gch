@@ -7,6 +7,8 @@ A tool to handle git related commands
 	- :warning: Note that English version has not been updated for a long time.
 - Blog Post (Japanese): [Qiita](https://qiita.com/Scstechr/items/53e3e326c4caa6dc2307) / [Qrunch](https://scstechr.qrunch.io/entries/Jmdclx72XYk2F5Pa)
 
+
+
 ## Install
 
 ```bash
@@ -25,24 +27,24 @@ $ brew upgrade gch
 
 ```bash
 $ gch --help
-Usage: gch [OPTIONS]
+Usage: gch [OPTION]
 
-Options:
-  -i, --init           Run initializer                       >Default:False
-  -v, --verbose        Verbose option.                       >Default:False
-  -l, --log            Git log with option.                  >Default:False
-  -r, --remote TEXT    Choose which remote repo.to push.     >Default:origin
-  -g, --gitpath PATH   Path of dir that contains `.git`.     >Default:.
-  -f, --filepath TEXT  Path/Regex of staging file/dir.       >Default:.
-  -b, --branch TEXT    Commiting branch.                     >Default:master
-  -c, --commit         Commit
-  -p, --push           Push.
-  -s, --save           Save settings                         >Default:False
-  -d, --diff           Open diff tool                        >Default:False
-  --version            Check version of gch                  >Default:False
-  --reset              Reset all changes since last commit.  >Default:False
-  --pull               Fetch + Merge from <origin> <master>. >Default:False
-  --help               Show this message and exit.
+Options
+  -i, --init        Run initializer
+  -v, --verbose     Verbose option.
+  -l, --log         Git log with option.
+  -r, --remote      Choose which remote repo.to push.
+  -g, --gitpath     Path of dir that contains `.git`.
+  -f, --filepath    Path/Regex of staging file/dir.
+  -b, --branch      Commiting branch.
+  -c, --commit      Commit
+  -p, --push        Push.
+  -s, --save        Save settings
+  -d, --diff        Open diff tool
+  --version         Check version of gch
+  --reset           Reset all changes since last commit.
+  --pull            Fetch + Merge from origin:master.
+  --help            Show this message and exit.
 ```
 ### Simple command
 
@@ -77,6 +79,7 @@ This executes `git commit` and `git push`.
 ##### `gch -cp -b test -d`
 Shows `diff` first, then `commit` and `push`.
 
-
+### Other
+The [original version of gch](https://github.com/Scstechr/usefultools/blob/master/gch.py) as a part of [usefultools](https://github.com/Scstechr/usefultools)
 
 
