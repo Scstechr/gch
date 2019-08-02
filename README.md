@@ -7,8 +7,6 @@ A tool to handle git related commands
 	- :warning: Note that English version has not been updated for a long time.
 - Blog Post (Japanese): [Qiita](https://qiita.com/Scstechr/items/53e3e326c4caa6dc2307) / [Qrunch](https://scstechr.qrunch.io/entries/Jmdclx72XYk2F5Pa)
 
-
-
 ## Install
 
 ```bash
@@ -79,7 +77,11 @@ This executes `git commit` and `git push`.
 ##### `gch -cp -b test -d`
 Shows `diff` first, then `commit` and `push`.
 
-### Other
-The [original version of gch](https://github.com/Scstechr/usefultools/blob/master/gch.py) (and its [history](https://github.com/Scstechr/usefultools/commits/master/gch.py)) as a part of [usefultools](https://github.com/Scstechr/usefultools)
+### Developer's Note
+
+- First developed under name of `comm.py` in [this commit](https://github.com/Scstechr/usefultools/commit/a24a413469f3a85c7325b09281fada7e3f031aa7#diff-e39ecf62d7a2fafe884171d619b2030c) ([view history](https://github.com/Scstechr/usefultools/commits/b66ba9beaf659d786e4897c3624e9e9b2facff43/comm.py)).
+- Then, it changed its name to `gch.py` in [this commit](https://github.com/Scstechr/usefultools/commit/b66ba9beaf659d786e4897c3624e9e9b2facff43#diff-e39ecf62d7a2fafe884171d619b2030c).
+
+- The [original version of gch](https://github.com/Scstechr/usefultools/blob/master/gch.py) (and its [history](https://github.com/Scstechr/usefultools/commits/master/gch.py)) was a part of [usefultools](https://github.com/Scstechr/usefultools).
 
 
