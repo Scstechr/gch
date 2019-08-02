@@ -1,11 +1,4 @@
-#!/usr/bin/env python
-'''
-==================
-Git Diff Handler
-==================
-'''
 
-import click
 import subprocess as sp
 import sys
 import cursor
@@ -15,7 +8,7 @@ import random, string
 import os
 
 from . import issues
-from .qs import getAnswer, isExist 
+from .qs import getAnswer, isExist , confirm, prompt
 from .git import *
 
 class CursorOff(object):
@@ -195,7 +188,7 @@ def logviewer(verbose, head):
         if head:
             break
         else:
-            if click.confirm('\nDo you want to exit diff hash tool?'):
+            if confirm('\nDo you want to exit diff hash tool?'):
                 sys.exit(0)
             else:
                 for i in range(vsize):
@@ -301,7 +294,7 @@ def diffhash(verbose, head, author):
     gfcheck()
     ret_diffhash = ''
     if author:
-        ret_author = click.prompt("Name specific author", type=str)
+        ret_author = prompt("Name specific author", _type=str)
     while(1):
         vsize = shutil.get_terminal_size()[1]
         hsize = shutil.get_terminal_size()[0]
@@ -345,7 +338,7 @@ def diffhash(verbose, head, author):
         if head:
             break
         else:
-            if click.confirm('\nDo you want to exit diff hash tool?'):
+            if confirm('\nDo you want to exit diff hash tool?'):
                 sys.exit(0)
             else:
                 for i in range(vsize):
@@ -353,12 +346,3 @@ def diffhash(verbose, head, author):
 
     return ret_diffhash
 
-@click.command()
-@click.option('-v', '--verbose', is_flag='False', help='detailed diff')
-@click.option('-h', '--head', is_flag='False', help='include head')
-@click.option('-a', '--author', is_flag='False', help='name specific author')
-def main(verbose, head, author):
-    diffhash(verbose, head, author)
-
-if __name__ == '__main__':
-    main()

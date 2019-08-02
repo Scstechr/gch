@@ -19,7 +19,7 @@ def isExist(command):
 
 def confirm(string):
     flag = True
-    ret = input(string+' [y/n]:')
+    ret = input(string+' [Y/n]:').lower()
     while(1):
         if ret in ['yes', 'y']:
             break
@@ -27,7 +27,17 @@ def confirm(string):
             flag = False
             break
         print('\033[1A',end='')
-        ret = input(string+' [y/n]:')
+        ret = input(string+' [Y/n]:').lower()
     return flag
 
+def echo(string):
+    print(string)
 
+def prompt(string, _type=str):
+    ret = input(string+': ')
+    while(1):
+        if type(ret) == _type:
+            break
+        print('\033[1A',end='')
+        ret = input(string+': ')
+    return ret

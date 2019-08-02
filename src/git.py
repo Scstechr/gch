@@ -1,15 +1,11 @@
-import click
 import sys, subprocess as sp
 from os import path, chdir, getcwd
 from pathlib import Path
 from urllib.parse import urlparse
 
 from . import issues
-from . import qs
+from .qs import getAnswer, isExist, confirm, prompt, echo
 from . import diff
-
-getAnswer = qs.getAnswer
-isExist = qs.isExist
 
 def b(string):
     ''' String Format for Branch Name '''
@@ -24,8 +20,11 @@ def CheckState():
 
 def Commit():
     ''' Commit '''
-    commit_message = click.prompt("Commit Message", type=str)
-    issues.execute([f'git commit -m "{commit_message}"'])
+    commit_message = prompt("Commit Message")
+    if commit_message in ['v', 'vi', 'vim']:
+        issues.execute([f'git commit'])
+    else:
+        issues.execute([f'git commit -m "{commit_message}"'])
 
 def getCurrentBranch(lst=False):
     ''' Returns current branch name w or w/o branch list '''
@@ -47,22 +46,22 @@ def setBranch(branch, filepath):
         if answer == 1:
             issues.execute([f'git checkout -b {branch}'])
         else:
-            click.echo(f'Commiting branch set to {b(current_branch)}')
+            echo(f'Commiting branch set to {b(current_branch)}')
             branch = current_branch
     else:
-        click.echo(f'Currently on branch `{b(current_branch)}` but tried to commit to branch `{b(branch)}`.')
+        echo(f'Currently on branch `{b(current_branch)}` but tried to commit to branch `{b(branch)}`.')
         qs =     [f'Merge branch `{b(current_branch)}` => branch `{b(branch)}`']
         qs.append(f'Stay on branch `{b(current_branch)}`                   ')
         qs.append(f'Checkout to branch `{b(branch)}`                       ')
         answer = getAnswer(qs)
         if answer == 2:
-            click.echo(f'Commiting branch is now set to `{b(current_branch)}`')
+            echo(f'Commiting branch is now set to `{b(current_branch)}`')
             branch = current_branch
         else:
             if not isExist(f'git status --short'):
                 issues.execute([f'git checkout {branch}'])
             else:
-                click.echo(f'\nTheres some changes in branch `{b(current_branch)}`.')
+                echo(f'\nTheres some changes in branch `{b(current_branch)}`.')
                 issues.execute([f'git diff --stat'])
                 qs =     [f'Commit changes of branch `{b(current_branch)}`']
                 qs.append(f'Stash changes of branch `{b(current_branch)}` ')
@@ -86,19 +85,19 @@ def setBranch(branch, filepath):
     return branch
 
 def globalsetting():
-    click.echo("** Configureation of global settings **")
+    echo("** Configureation of global settings **")
     issues.execute(['git config --global credential.helper osxkeychain',\
                     'git config --global core.excludesfile ~/.gitignore_global'])
-    name, email = click.prompt("name", type=str), click.prompt("email", type=str)
+    name, email = prompt("name"), prompt("email")
     issues.execute([f'git config --global user.name "{name}"',\
                     f'git config --global user.email {email}'])
 
-    if click.confirm('Do you want to use emacs instead of vim as an editor?'):
+    if confirm('Do you want to use emacs instead of vim as an editor?'):
         issues.execute([f'git config --global core.editor emacs'])
     else:
         issues.execute([f'git config --global core.editor vim'])
         
-    if click.confirm('Do you want to use ediff instead of vimdiff?'):
+    if confirm('Do you want to use ediff instead of vimdiff?'):
         issues.execute([f'git config --global {x}.tool ediff' for x in ['diff', 'merge']])
     else:
         issues.execute([f'git config --global {x}.tool vimdff' for x in ['diff', 'merge']])
@@ -115,16 +114,16 @@ def initialize(flag=False):
     # git config
     gitconfigpath = path.join(path.expanduser('~'), '.gitconfig')
     if not path.exists(gitconfigpath):
-        click.echo("~/.gitconfig file does not exist. => Start Initialization!")
+        echo("~/.gitconfig file does not exist. => Start Initialization!")
         globalsetting()
 
     issues.execute(['git init'])
 
     # README.md
     readmepath = path.join(getcwd(), 'README.md')
-    title = click.prompt('Title of this repository(project)').upper()
+    title = prompt('Title of this repository(project)').upper()
     if path.exists(readmepath):
-        if click.confirm('Do you want to remove the existing README.md?'):
+        if confirm('Do you want to remove the existing README.md?'):
             issues.execute([f'rm README.md'])
             issues.execute([f'echo "# {title}" >> README.md'])
     else:
@@ -140,7 +139,7 @@ def initialize(flag=False):
     issues.execute(['git add -f .gitignore'])
 
 def Reset():
-    if click.confirm("Are you sure you want to reset?"):
+    if confirm("Are you sure you want to reset?"):
         issues.warning('Options with `--hard` must be done with caution')
         opt=[]
         opt.append('\033[3mgit commit --amend\033[0m          > Change message of last commit')
@@ -161,18 +160,18 @@ def Reset():
         elif ans == 5:
             issues.warning('Select hash from diff tool...')
             flag = False
-            if click.confirm('Do you want to name specific author?'):
+            if confirm('Do you want to name specific author?'):
                 flag = True
             dhash = diff.diffhash(verbose=True, head=True, author=flag)
             while(1):
-                if click.confirm("Is this the correct hash you want to go back?"):
+                if confirm("Is this the correct hash you want to go back?"):
                     break
                 dhash = diff.diffhash(verbose=True, head=True, author=flag)
-            if click.confirm(f"Go back (reset) to {dhash}?"):
+            if confirm(f"Go back (reset) to {dhash}?"):
                 if not isExist(f'git status --short'):
                     issues.execute([f'git reset --hard {dhash}'])
                 else:
-                    click.echo(f'\nTheres some changes not commited..')
+                    echo(f'\nTheres some changes not commited..')
                     issues.execute([f'git diff --stat'])
                     qs =     [f'Commit changes before reset']
                     qs.append(f'Stash changes before reset')
@@ -204,9 +203,9 @@ def Push(remote, branch):
         issues.execute([f'git push -u {remote} {branch}'])
     else:
         issues.warning(f'Remote repository `{remote}` not found')
-        if click.confirm(f'Add?'):
+        if confirm(f'Add?'):
             while(1):
-                remote_url = click.prompt("URL", type=str)
+                remote_url = prompt("URL")
                 if url_valid(remote_url):
                     issues.execute([f'git remote add {remote} {remote_url}'])
                     issues.execute([f'git push -u {remote} {branch}'])
