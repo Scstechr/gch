@@ -16,3 +16,16 @@ def isExist(command):
     output = sp.getoutput(command)
     flag = False if len(output) == 0 else True
     return flag
+
+def confirm(string):
+    flag = True
+    while(1):
+        ret = input(string+' [y/n]:')
+        if ret in ['yes', 'y']:
+            break
+        if ret in ['no', 'n']:
+            flag = False
+            break
+    return flag
+
+

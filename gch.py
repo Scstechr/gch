@@ -11,7 +11,7 @@ import os
 import click
 
 from src import issues
-from src.qs import getAnswer, isExist 
+from src.qs import getAnswer, isExist , confirm
 from src.git import *
 from src.diff import diffhash, logviewer
 from src.parse import Parser, Version
@@ -50,7 +50,7 @@ def main():
     gitfolder = path.join(gitpath, '.git')
     if not path.exists(gitfolder):
         issues.warning(f'It seems path:`{gitpath}` does not have `.git` folder.')
-        if click.confirm(f'Initialize?'):
+        if confirm(f'Initialize?'):
             initialize(flag=False)
         else:
             issues.abort()
@@ -58,9 +58,9 @@ def main():
         initialize(flag=True)
 
     if diff:
-        if click.confirm('Do you want to use diff-column viewer?'):
+        if confirm('Do you want to use diff-column viewer?'):
             flag = False
-            if click.confirm('Do you want to name specific author?'):
+            if confirm('Do you want to name specific author?'):
                 flag = True
             diffhash(verbose=verbose, head=False, author=flag)
         else:

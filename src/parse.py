@@ -32,7 +32,11 @@ def Parser(mode):
                     print("ARG ERROR!", a)
                     sys.exit(1)
                 Name = argdict[a]['ProperName']
-                d[Name] = True
+                if argdict[Name]['ArgType'] == 'flag':
+                    d[Name] = True
+                else:
+                    print("ARG ERROR!", a)
+                    sys.exit(1)
                 last_arg = a
             if idx+1 < len(argv) and not argv[idx+1].count('-'):
                 Name = argdict[a]['ProperName']
