@@ -1,15 +1,30 @@
 import subprocess as sp
-import click
 from . import issues
+
+def echo(string):
+    print(string)
+
+def prompt(string, _type=str):
+    ret = input(string+': ')
+    while(1):
+        if type(ret) == _type:
+            break
+        print('\033[1A',end='')
+        ret = input(string+': ')
+    return ret
 
 def getAnswer(lst):
     ''' Generates selection list and answering sequence '''
     while(1):
-        [click.echo(f'{idx+1}: {option}') for idx, option in enumerate(lst)]
-        answer = click.prompt('Answer',type=int)
-        if answer > 0 and answer <= len(lst):
-            break
-        issues.warning('Please choose right answer from below:')
+        [echo(f'{idx+1}: {option}') for idx, option in enumerate(lst)]
+        answer = prompt('Answer')
+        try:
+            answer = int(answer)
+            if answer > 0 and answer <= len(lst):
+                break
+            issues.warning('Please choose right answer from below:')
+        except:
+            issues.warning('Please enter integer!')
     return answer
 
 def isExist(command):
@@ -30,14 +45,4 @@ def confirm(string):
         ret = input(string+' [Y/n]:').lower()
     return flag
 
-def echo(string):
-    print(string)
 
-def prompt(string, _type=str):
-    ret = input(string+': ')
-    while(1):
-        if type(ret) == _type:
-            break
-        print('\033[1A',end='')
-        ret = input(string+': ')
-    return ret
