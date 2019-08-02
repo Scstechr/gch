@@ -20,7 +20,7 @@ def CheckState():
 
 def Commit():
     ''' Commit '''
-    commit_message = prompt("Commit Message")
+    commit_message = prompt("Commit Message [v:vim mode]")
     if commit_message in ['v', 'vi', 'vim']:
         issues.execute([f'git commit'])
     else:
