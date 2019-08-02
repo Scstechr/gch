@@ -10,6 +10,7 @@ MODE = 0
 import sys, subprocess as sp
 from os import path, chdir, getcwd
 import os
+import cursor
 
 from src import issues
 from src.qs import getAnswer, isExist , confirm
@@ -114,4 +115,7 @@ def main():
         issues.ok('No push')
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        issues.abort()

@@ -1,5 +1,6 @@
 import subprocess as sp
 from . import issues
+import sys
 
 def echo(string):
     print(string)
