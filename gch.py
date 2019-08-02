@@ -5,6 +5,8 @@ Git Commit Handler
 ==================
 '''
 
+MODE = 0
+
 import sys, subprocess as sp
 from os import path, chdir, getcwd
 import os
@@ -23,7 +25,7 @@ diffcmd = 'git diff --cached --ignore-all-space --ignore-blank-lines'
 logcmd =  'git log --stat --oneline --graph --decorate'
 
 def main():
-    d = Parser(0)
+    d = Parser(MODE)
 
     init     = d['init']
     gitpath  = d['gitpath']
@@ -41,7 +43,7 @@ def main():
     save     = d['save']
 
     if d['help']:
-        Help(0)
+        Help(MODE)
 
     if version:
         Version('GCH - Git Commit Handler')

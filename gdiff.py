@@ -5,20 +5,23 @@ Git Diff Tool
 ==================
 '''
 
+MODE = 1
+
 from src.diff import diffhash, logviewer
 from src.parse import Parser, Version
 from src.arg import Help
 from src import issues
 
-MODE = 1
-
 issues.version(3)
 
 def main():
     d = Parser(MODE)
+
     verbose = d['verbose']
     head    = d['head']
     author  = d['author']
+    version = d['version']
+
     if d['help']:
         Help(MODE)
     if d['version']:
