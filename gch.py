@@ -14,96 +14,36 @@ from src import issues
 from src.qs import getAnswer, isExist 
 from src.git import *
 from src.diff import diffhash, logviewer
+from src.parse import Parser, Help
 
 from src import VERSION
 GCH_VERSION = VERSION
 issues.version(3)
 
-defaults = {}
-defaults['init'] = 'False'
-defaults['gitpath'] = '.'
-defaults['filepath'] = '.'
-defaults['branch'] = 'master'
-defaults['verbose'] = 'False'
-defaults['log'] = 'False'
-defaults['commit'] = 'False'
-defaults['reset'] = 'False'
-defaults['push'] = 'False'
-defaults['remote'] = 'origin'
-defaults['pull'] = 'False'
-defaults['diff'] = 'False'
-defaults['version'] = 'False'
-defaultspath = path.join(".", ".defaults.txt")
-if path.exists(defaultspath):
-    with open(defaultspath, 'r') as readfile:
-        for line in readfile:
-            k, v = line.replace('\n','').split(":")
-            defaults[str(k)] = str(v)
-
 # git commands 
 diffcmd = 'git diff --cached --ignore-all-space --ignore-blank-lines'
 logcmd =  'git log --stat --oneline --graph --decorate'
 
-# Explanation of the options showed in --help flag
-exp_c=f'Commit'
-exp_p=f'Push.'
-exp_i=f'Run initializer'.ljust(38)+f'>Default:{defaults["init"]}'
-exp_g=f'Path of dir that contains `.git`.'.ljust(38)+f'>Default:{defaults["gitpath"]}'
-exp_f=f'Path/Regex of staging file/dir.'.ljust(38)+f'>Default:{defaults["filepath"]}'
-exp_b=f'Commiting branch.'.ljust(38)+f'>Default:{defaults["branch"]}'
-exp_v=f'Verbose option.'.ljust(38)+f'>Default:{defaults["verbose"]}'
-exp_l=f'Git log with option.'.ljust(38)+f'>Default:{defaults["log"]}'
-exp_r=f'Reset all changes since last commit.'.ljust(38)+f'>Default:{defaults["reset"]}'
-exp_e=f'Choose which remote repo.to push.'.ljust(38)+f'>Default:{defaults["remote"]}'
-exp_p2=f'Fetch + Merge from <{defaults["remote"]}> <{defaults["branch"]}>.'.ljust(38)+f'>Default:False'
-exp_s=f'Save settings'.ljust(38)+f'>Default:False'
-exp_d=f'Open diff tool'.ljust(38)+f'>Default:False'
-exp_v2=f'Check version of gch'.ljust(38)+f'>Default:False'
+def main():
+    d = Parser()
 
-@click.command()
-@click.option('-i', '--init',     is_flag=defaults['init'],     help=exp_i)
-@click.option('-v', '--verbose',  is_flag=defaults['verbose'],   help=exp_v)
-@click.option('-l', '--log',      is_flag=defaults['log'],      help=exp_l)
-@click.option('-r', '--remote',   default=defaults['remote'],    help=exp_e)
-@click.option('-g', '--gitpath',  default=defaults['gitpath'],  type=click.Path(exists=True), help=exp_g)
-@click.option('-f', '--filepath', default=defaults['filepath'], type=str, help=exp_f)
-@click.option('-b', '--branch',   default=defaults['branch'],   type=str, help=exp_b)
-@click.option('-c', '--commit',   is_flag=defaults['commit'],   help=exp_c)
-@click.option('-p', '--push',     is_flag=defaults['push'],     help=exp_p)
-@click.option('-s', '--save',     is_flag='False',              help=exp_s)
-@click.option('-d', '--diff',     is_flag=defaults['diff'],     type=str, help=exp_d)
-@click.option('--version',        is_flag=defaults['reset'],    type=str, help=exp_v2)
-@click.option('--reset',          is_flag=defaults['reset'],    type=str, help=exp_r)
-@click.option('--pull',           is_flag=defaults['pull'],     type=str, help=exp_p2)
-def main(init,
-         verbose,
-         log,
-         commit,
-         remote,
-         push,
-         gitpath,
-         filepath,
-         branch,
-         save,
-         reset,
-         pull,
-         version,
-         diff
-         ):
-#def main(init, verbose, log, commit, reset, push, save, gitpath, filepath, branch, remote, pull):
+    init = d['init']
+    gitpath = d['gitpath']
+    filepath = d['filepath']
+    branch = d['branch']
+    verbose = d['verbose']
+    log = d['log']
+    commit = d['commit']
+    reset = d['reset']
+    push = d['push']
+    remote = d['remote']
+    pull = d['pull']
+    diff = d['diff']
+    version = d['version']
+    save = d['save']
 
-    defaults['init'] = init
-    defaults['gitpath'] = os.path.abspath(gitpath)
-    defaults['filepath'] = filepath
-    defaults['branch'] = branch
-    defaults['verbose'] = verbose 
-    defaults['log'] = log
-    defaults['commit'] = commit
-    defaults['reset'] = reset
-    defaults['push'] = push
-    defaults['remote'] = remote
-    defaults['pull'] = pull
-    defaults['diff'] = diff
+    if d['help']:
+        Help()
 
     if version:
         print(" gch version :", GCH_VERSION)
