@@ -4,7 +4,7 @@ from platform import platform
 import sys
 from .arg import ReturnArgdict
 import subprocess as sp
-VERSION = '1.17'
+VERSION = '1.19'
 
 date = "2019-08-09 UTC"
 
@@ -65,8 +65,9 @@ def DictSet(d, argdict, argv, arg, idx):
             d[arg] = True
         else:
             d[arg] = argdict[arg]['Default']
-            if idx+1 < len(argv) and argv[idx+1].count('-') == 0:
-                d[arg] = argv[idx+1]
+            if idx+1 < len(argv):
+                if argv[idx+1][0] != '-' and argv[idx+1][:2] != '--':
+                    d[arg] = argv[idx+1]
             else:
                 Require(names)
 
