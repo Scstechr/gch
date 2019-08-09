@@ -6,12 +6,18 @@ def echo(string):
     print(string)
 
 def prompt(string, _type=str):
-    ret = input(string+': ')
+    try:
+        ret = input(string+': ')
+    except (KeyboardInterrupt, EOFError):
+        issues.abort()
     while(1):
         if type(ret) == _type:
             break
         print('\033[1A',end='')
-        ret = input(string+': ')
+        try:
+            ret = input(string+': ')
+        except (KeyboardInterrupt, EOFError):
+            issues.abort()
     return ret
 
 def getAnswer(lst):
@@ -35,15 +41,18 @@ def isExist(command):
 
 def confirm(string):
     flag = True
-    ret = input(string+' [Y/n]:').lower()
-    while(1):
-        if ret in ['yes', 'y']:
-            break
-        if ret in ['no', 'n', '']:
-            flag = False
-            break
-        print('\033[1A',end='')
+    try:
         ret = input(string+' [Y/n]:').lower()
+        while(1):
+            if ret in ['yes', 'y']:
+                break
+            if ret in ['no', 'n', '']:
+                flag = False
+                break
+            print('\033[1A',end='')
+            ret = input(string+' [Y/n]:').lower()
+    except (KeyboardInterrupt, EOFError):
+        issues.abort()
     return flag
 
 

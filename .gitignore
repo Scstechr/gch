@@ -1,6 +1,6 @@
 .*
 dist
-build
+build*
 release
 *.tar.gz
 *.spec

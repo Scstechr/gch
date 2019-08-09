@@ -1,12 +1,32 @@
 from os import path
+from platform import platform
 import sys
 from .arg import ReturnArgdict
-VERSION = '1.10'
+import subprocess as sp
+VERSION = '1.13'
+
+PYTHON_VERSION = sys.version.split('\n')[0]
+PLATFM_VERSION = platform()
+
+string = sp.run(['PyInstaller','--version'],capture_output=True).stdout.strip()
+string = string.decode('utf-8')
+PYINST_VERSION = string
 
 def Version(string):
-    print(string, f"v{VERSION}")
-    print("Build    : Python 3.6.8, PyInstaller 3.5")
-    print("Platform : Darwin-16.7.0-x86_64-i386-64bit")
+    print(f"\033[1m{string} v{VERSION}\033[0m")
+    print(f"\033[1mBUILD INFO: \033[0m")
+    # Python version
+    version = PYTHON_VERSION
+    print(f"\033[1m Python      :\033[0m", version)
+
+    # PyInstaller version
+    version = PYINST_VERSION
+    print(f"\033[1m PyInstaller :\033[0m", version)
+
+    # Platform version (Kernel)
+    version = PLATFM_VERSION
+    print(f"\033[1m Platform    :\033[0m", version)
+
     sys.exit(0)
 
 def Parser(mode):
