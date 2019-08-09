@@ -3,7 +3,7 @@ from platform import platform
 import sys
 from .arg import ReturnArgdict
 import subprocess as sp
-VERSION = '1.13'
+VERSION = '1.14'
 
 PYTHON_VERSION = sys.version.split('\n')[0]
 PLATFM_VERSION = platform()
