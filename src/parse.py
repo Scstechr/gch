@@ -93,7 +93,6 @@ def Parser(mode):
         ProperName = val['ProperName']
         if ProperName not in d.keys():
             d[ProperName] = val['Default']
-    print(d)
     return d
 
 
