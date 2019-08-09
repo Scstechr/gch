@@ -1,9 +1,6 @@
 import sys, subprocess as sp
 from .qs import echo
 
-class Abort(RuntimeError):
-    """Abort."""
-
 def branch():
     echo(f'\n\033[93m>> branch ISSUE!\033[0m')
 
