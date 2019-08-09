@@ -1,11 +1,14 @@
 from os import path
 from platform import platform
 import sys
+from datetime import datetime
 from .arg import ReturnArgdict
 import subprocess as sp
-VERSION = '1.14'
+VERSION = '1.16'
 
-PYTHON_VERSION = sys.version.split('\n')[0]
+date = str(datetime.utcnow())[:-7] + ' UTC'
+
+PYTHON_VERSION = sys.version.split(' ')[0]
 PLATFM_VERSION = platform()
 
 string = sp.run(['PyInstaller','--version'],capture_output=True).stdout.strip()
@@ -25,7 +28,7 @@ def Error():
     sys.exit(1)
 
 def Version(string):
-    print(f"\033[1m{string} v{VERSION}\033[0m")
+    print(f"\033[1m{string} v{VERSION} ({date})\033[0m")
     print(f"\033[1mBUILD INFO: \033[0m")
     # Python version
     version = PYTHON_VERSION

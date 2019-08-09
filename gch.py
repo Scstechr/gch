@@ -53,7 +53,6 @@ def main():
     gitpath = path.abspath(gitpath)
     filepath = path.abspath(filepath)
     os.chdir(gitpath)
-    print(os.getcwd())
 
     gitfolder = path.join(gitpath, '.git')
     if not path.exists(gitfolder):
