@@ -213,6 +213,25 @@ def Push(remote, branch):
                 else:
                     issues.warning('Not valid URL')
 
+def Checkout():
+    current_branch, branch_list = getCurrentBranch(lst=True)
+    branch_list.append('[MAKE NEW BRANCH]')
+    echo(f'\n\033[1mCURRENTLY ON: \033[3m{current_branch}')
+    echo(f'\n\033[0m\033[1mWhich branch do you want to checkout?\033[0m')
+    branch = [b for b in branch_list if b != current_branch]
+    answer = getAnswer(branch)
+    if answer == len(branch):
+        while 1:
+            new_branch = prompt('Enter new branch name')
+            if new_branch in branch_list:
+                issues.warning(f'Branch {new_branch} already exists!')
+            else:
+                if confirm(f'Checkout to {new_branch}'):
+                    issues.execute([f'git checkout -b {new_branch}'])
+                else:
+                    issues.execute([f'git branch {new_branch}'])
+                break
 
-
-
+    else:
+        issues.execute([f'git checkout {branch[answer-1]}'])
+        issues.execute([f'git diff {current_branch}..{branch[answer-1]}'])

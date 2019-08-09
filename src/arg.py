@@ -15,6 +15,7 @@ defaults['remote'] = 'origin'
 defaults['pull'] = False
 defaults['diff'] = False
 defaults['version'] = False
+defaults['checkout'] = False
 defaultspath = path.join(".", ".defaults.txt")
 if path.exists(defaultspath):
     with open(defaultspath, 'r') as readfile:
@@ -44,6 +45,7 @@ gch_exp_p2=f'Fetch + Merge from {defaults["remote"]}:{defaults["branch"]}.'
 gch_exp_s=f'Save settings'
 gch_exp_d=f'Open diff tool'
 gch_exp_v2=f'Check version of gch'
+gch_exp_c2=f'Handling checkouts'
 
 gdiff_exp_v  = f'Detailed diff.'
 gdiff_exp_h  = f'Include HEAD^ from the beginning.'
@@ -100,9 +102,10 @@ def ReturnArgdict(mode):
         arglist.append(ArgSet(['-p', '--push',     'flag',   gch_exp_p,  defaults['push'], ]))
         arglist.append(ArgSet(['-s', '--save',     'flag',   gch_exp_s,  False]))
         arglist.append(ArgSet(['-d', '--diff',     'flag',   gch_exp_d,  defaults['diff']]))
-        arglist.append(ArgSet(['',   '--version',  'flag',   gch_exp_v2, defaults['reset']]))
+        arglist.append(ArgSet(['',   '--checkout', 'flag',   gch_exp_c2, defaults['checkout']]))
         arglist.append(ArgSet(['',   '--reset',    'flag',   gch_exp_r,  defaults['reset']]))
         arglist.append(ArgSet(['',   '--pull',     'flag',   gch_exp_p2, defaults['pull']]))
+        arglist.append(ArgSet(['',   '--version',  'flag',   gch_exp_v2, defaults['reset']]))
     arglist.append(ArgSet(['','--help', 'flag', exp_h, False]))
 
     argdict = {}
@@ -117,7 +120,7 @@ def ReturnArgdict(mode):
 def Help(mode):
     argdict = ReturnArgdict(mode)
     command = 'gdiff' if mode else 'gch'
-    print(f"Usage: {command} [OPTION]\n\nOptions")
+    print(f"\033[1mUsage: {command} [OPTION]\n\nOptions\033[0m")
     for key, value in argdict.items():
         if len(key) > 1:
             string = '  '
@@ -125,6 +128,6 @@ def Help(mode):
                 string += '-' + value['ShortName'] + ', --' + value['ProperName']
             else:
                 string += '--' + value['ProperName']
-            string = f'{string}'.ljust(20) + f"{value['ExplainString']}"
+            string = '\033[1m' + f'{string}'.ljust(20) + f"\033[0m{value['ExplainString']}"
             print(string)
     sys.exit()

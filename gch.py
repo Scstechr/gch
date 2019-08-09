@@ -13,11 +13,11 @@ import os
 import cursor
 
 from src import issues
-from src.qs import getAnswer, isExist , confirm
+from src.qs import isExist , confirm
 from src.git import *
 from src.diff import diffhash, logviewer
 from src.parse import Parser, Version
-from src.arg import Help
+from src.arg import Help, defaults, defaultspath
 
 issues.version(3)
 
@@ -42,12 +42,16 @@ def main():
     diff     = d['diff']
     version  = d['version']
     save     = d['save']
+    checkout = d['checkout']
 
     if d['help']:
         Help(MODE)
 
     if version:
         Version('GCH - Git Commit Handler')
+
+    if checkout:
+        Checkout()
 
     #conversion to absolute path
     gitpath = path.abspath(gitpath)
@@ -117,8 +121,9 @@ def main():
         issues.ok('No push')
 
 if __name__ == "__main__":
-    try:
-        main()
-    except:
-        pass
+    main()
+    #try:
+    #    main()
+    #except:
+    #    pass
         #issues.abort()
