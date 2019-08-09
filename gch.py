@@ -49,6 +49,12 @@ def main():
     if version:
         Version('GCH - Git Commit Handler')
 
+    #conversion to absolute path
+    gitpath = path.abspath(gitpath)
+    filepath = path.abspath(filepath)
+    os.chdir(gitpath)
+    print(os.getcwd())
+
     gitfolder = path.join(gitpath, '.git')
     if not path.exists(gitfolder):
         issues.warning(f'It seems path:`{gitpath}` does not have `.git` folder.')
@@ -88,9 +94,6 @@ def main():
         for k, v in defaults.items():
             issues.execute([f'echo "{str(k)}:{str(v)}" >> {defaultspath}'])
 
-    #conversion to absolute path
-    gitpath = path.abspath(gitpath)
-    filepath = path.abspath(filepath)
 
     if log:
         issues.execute([logcmd])

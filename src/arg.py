@@ -100,10 +100,10 @@ def ReturnArgdict(mode):
         arglist.append(ArgSet(['-p', '--push',     'flag',   gch_exp_p,  defaults['push'], ]))
         arglist.append(ArgSet(['-s', '--save',     'flag',   gch_exp_s,  False]))
         arglist.append(ArgSet(['-d', '--diff',     'flag',   gch_exp_d,  defaults['diff']]))
-        arglist.append(ArgSet(['','--version',     'flag',   gch_exp_v2, defaults['reset']]))
-        arglist.append(ArgSet(['','--reset',       'flag',   gch_exp_r,  defaults['reset']]))
-        arglist.append(ArgSet(['','--pull',        'flag',   gch_exp_p2, defaults['pull']]))
-    arglist.append(ArgSet(['','--help',       'flag', exp_h, False]))
+        arglist.append(ArgSet(['',   '--version',  'flag',   gch_exp_v2, defaults['reset']]))
+        arglist.append(ArgSet(['',   '--reset',    'flag',   gch_exp_r,  defaults['reset']]))
+        arglist.append(ArgSet(['',   '--pull',     'flag',   gch_exp_p2, defaults['pull']]))
+    arglist.append(ArgSet(['','--help', 'flag', exp_h, False]))
 
     argdict = {}
     for arg in arglist:
