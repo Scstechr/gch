@@ -3,17 +3,12 @@ from os import path
 from platform import platform
 import sys
 from .arg import ReturnArgdict
-import subprocess as sp
-VERSION = '1.19'
 
-date = "2019-08-09 UTC"
-
-PYTHON_VERSION = sys.version.split(' ')[0]
-PLATFM_VERSION = platform()
-
-string = sp.run(['PyInstaller','--version'],capture_output=True).stdout.strip()
-string = string.decode('utf-8')
-PYINST_VERSION = string
+VERSION = '1.20'
+DATE = "2019-08-17 UTC"
+PYTHON_VERSION = '3.7.3'
+PLATFM_VERSION = 'Darwin-18.0.0-x86_64-i386-64bit'
+PYINST_VERSION = '3.5'
 
 def Require(arg):
     f = 'Argument "\033[3m' + arg + '\033[0m\033[91m" requires additional string.'
@@ -31,7 +26,7 @@ def Error():
     sys.exit(1)
 
 def Version(string):
-    print(f"\033[1m{string} v{VERSION} (compiled: {date})\033[0m")
+    print(f"\033[1m{string} v{VERSION} (compiled: {DATE})\033[0m")
     print(f"\033[0mBUILD INFO: \033[0m")
     # Python version
     version = PYTHON_VERSION

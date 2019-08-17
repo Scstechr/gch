@@ -59,7 +59,7 @@ def decorate(string):
         line = ')'.join(line[1:])
         line = line.split(']')
         chash = f'{line[0][2:]}'
-        ret += f'\033[31m{line[0][1:]}]\033[0m '
+        ret += f'\033[30G\033[31m{line[0][1:]}]\033[0m '
         line = ']'.join(line[1:])
         line = line.split('>')
         ret += f'\033[36m{line[0][1:]}>\033[0m'
