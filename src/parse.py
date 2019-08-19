@@ -4,7 +4,7 @@ from platform import platform
 import sys
 from .arg import ReturnArgdict
 
-VERSION = '1.21'
+VERSION = '1.22'
 DATE = "2019-08-19 UTC"
 PYTHON_VERSION = '3.7.3'
 PLATFM_VERSION = 'Darwin-18.0.0-x86_64-i386-64bit'
