@@ -94,7 +94,7 @@ def main():
 
     if save:
         issues.execute([f'rm {defaultspath}'])
-        for k, v in defaults.items():
+        for k, v in d.items():
             issues.execute([f'echo "{str(k)}:{str(v)}" >> {defaultspath}'])
 
 
