@@ -121,7 +121,7 @@ def initialize(flag=False):
 
     # README.md
     readmepath = path.join(getcwd(), 'README.md')
-    title = prompt('Title of this repository(project)').upper()
+    title = prompt('Title of this repository(project)')
     if path.exists(readmepath):
         if confirm('Do you want to remove the existing README.md?'):
             issues.execute([f'rm README.md'])
