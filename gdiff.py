@@ -8,7 +8,8 @@ Git Diff Tool
 MODE = 1
 
 from src.diff import diffhash, logviewer
-from src.parse import Parser, Version
+from src.parse import Parser
+from src.version import *
 from src.arg import Help
 from src import issues
 

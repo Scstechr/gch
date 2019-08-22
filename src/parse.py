@@ -4,11 +4,6 @@ from platform import platform
 import sys
 from .arg import ReturnArgdict
 
-VERSION = '1.22'
-DATE = "2019-08-19 UTC"
-PYTHON_VERSION = '3.7.3'
-PLATFM_VERSION = 'Darwin-18.0.0-x86_64-i386-64bit'
-PYINST_VERSION = '3.5'
 
 def Require(arg):
     f = 'Argument "\033[3m' + arg + '\033[0m\033[91m" requires additional string.'
@@ -24,23 +19,6 @@ def Error():
     f = "Argument error!"
     issues.warning(f)
     sys.exit(1)
-
-def Version(string):
-    print(f"\033[1m{string} v{VERSION} (compiled: {DATE})\033[0m")
-    print(f"\033[0mBUILD INFO: \033[0m")
-    # Python version
-    version = PYTHON_VERSION
-    print(f"\033[0m Python      :\033[0m", version)
-
-    # PyInstaller version
-    version = PYINST_VERSION
-    print(f"\033[0m PyInstaller :\033[0m", version)
-
-    # Platform version (Kernel)
-    version = PLATFM_VERSION
-    print(f"\033[0m Platform    :\033[0m", version)
-
-    sys.exit(0)
 
 def genname(argdict, arg):
     names = '-' + argdict[arg]['ShortName']
@@ -61,8 +39,13 @@ def DictSet(d, argdict, argv, arg, idx):
         else:
             d[arg] = argdict[arg]['Default']
             if idx+1 < len(argv):
-                if argv[idx+1][0] != '-' and argv[idx+1][:2] != '--':
+                next_arg = argv[idx+1]
+                if len(next_arg):
+                    if argv[idx+1][0] != '-' and argv[idx+1][:2] != '--':
+                        d[arg] = argv[idx+1]
+                else:
                     d[arg] = argv[idx+1]
+
             else:
                 Require(names)
 

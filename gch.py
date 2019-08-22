@@ -16,7 +16,8 @@ from src import issues
 from src.qs import isExist , confirm
 from src.git import *
 from src.diff import diffhash, logviewer
-from src.parse import Parser, Version
+from src.parse import Parser
+from src.version import *
 from src.arg import Help, defaults, defaultspath
 
 issues.version(3)
@@ -50,8 +51,15 @@ def main():
     if version:
         Version('GCH - Git Commit Handler')
 
+    ShortVersion('GCH - Git Commit Handler')
+
     if checkout:
         Checkout()
+
+    if save:
+        issues.execute([f'rm {defaultspath}'])
+        for k, v in d.items():
+            issues.execute([f'echo "{str(k)}:{str(v)}" >> {defaultspath}'])
 
     #conversion to absolute path
     gitpath = path.abspath(gitpath)
@@ -91,11 +99,6 @@ def main():
                 branch = setBranch(branch, filepath)
         
     issues.execute(['git status --short'])
-
-    if save:
-        issues.execute([f'rm {defaultspath}'])
-        for k, v in d.items():
-            issues.execute([f'echo "{str(k)}:{str(v)}" >> {defaultspath}'])
 
 
     if log:

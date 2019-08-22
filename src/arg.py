@@ -1,5 +1,6 @@
 from os import path
 import sys
+from .version import *
 
 defaults = {}
 defaults['init'] = False
@@ -120,7 +121,9 @@ def ReturnArgdict(mode):
 def Help(mode):
     argdict = ReturnArgdict(mode)
     command = 'gdiff' if mode else 'gch'
-    print(f"\033[1mUsage: {command} [OPTION]\n\nOptions\033[0m")
+    
+    print(f"\033[1m{command} v{VERSION} (compiled: {DATE})\033[0m")
+    print(f"\033[1mUsage: {command} [OPTION]\n\nOptions:\033[0m")
     for key, value in argdict.items():
         if len(key) > 1:
             string = '  '
@@ -128,6 +131,6 @@ def Help(mode):
                 string += '-' + value['ShortName'] + ', --' + value['ProperName']
             else:
                 string += '--' + value['ProperName']
-            string = '\033[1m' + f'{string}'.ljust(20) + f"\033[0m{value['ExplainString']}"
+            string = '\033[1m' + f'{string}'.ljust(20) + f"| \033[0m{value['ExplainString']}"
             print(string)
     sys.exit()
