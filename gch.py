@@ -53,13 +53,13 @@ def main():
 
     ShortVersion('GCH - Git Commit Handler')
 
-    if checkout:
-        Checkout()
-
     if save:
         issues.execute([f'rm {defaultspath}'])
         for k, v in d.items():
             issues.execute([f'echo "{str(k)}:{str(v)}" >> {defaultspath}'])
+
+    if checkout:
+        Checkout()
 
     #conversion to absolute path
     gitpath = path.abspath(gitpath)
@@ -90,6 +90,7 @@ def main():
 
     if len(branch) == 0:
         issues.execute(['git branch'])
+        sys.exit()
 
     if isExist('git branch'):
         current_branch = getCurrentBranch()
