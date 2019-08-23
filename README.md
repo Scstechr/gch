@@ -1,4 +1,8 @@
 # GCH: Git Commit Handler
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)][license]
+
+[license]: https://github.com/Scstechr/gch/blob/master/LICENSE
+
 A tool to handle git related commands such as: `git init`, `git commit`, `git diff`, `git add`, `git push`
 
 ## Overview
