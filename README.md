@@ -1,7 +1,7 @@
 # GCH: Git Commit Handler
 A tool to handle git related commands such as: `git init`, `git commit`, `git diff`, `git add`, `git push`
 
-# Overview
+## Overview
 This tool makes it easier to execute certain `git` commands from terminal. Also, this `gch` aims for beginners of `git` by showing actual commands executed in specific color.
 
 - Documents available in: :us: [English](doc/gch_doc_en.md) / :jp: [Japanese](doc/gch_doc_jp.md)
