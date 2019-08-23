@@ -117,6 +117,8 @@ def main():
     if pull:
         issues.execute([f'git pull {remote} {branch}'])
 
+    if remote:
+        Remote(remote)
     # Push or not
     if push:
         Push(remote, branch)

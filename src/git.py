@@ -196,22 +196,27 @@ def url_valid(x):
     except:
         return False
 
-def Push(remote, branch):
+def Remote(remote):
     remotelst = sp.getoutput(f'git remote -v').split('\n')
     remotelst = [r.split('\t')[0] for idx, r in enumerate(remotelst) if idx%2]
     if remote in remotelst:
-        issues.execute([f'git push -u {remote} {branch}'])
+        pass
     else:
-        issues.warning(f'Remote repository `{remote}` not found')
+        issues.warning(f'Remote branch `{remote}` not found')
         if confirm(f'Add?'):
             while(1):
                 remote_url = prompt("URL")
                 if url_valid(remote_url):
                     issues.execute([f'git remote add {remote} {remote_url}'])
-                    issues.execute([f'git push -u {remote} {branch}'])
                     break
                 else:
                     issues.warning('Not valid URL')
+        else:
+            sys.exit()
+
+def Push(remote, branch):
+    Remote(remote)
+    issues.execute([f'git push -u {remote} {branch}'])
 
 def Checkout():
     current_branch, branch_list = getCurrentBranch(lst=True)
