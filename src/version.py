@@ -7,7 +7,7 @@ PLATFM_VERSION = 'Darwin-18.0.0-x86_64-i386-64bit'
 PYINST_VERSION = '3.5'
 
 def ShortVersion(string):
-    print(f"\033[2m{string} v{VERSION} (compiled: {DATE})\033[0m")
+    print(f"\033[1m{string} v{VERSION} (compiled: {DATE})\033[0m")
 
 def Version(string):
     print(f"\033[1m{string} v{VERSION} (compiled: {DATE})\033[0m")
