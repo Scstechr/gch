@@ -115,8 +115,7 @@ def main():
 
 
     if pull:
-        issues.execute([f'git fetch {remote} {branch}',
-                        f'git merge {remote} {branch}'])
+        issues.execute([f'git pull {remote} {branch}'])
 
     # Push or not
     if push:
