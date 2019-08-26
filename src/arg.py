@@ -1,6 +1,7 @@
 from os import path
 import sys
 from .version import *
+from . import issues
 
 defaults = {}
 defaults['init'] = False
@@ -18,16 +19,20 @@ defaults['diff'] = False
 defaults['version'] = False
 defaults['checkout'] = False
 defaultspath = path.join(".", ".defaults.txt")
+gitpath = path.join(".", ".git")
 if path.exists(defaultspath):
-    with open(defaultspath, 'r') as readfile:
-        for line in readfile:
-            k, v = line.replace('\n','').split(":")
-            if v != 'None':
-                defaults[str(k)] = str(v)
-            if v == 'True':
-                defaults[str(k)] = True
-            if v == 'False':
-                defaults[str(k)] = False
+    if not path.exists(gitpath):
+        issues.execute([f'rm .defaults.txt'])
+    else:
+        with open(defaultspath, 'r') as readfile:
+            for line in readfile:
+                k, v = line.replace('\n','').split(":")
+                if v != 'None':
+                    defaults[str(k)] = str(v)
+                if v == 'True':
+                    defaults[str(k)] = True
+                if v == 'False':
+                    defaults[str(k)] = False
 
 # Explanation of the options showed in --help flag
 exp_h=f'Show this message and exit.'

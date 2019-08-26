@@ -132,7 +132,7 @@ def initialize(flag=False):
 
     # .gitignore
     ignorepath = path.join(getcwd(), '.gitignore')
-    if not path.exists(readmepath):
+    if not path.exists(ignorepath):
         issues.execute(['touch .gitignore'])
         issues.execute([f'echo ".*" >> .gitignore'])
         issues.execute([f'echo ".default.txt" >> .gitignore'])
