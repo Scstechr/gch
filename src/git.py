@@ -240,3 +240,7 @@ def Checkout():
     else:
         issues.execute([f'git checkout {branch[answer-1]}'])
         issues.execute([f'git diff {current_branch}..{branch[answer-1]}'])
+
+def Ls():
+    issues.execute([f'git ls-files'])
+

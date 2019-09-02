@@ -44,6 +44,7 @@ def main():
     version  = d['version']
     save     = d['save']
     checkout = d['checkout']
+    ls = d['ls']
 
     if d['help']:
         Help(MODE)
@@ -91,6 +92,9 @@ def main():
     if len(branch) == 0:
         issues.execute(['git branch'])
         sys.exit()
+
+    if ls:
+        Ls()
 
     if isExist('git branch'):
         current_branch = getCurrentBranch()
