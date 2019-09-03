@@ -1,12 +1,14 @@
 import sys, subprocess as sp
 from .qs import echo
+import os
 
 def branch():
     echo(f'\n\033[93m>> branch ISSUE!\033[0m')
 
 def abort():
     echo(f'\n\033[91m>> abort!\n\033[0m')
-    sys.exit(1)
+    os._exit(0)
+    #sys.exit(1)
 
 def warning(string=None):
     echo(f'\n\033[91m>> warning!: {string}\033[0m')

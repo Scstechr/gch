@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+##!/usr/bin/env python
 '''
 ==================
 Git Commit Handler
@@ -66,6 +66,8 @@ def main():
         issues.ok('Saved!')
 
     if checkout:
+        current_branch, _ = getCurrentBranch(lst=True)
+        echo(f'\n\033[1mCurrently on branch `\033[3m{current_branch}`')
         Checkout()
 
     #conversion to absolute path

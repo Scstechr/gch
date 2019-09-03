@@ -221,12 +221,12 @@ def Push(remote, branch):
 
 def MakeNewBranch(branch_list):
     while 1:
-        new_branch = prompt('Enter new branch name (spaces will be replaced with `-`)').replace(' ', '-')
+        new_branch = prompt('\nEnter new branch name (spaces will be replaced with `-`)').replace(' ', '-')
         if new_branch in branch_list:
-            issues.warning(f'Branch {new_branch} already exists!')
+            issues.warning(f'Branch `{new_branch}` already exists!')
         else:
-            issues.ok(f'\bBranch {new_branch} successfully created!')
-            if confirm(f'Checkout to {new_branch}'):
+            issues.ok(f'\bBranch `{new_branch}` successfully created!')
+            if confirm(f'Checkout to `{new_branch}`'):
                 issues.execute([f'git checkout -b {new_branch}'])
             else:
                 issues.execute([f'git branch {new_branch}'])
@@ -236,7 +236,6 @@ def Checkout():
     current_branch, branch_list = getCurrentBranch(lst=True)
     branch_list.append('Make new branch')
     branch = [b for b in branch_list if b != current_branch]
-    echo(f'\n\033[1mCurrently on branch `\033[3m{current_branch}`')
     if len(branch) == 1:
         if confirm(f"Make new branch?"):
             MakeNewBranch(branch_list)
@@ -254,7 +253,6 @@ def Ls():
 
 def RenameBranch():
     current_branch, branch_list = getCurrentBranch(lst=True)
-    issues.ok(f'Renaming branch `{current_branch}`...')
     while 1:
         new_branch = prompt('\n\033[2KEnter new branch name (spaces will be replaced with `-`)').replace(' ', '-')
 
@@ -271,18 +269,27 @@ def Branch():
         issues.execute([f'git branch'])
         current_branch, branch_list = getCurrentBranch(lst=True)
         with CursorOff():
-            print("\nOptions:\n (c) checkout (r) rename (n) new branch (e) exit")
+            options = ['(c) checkout']
+            options.append('(r) rename')
+            options.append('(n) new branch')
+#            options.append('(d) delete')
+            print(f"\n\033[1mOptions:\033[0m\n {' '.join(options)} (e) exit")
             answer = wait_key()
             while 1:
                 if answer in ['c', 'r', 'n', 'e']:
                     break
                 answer = wait_key()
         if answer == 'c':
+            issues.ok('Checking out branch!')
             Checkout()
         elif answer == 'r':
+            issues.ok('Renaming current branch!')
             RenameBranch()
         elif answer == 'n':
+            issues.ok('Making new branch!')
             MakeNewBranch(branch_list)
+#        elif answer == 'd':
+#            print("DELETE!")
     else:
         issues.warning('branch not found!')
         branch = 'master'
