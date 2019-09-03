@@ -1,6 +1,7 @@
 .*
 dist
 build*
+libexec*
 release
 *.tar.gz
 *.spec
