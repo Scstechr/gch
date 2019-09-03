@@ -29,7 +29,5 @@ def wait_key():
 
         result = sys.stdin.read(1)
         termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
-    if not result:
-        raise KeyboardInterrupt
 
     return result

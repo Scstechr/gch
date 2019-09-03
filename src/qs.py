@@ -12,8 +12,6 @@ def cinput(string):
     with suppress(KeyboardInterrupt):
         ret = input(string+': ')
 
-    if not len(ret):
-        raise KeyboardInterrupt
     return ret
 
 def prompt(string, _type=str):
