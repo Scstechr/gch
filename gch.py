@@ -141,10 +141,5 @@ if __name__ == "__main__":
     #main()
     try:
         main()
-    except (EOFError, KeyboardInterrupt):
-        echo(f'\n\033[91m>> abort!\n\033[0m')
-        cursor.show()
-        sp.call('stty sane', shell=True)
-        os._exit(0)
-
-       #issues.abort()
+    except (IOError, EOFError, KeyboardInterrupt):
+        issues.abort()

@@ -2,17 +2,27 @@ import subprocess as sp
 from . import issues
 from .util import *
 import sys
+from contextlib import suppress
 
 def echo(string):
     print(string)
 
+def cinput(string):
+    ret = ''
+    with suppress(KeyboardInterrupt):
+        ret = input(string+': ')
+
+    if not len(ret):
+        raise KeyboardInterrupt
+    return ret
+
 def prompt(string, _type=str):
-    ret = input(string+': ')
+    ret = cinput(string)
     while(1):
         if type(ret) == _type:
             break
         print('\033[1A',end='')
-        ret = input(string+': ')
+        ret = cinput(string)
     return ret
 
 def getAnswer(lst):
