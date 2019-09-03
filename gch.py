@@ -138,9 +138,8 @@ def main():
         issues.ok('No push')
 
 if __name__ == "__main__":
-    main()
-    #try:
-    #    main()
-    #except:
-    #    pass
-        #issues.abort()
+    #main()
+    try:
+        main()
+    except (EOFError, KeyboardInterrupt):
+       issues.abort()

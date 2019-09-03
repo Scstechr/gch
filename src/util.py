@@ -25,11 +25,7 @@ def wait_key():
     newattr[3] = newattr[3] & ~termios.ICANON & ~termios.ECHO
     termios.tcsetattr(fd, termios.TCSANOW, newattr)
 
-    try:
-        result = sys.stdin.read(1)
-    except (IOError, KeyboardInterrupt):
-        issues.abort()
-    finally:
-        termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
+    result = sys.stdin.read(1)
+    termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
 
     return result

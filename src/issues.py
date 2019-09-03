@@ -1,12 +1,15 @@
 import sys, subprocess as sp
 from .qs import echo
 import os
+import cursor
 
 def branch():
     echo(f'\n\033[93m>> branch ISSUE!\033[0m')
 
 def abort():
     echo(f'\n\033[91m>> abort!\n\033[0m')
+    cursor.show()
+    sp.call('stty sane', shell=True)
     os._exit(0)
     #sys.exit(1)
 
