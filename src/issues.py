@@ -14,10 +14,11 @@ def warning(string=None):
 def ok(string=None):
     echo(f'\n\033[92m>> {string}\033[0m')
 
-def execute(command_list, run=True):
+def execute(command_list, run=True, verbose=True):
     ''' Execute bash commands through shell '''
     for command in command_list:
-        echo(f'\033[94m>> execute: {command}\033[0m')
+        if verbose:
+            echo(f'\033[94m>> execute: {command}\033[0m')
         if run == True:
             sp.run(command, shell=True)
 

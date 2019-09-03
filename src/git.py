@@ -218,28 +218,35 @@ def Push(remote, branch):
     Remote(remote)
     issues.execute([f'git push -u {remote} {branch}'])
 
+def MakeNewBranch(branch_list):
+    while 1:
+        new_branch = prompt('Enter new branch name (spaces will be replaced with `-`)').replace(' ', '-')
+        if new_branch in branch_list:
+            issues.warning(f'Branch {new_branch} already exists!')
+        else:
+            issues.ok(f'\bBranch {new_branch} successfully created!')
+            if confirm(f'Checkout to {new_branch}'):
+                issues.execute([f'git checkout -b {new_branch}'])
+            else:
+                issues.execute([f'git branch {new_branch}'])
+            break
+
 def Checkout():
     current_branch, branch_list = getCurrentBranch(lst=True)
     branch_list.append('[MAKE NEW BRANCH]')
-    echo(f'\n\033[1mCURRENTLY ON: \033[3m{current_branch}')
-    echo(f'\n\033[0m\033[1mWhich branch do you want to checkout?\033[0m')
     branch = [b for b in branch_list if b != current_branch]
-    answer = getAnswer(branch)
-    if answer == len(branch):
-        while 1:
-            new_branch = prompt('Enter new branch name')
-            if new_branch in branch_list:
-                issues.warning(f'Branch {new_branch} already exists!')
-            else:
-                if confirm(f'Checkout to {new_branch}'):
-                    issues.execute([f'git checkout -b {new_branch}'])
-                else:
-                    issues.execute([f'git branch {new_branch}'])
-                break
-
+    echo(f'\n\033[1mCURRENTLY ON: \033[3m{current_branch}')
+    if len(branch) == 1:
+        if confirm(f"Make new branch?"):
+            MakeNewBranch(branch_list)
     else:
-        issues.execute([f'git checkout {branch[answer-1]}'])
-        issues.execute([f'git diff {current_branch}..{branch[answer-1]}'])
+        echo(f'\n\033[0m\033[1mWhich branch do you want to checkout?\033[0m')
+        answer = getAnswer(branch)
+        if answer == len(branch):
+            MakeNewBranch(branch_list)
+        else:
+            issues.execute([f'git checkout {branch[answer-1]}'])
+            issues.execute([f'git diff {current_branch}..{branch[answer-1]}'])
 
 def Ls():
     issues.execute([f'git ls-files'])

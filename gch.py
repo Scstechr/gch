@@ -44,7 +44,8 @@ def main():
     version  = d['version']
     save     = d['save']
     checkout = d['checkout']
-    ls = d['ls']
+    ls       = d['ls']
+
 
     if d['help']:
         Help(MODE)
@@ -54,10 +55,25 @@ def main():
 
     ShortVersion('GCH - Git Commit Handler')
 
+    if type(branch) == bool:
+        if isExist('git branch'):
+            issues.execute([f'git branch'])
+            current_branch = getCurrentBranch()
+            #if confirm(f'Do you want to checkout?'):
+            Checkout()
+        else:
+            issues.warning('branch not found!')
+            branch = 'master'
+            issues.ok('\bBranch set to `master`...')
+        branch = getCurrentBranch()
+        issues.ok(f'\bBranch set to `{branch}`...')
+
     if save:
-        issues.execute([f'rm {defaultspath}'])
+        issues.execute([f'rm {defaultspath}'], verbose=False)
         for k, v in d.items():
-            issues.execute([f'echo "{str(k)}:{str(v)}" >> {defaultspath}'])
+            cmd = f'echo "{str(k)}:{str(v)}" >> {defaultspath}'
+            issues.execute([cmd], verbose=False)
+        issues.ok('Saved!')
 
     if checkout:
         Checkout()
