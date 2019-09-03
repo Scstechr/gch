@@ -34,4 +34,7 @@ def main():
         diffhash(verbose, head, author)
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except (IOError, EOFError, KeyboardInterrupt):
+        issues.abort()
