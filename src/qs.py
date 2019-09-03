@@ -25,19 +25,15 @@ def getAnswer(lst):
     ''' Generates selection list and answering sequence '''
     with CursorOff():
         while(1):
-            [echo(f'{idx+1}: {option}') for idx, option in enumerate(lst)]
+            [echo(f'{chr(97+idx)}) {option}') for idx, option in enumerate(lst)]
+            ans = [chr(97+idx) for idx, _ in enumerate(lst)]
         #    print("Type the answer:")
             answer = wait_key()
-            #answer = prompt('Answer')
-            try:
-                answer = int(answer)
-                if answer > 0 and answer <= len(lst):
-                    break
+            if answer in ans:
+                answer = ord(answer) - 97 + 1
+                break
+            else:
                 issues.warning('Please choose right answer from above!')
-                print(f"\033[{len(lst)+3}F", end='')
-            except:
-                issues.warning('Please enter integer!')
-                print(f"\033[{len(lst)+3}F", end='')
     return answer
 
 def isExist(command):
