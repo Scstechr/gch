@@ -98,6 +98,7 @@ def ReturnArgdict(mode):
         arglist.append(ArgSet(['-a', '--author',  'flag', gdiff_exp_a,  False]))
         arglist.append(ArgSet(['-l', '--log',     'flag', gdiff_exp_l,  False]))
         arglist.append(ArgSet(['',   '--version', 'flag', gdiff_exp_v2, False]))
+        arglist.append(ArgSet(['','--help', 'flag', exp_h, False]))
     else:
         arglist.append(ArgSet(['-i', '--init',     'flag',   gch_exp_i,  defaults['init']]))
         arglist.append(ArgSet(['-v', '--verbose',  'flag',   gch_exp_v,  defaults['verbose']]))
@@ -115,7 +116,7 @@ def ReturnArgdict(mode):
         arglist.append(ArgSet(['',   '--pull',     'flag',   gch_exp_p2, defaults['pull']]))
         arglist.append(ArgSet(['',   '--ls',       'flag',   gch_exp_l2, defaults['ls']]))
         arglist.append(ArgSet(['',   '--version',  'flag',   gch_exp_v2, defaults['version']]))
-    arglist.append(ArgSet(['','--help', 'flag', exp_h, False]))
+        arglist.append(ArgSet(['-h','--help', 'flag', exp_h, False]))
 
     argdict = {}
     for arg in arglist:

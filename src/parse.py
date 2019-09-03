@@ -1,8 +1,7 @@
 from . import issues
 from os import path
-from platform import platform
 import sys
-from .arg import ReturnArgdict
+from .arg import ReturnArgdict, Help
 
 
 def Require(arg):
@@ -10,10 +9,10 @@ def Require(arg):
     issues.warning(f)
     sys.exit(1)
 
-def NotFound(arg):
-    f = 'Argument "\033[3m' + arg + '\033[0m\033[91m" not found.'
+def NotFound(mode,a):
+    f = 'Argument "' + a + '" not found.'
     issues.warning(f)
-    sys.exit(1)
+    Help(mode)
 
 def Error():
     f = "Argument error!"
@@ -26,28 +25,22 @@ def genname(argdict, arg):
     return names
 
 def DictSet(d, argdict, argv, arg, idx):
-    if arg not in argdict.keys():
-        if len(arg) > 1:
-            NotFound('--' + arg)
-        else:
-            NotFound('-' + arg)
+    names = genname(argdict, arg)
+    arg = argdict[arg]['ProperName']
+    if argdict[arg]['ArgType'] == 'flag':
+        d[arg] = True
     else:
-        names = genname(argdict, arg)
-        arg = argdict[arg]['ProperName']
-        if argdict[arg]['ArgType'] == 'flag':
-            d[arg] = True
-        else:
-            d[arg] = argdict[arg]['Default']
-            if idx+1 < len(argv):
-                next_arg = argv[idx+1]
-                if len(next_arg):
-                    if argv[idx+1][0] != '-' and argv[idx+1][:2] != '--':
-                        d[arg] = argv[idx+1]
-                else:
+        d[arg] = argdict[arg]['Default']
+        if idx+1 < len(argv):
+            next_arg = argv[idx+1]
+            if len(next_arg):
+                if argv[idx+1][0] != '-' and argv[idx+1][:2] != '--':
                     d[arg] = argv[idx+1]
-
             else:
-                Require(names)
+                d[arg] = argv[idx+1]
+
+        else:
+            Require(names)
 
 def Parser(mode):
     argdict = ReturnArgdict(mode)
@@ -56,10 +49,14 @@ def Parser(mode):
     d = {}
     for idx in range(len(argv)):
         arg = argv[idx]
+
         if arg.count('--') == 1 and arg[:2] == '--':
+            if arg[2:] not in argdict.keys():
+                NotFound(mode,arg)
             DictSet(d, argdict, argv, arg[2:], idx)
         elif arg.count('-') == 1 and arg[0] == '-':
             arg = [a for a in arg[1:]]
+            [NotFound(mode,'-' + a) for a in arg if a not in argdict.keys()]
             sarg = [a for a in arg if argdict[a]['ArgType'] == 'string']
             if len(sarg) > 1:
                 Error()
