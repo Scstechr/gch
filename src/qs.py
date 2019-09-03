@@ -1,5 +1,6 @@
 import subprocess as sp
 from . import issues
+from .util import *
 import sys
 
 def echo(string):
@@ -22,16 +23,21 @@ def prompt(string, _type=str):
 
 def getAnswer(lst):
     ''' Generates selection list and answering sequence '''
-    while(1):
-        [echo(f'{idx+1}: {option}') for idx, option in enumerate(lst)]
-        answer = prompt('Answer')
-        try:
-            answer = int(answer)
-            if answer > 0 and answer <= len(lst):
-                break
-            issues.warning('Please choose right answer from below:')
-        except:
-            issues.warning('Please enter integer!')
+    with CursorOff():
+        while(1):
+            [echo(f'{idx+1}: {option}') for idx, option in enumerate(lst)]
+        #    print("Type the answer:")
+            answer = wait_key()
+            #answer = prompt('Answer')
+            try:
+                answer = int(answer)
+                if answer > 0 and answer <= len(lst):
+                    break
+                issues.warning('Please choose right answer from above!')
+                print(f"\033[{len(lst)+3}F", end='')
+            except:
+                issues.warning('Please enter integer!')
+                print(f"\033[{len(lst)+3}F", end='')
     return answer
 
 def isExist(command):

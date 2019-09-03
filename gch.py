@@ -56,17 +56,7 @@ def main():
     ShortVersion('GCH - Git Commit Handler')
 
     if type(branch) == bool:
-        if isExist('git branch'):
-            issues.execute([f'git branch'])
-            current_branch = getCurrentBranch()
-            #if confirm(f'Do you want to checkout?'):
-            Checkout()
-        else:
-            issues.warning('branch not found!')
-            branch = 'master'
-            issues.ok('\bBranch set to `master`...')
-        branch = getCurrentBranch()
-        issues.ok(f'\bBranch set to `{branch}`...')
+        branch = Branch()
 
     if save:
         issues.execute([f'rm {defaultspath}'], verbose=False)

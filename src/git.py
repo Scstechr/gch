@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 from . import issues
 from .qs import getAnswer, isExist, confirm, prompt, echo
 from . import diff
+from .util import *
 
 def b(string):
     ''' String Format for Branch Name '''
@@ -233,9 +234,9 @@ def MakeNewBranch(branch_list):
 
 def Checkout():
     current_branch, branch_list = getCurrentBranch(lst=True)
-    branch_list.append('[MAKE NEW BRANCH]')
+    branch_list.append('Make new branch')
     branch = [b for b in branch_list if b != current_branch]
-    echo(f'\n\033[1mCURRENTLY ON: \033[3m{current_branch}')
+    echo(f'\n\033[1mCurrently on branch `\033[3m{current_branch}`')
     if len(branch) == 1:
         if confirm(f"Make new branch?"):
             MakeNewBranch(branch_list)
@@ -251,3 +252,41 @@ def Checkout():
 def Ls():
     issues.execute([f'git ls-files'])
 
+def RenameBranch():
+    current_branch, branch_list = getCurrentBranch(lst=True)
+    issues.ok(f'Renaming branch `{current_branch}`...')
+    while 1:
+        new_branch = prompt('\n\033[2KEnter new branch name (spaces will be replaced with `-`)').replace(' ', '-')
+
+        if new_branch in branch_list:
+            issues.warning(f'Branch `{new_branch}` already exists!')
+            #print(f"\033[4F", end='')
+        else:
+            issues.execute([f'git branch -m {new_branch}'])
+            issues.ok(f'Branch `{current_branch}` is now `{new_branch}`')
+            break
+
+def Branch():
+    if isExist('git branch'):
+        issues.execute([f'git branch'])
+        current_branch, branch_list = getCurrentBranch(lst=True)
+        with CursorOff():
+            print("\nOptions:\n (c) checkout (r) rename (n) new branch (e) exit")
+            answer = wait_key()
+            while 1:
+                if answer in ['c', 'r', 'n', 'e']:
+                    break
+                answer = wait_key()
+        if answer == 'c':
+            Checkout()
+        elif answer == 'r':
+            RenameBranch()
+        elif answer == 'n':
+            MakeNewBranch(branch_list)
+    else:
+        issues.warning('branch not found!')
+        branch = 'master'
+        issues.ok('Branch set to `master`...')
+    branch = getCurrentBranch()
+    issues.ok(f'Branch set to `{branch}`...')
+    return branch

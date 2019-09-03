@@ -2,6 +2,7 @@ import cursor
 import termios
 import shutil
 import sys
+from . import issues
 
 class CursorOff(object):
     def __enter__(self):
@@ -26,8 +27,8 @@ def wait_key():
 
     try:
         result = sys.stdin.read(1)
-    except IOError:
-        pass
+    except (IOError, KeyboardInterrupt):
+        issues.abort()
     finally:
         termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
 

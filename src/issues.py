@@ -9,7 +9,7 @@ def abort():
     sys.exit(1)
 
 def warning(string=None):
-    echo(f'\n\033[91m>> warning!: {string}\033[0m\n')
+    echo(f'\n\033[91m>> warning!: {string}\033[0m')
 
 def ok(string=None):
     echo(f'\n\033[92m>> {string}\033[0m')
