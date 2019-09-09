@@ -6,4 +6,4 @@ release
 *.tar.gz
 *.spec
 *.sh
-
+*.pyc
