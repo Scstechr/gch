@@ -51,13 +51,14 @@ def isExist(command):
 
 def confirm(string):
     flag = True
-    ret = input("\033[94m>> " + string + ' [Y/n]:\033[0m').lower()
-    while(1):
-        if ret in ['yes', 'y']:
-            break
-        if ret in ['no', 'n', '']:
-            flag = False
-            break
-        print('\033[1A', end='')
-        ret = input(string + ' [Y/n]:').lower()
+    with suppress(KeyboardInterrupt):
+        ret = input("\033[96m>> " + string + ' [Y/n]:\033[0m').lower()
+        while(1):
+            if ret in ['yes', 'y']:
+                break
+            if ret in ['no', 'n', '']:
+                flag = False
+                break
+            print('\033[1A', end='')
+            ret = input(string + ' [Y/n]:').lower()
     return flag
