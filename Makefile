@@ -31,4 +31,5 @@ dist: $(PROGRAM) $(SRC)
 	rm -r build
 	rm gch.spec
 
-	
+release:	$(PROGRAM) $(SRC)
+	python build.py
