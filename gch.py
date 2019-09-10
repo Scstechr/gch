@@ -5,18 +5,17 @@ Git Commit Handler
 ==================
 '''
 
-from src.qs import isExist, confirm
-import subprocess as sp
+from src.qs import isExist, confirm, echo
 import sys
-from src.arg import Help, defaults, defaultspath
-from src.version import *
+from src.arg import Help, defaultspath
+from src.version import Version, ShortVersion
 from src.parse import Parser
 from src.diff import diffhash, logviewer
-from src.git import *
+from src.git import Init, Reset, Ls, Commit, Remote, Push, Checkout
+from src.git import Branch, getCurrentBranch, setBranch
+from src.git import CheckState
 from src import issues
-import cursor
-import os
-from os import path, chdir, getcwd
+from os import path, chdir
 MODE = 0
 
 
@@ -73,18 +72,18 @@ def main():
     # conversion to absolute path
     gitpath = path.abspath(gitpath)
     filepath = path.abspath(filepath)
-    os.chdir(gitpath)
+    chdir(gitpath)
 
     gitfolder = path.join(gitpath, '.git')
     if not path.exists(gitfolder):
         issues.warning(
             f'It seems path:`{gitpath}` does not have `.git` folder.')
         if confirm(f'Initialize?'):
-            initialize(flag=False)
+            Init(flag=False)
         else:
             issues.abort()
     if init:
-        initialize(flag=True)
+        Init(flag=True)
 
     if diff:
         if confirm('Do you want to use diff-column viewer?'):

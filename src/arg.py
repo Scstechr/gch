@@ -1,6 +1,6 @@
 from os import path
 import sys
-from .version import *
+from .version import VERSION, DATE
 from . import issues
 
 defaults = {}
@@ -31,10 +31,13 @@ if path.exists(defaultspath):
                 k, v = line.replace('\n', '').split(":")
                 if v != 'None':
                     defaults[str(k)] = str(v)
-                if v == 'True':
+                elif v == 'True':
                     defaults[str(k)] = True
-                if v == 'False':
+                elif v == 'False':
                     defaults[str(k)] = False
+                elif k in ['save', 'help']:
+                    defaults[str(k)] = False
+
 
 # Explanation of the options showed in --help flag
 exp_h = f'Show this message and exit.'

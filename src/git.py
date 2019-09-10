@@ -120,7 +120,7 @@ def globalsetting():
     issues.execute([f'cat ~/.gitconfig'])
 
 
-def initialize(flag=False):
+def Init(flag=False):
     if flag:
         issues.execute([f'cat ~/.gitconfig'])
         globalsetting()
