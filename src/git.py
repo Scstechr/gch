@@ -234,6 +234,7 @@ def getRemoteList():
                  for idx, r in enumerate(remotelst) if idx % 2]
     return remotelst
 
+
 def Remote(remote):
     remotelst = getRemoteList()
     if remote in remotelst:

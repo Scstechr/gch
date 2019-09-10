@@ -8,7 +8,7 @@ Git Commit Handler
 from src.qs import isExist, confirm
 import sys
 from src.arg import Help, defaultspath, status_bar, IGNORE as ignore
-from src.version import Version, ShortVersion
+from src.version import Version
 from src.parse import Parser
 from src.diff import diffhash, logviewer
 from src.git import Init, Reset, Ls, Commit, Remote, Push, Checkout
@@ -72,7 +72,6 @@ def main():
     gitpath = path.abspath(gitpath)
     filepath = path.abspath(filepath)
     chdir(gitpath)
-
 
     gitfolder = path.join(gitpath, '.git')
     if not path.exists(gitfolder):

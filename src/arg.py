@@ -63,8 +63,10 @@ gdiff_exp_l = f'User log ver. instead.'
 gdiff_exp_v2 = f'Check version of gdiff.'
 
 
-IGNORE = ['init', 'log', 'version','help','reset',\
-        'save','diff','checkout','ls','pull']
+IGNORE = ['init', 'log', 'version', 'help', 'reset',
+          'save', 'diff', 'checkout', 'ls', 'pull']
+
+
 def ArgSet(lst):
     d = {}
     if len(lst[0]) == 2 and lst[0].count('-') == 1:
@@ -156,7 +158,7 @@ def ReturnArgdict(mode):
 
 def status_bar(d):
     """ ONLY FOR GCH """
-    print(f"GCH v{VERSION}: ",end='')
+    print(f"GCH v{VERSION}: ", end='')
     string = f"\033[31m[GITDIR: \'{d['gitpath']}\']\033[m"
     _, branch_list = getCurrentBranch(lst=True)
     if len(branch_list) > 0:
