@@ -1,7 +1,7 @@
 PROGRAM = gch.py gdiff.py 
 SRC = src/arg.py src/diff.py src/git.py src/issues.py src/log.py src/parse.py src/qs.py src/util.py src/version.py
 
-main: $(PROGRAM) $(SRC)
+main: gch.py $(SRC)
 	python gch.py
 
 install:
@@ -27,6 +27,7 @@ pfc: $(PROGRAM) $(SRC)
 
 dist: $(PROGRAM) $(SRC)
 	pyinstaller gch.py --onefile
+	pyinstaller gdiff.py --onefile
 	rm -r build
 	rm gch.spec
 
