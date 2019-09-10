@@ -7,7 +7,7 @@ Git Commit Handler
 
 from src.qs import isExist, confirm
 import sys
-from src.arg import Help, defaultspath, status_bar
+from src.arg import Help, defaultspath, status_bar, IGNORE as ignore
 from src.version import Version, ShortVersion
 from src.parse import Parser
 from src.diff import diffhash, logviewer
@@ -55,6 +55,7 @@ def main():
     ShortVersion('GCH - Git Commit Handler')
 
     status_bar(d)
+
     if type(branch) == bool:
         branch = Branch()
 
@@ -62,20 +63,16 @@ def main():
         if path.exists(defaultspath):
             issues.execute([f'rm {defaultspath}'], verbose=False)
         for k, v in d.items():
-            if k not in ['save']:
+            if k not in ignore:
                 cmd = f'echo "{str(k)}:{str(v)}" >> {defaultspath}'
                 issues.execute([cmd], verbose=False)
         issues.ok('Saved!')
-
-    if checkout:
-        current_branch, _ = getCurrentBranch(lst=True)
-        print(f'\n\033[1mCurrently on branch `\033[3m{current_branch}`')
-        Checkout()
 
     # conversion to absolute path
     gitpath = path.abspath(gitpath)
     filepath = path.abspath(filepath)
     chdir(gitpath)
+
 
     gitfolder = path.join(gitpath, '.git')
     if not path.exists(gitfolder):
@@ -96,6 +93,11 @@ def main():
             diffhash(verbose=verbose, head=False, author=flag)
         else:
             logviewer(verbose=verbose, head=False)
+
+    if checkout:
+        current_branch, _ = getCurrentBranch(lst=True)
+        print(f'\n\033[1mCurrently on branch `\033[3m{current_branch}`')
+        Checkout()
 
     if reset:
         Reset()

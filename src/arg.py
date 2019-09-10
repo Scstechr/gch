@@ -62,6 +62,8 @@ gdiff_exp_l = f'User log ver. instead.'
 gdiff_exp_v2 = f'Check version of gdiff.'
 
 
+IGNORE = ['init', 'log', 'version','help','reset',\
+        'save','diff','checkout','ls','pull']
 def ArgSet(lst):
     d = {}
     if len(lst[0]) == 2 and lst[0].count('-') == 1:
@@ -152,7 +154,14 @@ def ReturnArgdict(mode):
 
 
 def status_bar(d):
+    d = {k:v for k, v in d.items() if k not in IGNORE}
     print(d)
+    flags = {k[0]:v for k, v in d.items() if v in [True, False]}
+    flags_str = '\033[m'.join([f'\033[92m{k}' if v else f'\033[2m{k}' for k, v in flags.items()])
+    flags_str = '[' + flags_str + '\033[m]'
+    print(flags_str)
+    strings = {k:v for k, v in d.items() if k[0] not in flags.keys()}
+    print(strings)
     pass
 
 
