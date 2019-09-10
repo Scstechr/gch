@@ -23,7 +23,8 @@ defaultspath = path.join(".", ".defaults.txt")
 gitpath = path.join(".", ".git")
 if path.exists(defaultspath):
     if not path.exists(gitpath):
-        issues.execute([f'rm .defaults.txt'])
+        if path.exists(".defaults.txt"):
+            issues.execute([f'rm .defaults.txt'])
     else:
         with open(defaultspath, 'r') as readfile:
             for line in readfile:
@@ -38,7 +39,7 @@ if path.exists(defaultspath):
 # Explanation of the options showed in --help flag
 exp_h=f'Show this message and exit.'
 
-gch_exp_c=f'Commit'
+gch_exp_c=f'Commit.'
 gch_exp_p=f'Push.'
 gch_exp_i=f'Run initializer'
 gch_exp_g=f'Path of dir that contains `.git`.'
@@ -46,9 +47,9 @@ gch_exp_f=f'Path/Regex of staging file/dir.'
 gch_exp_b=f'Commiting branch.'
 gch_exp_v=f'Verbose option.'
 gch_exp_l=f'Git log with option.'
-gch_exp_r=f'Reset all changes since last commit.'
-gch_exp_e=f'Choose which remote repo.to push.'
-gch_exp_p2=f'Fetch + Merge from {defaults["remote"]}:{defaults["branch"]}.'
+gch_exp_r=f'Reset.'
+gch_exp_e=f'Choose which remote repository for push.'
+gch_exp_p2=f'Pull from {defaults["remote"]}:{defaults["branch"]}.'
 gch_exp_s=f'Save settings'
 gch_exp_d=f'Open diff tool'
 gch_exp_v2=f'Check version of gch'

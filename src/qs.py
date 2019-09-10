@@ -4,8 +4,8 @@ from .util import *
 import sys
 from contextlib import suppress
 
-def echo(string):
-    print(string)
+def echo(string, end = '\n'):
+    print(string, end = end)
 
 def cinput(string):
     ret = ''
@@ -26,6 +26,7 @@ def prompt(string, _type=str):
 def getAnswer(lst):
     ''' Generates selection list and answering sequence '''
     with CursorOff():
+        lst.append("exit")
         while(1):
             [echo(f' {chr(97+idx)}) {option}') for idx, option in enumerate(lst)]
             ans = [chr(97+idx) for idx, _ in enumerate(lst)]
@@ -35,7 +36,10 @@ def getAnswer(lst):
                 answer = ord(answer) - 97 + 1
                 break
             else:
+                print(f"What you entered: `{answer}`")
                 issues.warning('Please choose right answer from above!')
+        if answer == len(lst):
+            issues.exit()
     return answer
 
 def isExist(command):
