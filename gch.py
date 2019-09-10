@@ -5,7 +5,7 @@ Git Commit Handler
 ==================
 '''
 
-from src.qs import isExist, confirm, echo
+from src.qs import isExist, confirm
 import sys
 from src.arg import Help, defaultspath
 from src.version import Version, ShortVersion
@@ -66,7 +66,7 @@ def main():
 
     if checkout:
         current_branch, _ = getCurrentBranch(lst=True)
-        echo(f'\n\033[1mCurrently on branch `\033[3m{current_branch}`')
+        print(f'\n\033[1mCurrently on branch `\033[3m{current_branch}`')
         Checkout()
 
     # conversion to absolute path
