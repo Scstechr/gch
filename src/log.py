@@ -1,5 +1,5 @@
 from . import issues
-from .qs import getAnswer, isExist 
+from .qs import getAnswer, isExist
 from .git import *
 from .util import *
 
@@ -7,16 +7,20 @@ import sys
 import cursor
 import termios
 import shutil
-import random, string
+import random
+import string
 import os
+
 
 def hr():
     hsize = shutil.get_terminal_size()[0]
-    print(''.join(['\u2500' for _ in range(hsize)]),flush=True)
+    print(''.join(['\u2500' for _ in range(hsize)]), flush=True)
+
 
 def decorate(string):
     hsize = shutil.get_terminal_size()[0]
-    line = string if len(string) < hsize*0.8 else print(string[:int(hsize*0.95)])
+    line = string if len(string) < hsize * \
+        0.8 else print(string[:int(hsize*0.95)])
     line = string.split(')')
     try:
         ret = f'{line[0].split("(")[0]}\033[32m({line[0].split("(")[1]})\033[0m '
@@ -34,10 +38,11 @@ def decorate(string):
         chash = ''
     return ret, chash
 
+
 def page(option):
     vsize = shutil.get_terminal_size()[1]
     hsize = shutil.get_terminal_size()[0]
-    lpp = int(vsize / 2); #lines per page
+    lpp = int(vsize / 2)  # lines per page
     select = 0
     pagenum = 0
     start = 0
@@ -50,12 +55,12 @@ def page(option):
         hr()
         for idx, line in enumerate(option[start:end]):
             print('\033[2K\033[0m', end='')
-            print('> ',end='') if start+idx==select else print('  ', end='')
+            print('> ', end='') if start+idx == select else print('  ', end='')
             line, chash = decorate(line)
             print(line, end='\033[0m\n')
         hr()
-        print(f'| \033[93m[hj]:[\u2190\u2193]', end = '')
-        print(f',q:QUIT\033[0m\033[K',select,start,end)
+        print(f'| \033[93m[hj]:[\u2190\u2193]', end='')
+        print(f',q:QUIT\033[0m\033[K', select, start, end)
         hr()
         ret = wait_key()
         while(1):
@@ -68,8 +73,8 @@ def page(option):
             if select < len(option) - 1:
                 select += 1
             k = 0
-            while(option[select].count('*')==0):
-                select+=1
+            while(option[select].count('*') == 0):
+                select += 1
                 k += 1
             if select >= end and end < len(option):
                 end += 1 + k
@@ -78,8 +83,8 @@ def page(option):
             if select > 0:
                 select -= 1
             k = 0
-            while(option[select].count('*')==0):
-                select-=1
+            while(option[select].count('*') == 0):
+                select -= 1
                 k += 1
             if select < start:
                 end -= (1 + k)
@@ -88,8 +93,9 @@ def page(option):
             sys.exit(0)
         print(f'\033[{lpp+7}A')
 
+
 def displog():
-    logcmd2 =  "git log --graph --all --pretty=format:'(%cr) [%h] <%an> %s' --abbrev-commit --date=relative --decorate=full "
+    logcmd2 = "git log --graph --all --pretty=format:'(%cr) [%h] <%an> %s' --abbrev-commit --date=relative --decorate=full "
     logout = sp.getoutput(logcmd2).split('\n')
     with CursorOff():
         page(logout)

@@ -1,51 +1,51 @@
-##!/usr/bin/env python
+# !/usr/bin/env python
 '''
 ==================
 Git Commit Handler
 ==================
 '''
 
+from src.qs import isExist, confirm
+import subprocess as sp
+import sys
+from src.arg import Help, defaults, defaultspath
+from src.version import *
+from src.parse import Parser
+from src.diff import diffhash, logviewer
+from src.git import *
+from src import issues
+import cursor
+import os
+from os import path, chdir, getcwd
 MODE = 0
 
-import sys, subprocess as sp
-from os import path, chdir, getcwd
-import os
-import cursor
-
-from src import issues
-from src.qs import isExist , confirm
-from src.git import *
-from src.diff import diffhash, logviewer
-from src.parse import Parser
-from src.version import *
-from src.arg import Help, defaults, defaultspath
 
 issues.version(3)
 
-# git commands 
+# git commands
 diffcmd = 'git diff --cached --ignore-all-space --ignore-blank-lines'
-logcmd =  'git log --stat --oneline --graph --decorate'
+logcmd = 'git log --stat --oneline --graph --decorate'
+
 
 def main():
     d = Parser(MODE)
 
-    init     = d['init']
-    gitpath  = d['gitpath']
+    init = d['init']
+    gitpath = d['gitpath']
     filepath = d['filepath']
-    branch   = d['branch']
-    verbose  = d['verbose']
-    log      = d['log']
-    commit   = d['commit']
-    reset    = d['reset']
-    push     = d['push']
-    remote   = d['remote']
-    pull     = d['pull']
-    diff     = d['diff']
-    version  = d['version']
-    save     = d['save']
+    branch = d['branch']
+    verbose = d['verbose']
+    log = d['log']
+    commit = d['commit']
+    reset = d['reset']
+    push = d['push']
+    remote = d['remote']
+    pull = d['pull']
+    diff = d['diff']
+    version = d['version']
+    save = d['save']
     checkout = d['checkout']
-    ls       = d['ls']
-
+    ls = d['ls']
 
     if d['help']:
         Help(MODE)
@@ -70,14 +70,15 @@ def main():
         echo(f'\n\033[1mCurrently on branch `\033[3m{current_branch}`')
         Checkout()
 
-    #conversion to absolute path
+    # conversion to absolute path
     gitpath = path.abspath(gitpath)
     filepath = path.abspath(filepath)
     os.chdir(gitpath)
 
     gitfolder = path.join(gitpath, '.git')
     if not path.exists(gitfolder):
-        issues.warning(f'It seems path:`{gitpath}` does not have `.git` folder.')
+        issues.warning(
+            f'It seems path:`{gitpath}` does not have `.git` folder.')
         if confirm(f'Initialize?'):
             initialize(flag=False)
         else:
@@ -110,9 +111,8 @@ def main():
             if current_branch != branch:
                 issues.branch()
                 branch = setBranch(branch, filepath)
-        
-    issues.execute(['git status --short'])
 
+    issues.execute(['git status --short'])
 
     if log:
         issues.execute([logcmd])
@@ -125,7 +125,6 @@ def main():
             issues.execute([f'git add {filepath}'])
             Commit()
 
-
     if pull:
         issues.execute([f'git pull {remote} {branch}'])
 
@@ -137,8 +136,9 @@ def main():
     else:
         issues.ok('No push')
 
+
 if __name__ == "__main__":
-    #main()
+    # main()
     try:
         main()
     except (IOError, EOFError, KeyboardInterrupt):

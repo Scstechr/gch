@@ -1,4 +1,5 @@
-import sys, subprocess as sp
+import sys
+import subprocess as sp
 from os import path, chdir, getcwd
 from pathlib import Path
 from urllib.parse import urlparse
@@ -8,9 +9,11 @@ from .qs import getAnswer, isExist, confirm, prompt, echo
 from . import diff
 from .util import *
 
+
 def b(string):
     ''' String Format for Branch Name '''
     return f'\033[3m\033[33m{string}\033[0m'
+
 
 def CheckState():
     if isExist(f'git status --short'):
@@ -18,6 +21,7 @@ def CheckState():
     else:
         issues.ok('Clean State')
         return False
+
 
 def Commit():
     ''' Commit '''
@@ -27,21 +31,23 @@ def Commit():
     else:
         issues.execute([f'git commit -m "{commit_message}"'])
 
+
 def getCurrentBranch(lst=False):
     ''' Returns current branch name w or w/o branch list '''
     l = sp.getoutput('git branch').split('\n')
-    current_branch = ''.join(branch[2:] for branch in l if branch[0]=='*')
+    current_branch = ''.join(branch[2:] for branch in l if branch[0] == '*')
     branch_list = [branch[2:] for branch in l]
     if lst:
         return current_branch, branch_list
     else:
         return current_branch
 
+
 def setBranch(branch, filepath):
     current_branch, branch_list = getCurrentBranch(lst=True)
     if branch not in branch_list:
         issues.warning(f'Branch `{b(branch)}` not found.')
-        qs =     [f'Make new branch `{b(branch)}`               ']
+        qs = [f'Make new branch `{b(branch)}`               ']
         qs.append(f'Stay on current branch `{b(current_branch)}`')
         answer = getAnswer(qs)
         if answer == 1:
@@ -50,8 +56,9 @@ def setBranch(branch, filepath):
             echo(f'Commiting branch set to {b(current_branch)}')
             branch = current_branch
     else:
-        echo(f'Currently on branch `{b(current_branch)}` but tried to commit to branch `{b(branch)}`.')
-        qs =     [f'Merge branch `{b(current_branch)}` => branch `{b(branch)}`']
+        echo(
+            f'Currently on branch `{b(current_branch)}` but tried to commit to branch `{b(branch)}`.')
+        qs = [f'Merge branch `{b(current_branch)}` => branch `{b(branch)}`']
         qs.append(f'Stay on branch `{b(current_branch)}`                   ')
         qs.append(f'Checkout to branch `{b(branch)}`                       ')
         answer = getAnswer(qs)
@@ -64,48 +71,54 @@ def setBranch(branch, filepath):
             else:
                 echo(f'\nTheres some changes in branch `{b(current_branch)}`.')
                 issues.execute([f'git diff --stat'])
-                qs =     [f'Commit changes of branch `{b(current_branch)}`']
+                qs = [f'Commit changes of branch `{b(current_branch)}`']
                 qs.append(f'Stash changes of branch `{b(current_branch)}` ')
                 qs.append(f'Force Checkout to branch `{b(branch)}`        ')
                 answer_2 = getAnswer(qs)
                 if answer_2 == 1:
-                    issues.execute([f'git add .',f'git diff --stat'])
+                    issues.execute([f'git add .', f'git diff --stat'])
                     Commit()
                     issues.execute([f'git checkout {branch}'])
                 elif answer_2 == 2:
-                    issues.execute([f'git stash',f'git checkout {branch}'])
+                    issues.execute([f'git stash', f'git checkout {branch}'])
                 else:
                     issues.execute([f'git checkout -f {branch}'])
             if answer == 1:
-                issues.execute([f'git format-patch {branch}..{current_branch} --stdout | git apply --check'])
+                issues.execute(
+                    [f'git format-patch {branch}..{current_branch} --stdout | git apply --check'])
                 if isExist('git format-patch {branch}..{current_branch} --stdout | git apply --check'):
                     issues.execute([f'git merge {current_branch}'])
                 else:
-                    issues.warning("Aborting Merge because conflict is likely to occur.")
+                    issues.warning(
+                        "Aborting Merge because conflict is likely to occur.")
                     issues.abort()
     return branch
 
+
 def globalsetting():
     echo("** Configureation of global settings **")
-    issues.execute(['git config --global credential.helper osxkeychain',\
+    issues.execute(['git config --global credential.helper osxkeychain',
                     'git config --global core.excludesfile ~/.gitignore_global'])
     name, email = prompt("name"), prompt("email")
-    issues.execute([f'git config --global user.name "{name}"',\
+    issues.execute([f'git config --global user.name "{name}"',
                     f'git config --global user.email {email}'])
 
     if confirm('Do you want to use emacs instead of vim as an editor?'):
         issues.execute([f'git config --global core.editor emacs'])
     else:
         issues.execute([f'git config --global core.editor vim'])
-        
+
     if confirm('Do you want to use ediff instead of vimdiff?'):
-        issues.execute([f'git config --global {x}.tool ediff' for x in ['diff', 'merge']])
+        issues.execute(
+            [f'git config --global {x}.tool ediff' for x in ['diff', 'merge']])
     else:
-        issues.execute([f'git config --global {x}.tool vimdff' for x in ['diff', 'merge']])
-    format_string ="'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s'" 
+        issues.execute(
+            [f'git config --global {x}.tool vimdff' for x in ['diff', 'merge']])
+    format_string = "'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s'"
     string = f'"log --graph --date-order --all --pretty=format:{format_string} --date=short"'
     issues.execute([f"git config --global alias.graph {string}"])
     issues.execute([f'cat ~/.gitconfig'])
+
 
 def initialize(flag=False):
     if flag:
@@ -139,16 +152,23 @@ def initialize(flag=False):
         issues.execute([f'echo ".default.txt" >> .gitignore'])
     issues.execute(['git add -f .gitignore'])
 
+
 def Reset():
     if confirm("Are you sure you want to reset?"):
         issues.warning('Options with `--hard` must be done with caution')
-        opt=[]
-        opt.append('\033[3mgit commit --amend\033[0m          > Change message of last commit')
-        opt.append('\033[3mgit reset --soft HEAD^\033[0m      > Undo last commit (soft)')
-        opt.append('\033[3mgit reset \033[91m--hard\033[0m\033[3m HEAD^\033[0m      > Undo last commit')
-        opt.append('\033[3mgit reset \033[91m--hard\033[0m\033[3m HEAD\033[0m       > Undo changes from last commit')
-        opt.append('\033[3mgit reset \033[91m--hard\033[0m\033[3m <hash>\033[0m     > Undo changes from past commit')
-        opt.append('\033[3mgit reset \033[91m--hard\033[0m\033[3m ORIG_HEAD\033[0m  > Undo most recent reset')
+        opt = []
+        opt.append(
+            '\033[3mgit commit --amend\033[0m          > Change message of last commit')
+        opt.append(
+            '\033[3mgit reset --soft HEAD^\033[0m      > Undo last commit (soft)')
+        opt.append(
+            '\033[3mgit reset \033[91m--hard\033[0m\033[3m HEAD^\033[0m      > Undo last commit')
+        opt.append(
+            '\033[3mgit reset \033[91m--hard\033[0m\033[3m HEAD\033[0m       > Undo changes from last commit')
+        opt.append(
+            '\033[3mgit reset \033[91m--hard\033[0m\033[3m <hash>\033[0m     > Undo changes from past commit')
+        opt.append(
+            '\033[3mgit reset \033[91m--hard\033[0m\033[3m ORIG_HEAD\033[0m  > Undo most recent reset')
         ans = getAnswer(opt)
         if ans == 1:
             issues.execute(['git commit --amend'])
@@ -174,16 +194,17 @@ def Reset():
                 else:
                     echo(f'\nTheres some changes not commited..')
                     issues.execute([f'git diff --stat'])
-                    qs =     [f'Commit changes before reset']
+                    qs = [f'Commit changes before reset']
                     qs.append(f'Stash changes before reset')
                     qs.append(f'Force Checkout before reset')
                     ans = getAnswer(qs)
                     if ans == 1:
-                        issues.execute([f'git add .',f'git diff --stat'])
+                        issues.execute([f'git add .', f'git diff --stat'])
                         Commit()
                         issues.execute([f'git reset --hard {dhash}'])
                     elif ans == 2:
-                        issues.execute([f'git stash',f'git reset --hard {dhash}'])
+                        issues.execute(
+                            [f'git stash', f'git reset --hard {dhash}'])
                     else:
                         issues.execute([f'git reset --hard {dhash}'])
         elif ans == 5:
@@ -197,9 +218,11 @@ def url_valid(x):
     except:
         return False
 
+
 def Remote(remote):
     remotelst = sp.getoutput(f'git remote -v').split('\n')
-    remotelst = [r.split('\t')[0] for idx, r in enumerate(remotelst) if idx%2]
+    remotelst = [r.split('\t')[0]
+                 for idx, r in enumerate(remotelst) if idx % 2]
     if remote in remotelst:
         pass
     else:
@@ -215,13 +238,16 @@ def Remote(remote):
         else:
             sys.exit()
 
+
 def Push(remote, branch):
     Remote(remote)
     issues.execute([f'git push -u {remote} {branch}'])
 
+
 def MakeNewBranch(branch_list):
     while 1:
-        new_branch = prompt('\nEnter new branch name (spaces will be replaced with `-`)').replace(' ', '-')
+        new_branch = prompt(
+            '\nEnter new branch name (spaces will be replaced with `-`)').replace(' ', '-')
         if new_branch in branch_list:
             issues.warning(f'Branch `{new_branch}` already exists!')
         else:
@@ -231,6 +257,7 @@ def MakeNewBranch(branch_list):
             else:
                 issues.execute([f'git branch {new_branch}'])
             break
+
 
 def Checkout():
     current_branch, branch_list = getCurrentBranch(lst=True)
@@ -248,13 +275,16 @@ def Checkout():
             issues.execute([f'git checkout {branch[answer-1]}'])
             issues.execute([f'git diff {current_branch}..{branch[answer-1]}'])
 
+
 def Ls():
     issues.execute([f'git ls-files'])
+
 
 def RenameBranch():
     current_branch, branch_list = getCurrentBranch(lst=True)
     while 1:
-        new_branch = prompt('\n\033[2KEnter new branch name (spaces will be replaced with `-`)').replace(' ', '-')
+        new_branch = prompt(
+            '\n\033[2KEnter new branch name (spaces will be replaced with `-`)').replace(' ', '-')
 
         if new_branch in branch_list:
             issues.warning(f'Branch `{new_branch}` already exists!')
@@ -263,6 +293,7 @@ def RenameBranch():
             issues.execute([f'git branch -m {new_branch}'])
             issues.ok(f'Branch `{current_branch}` is now `{new_branch}`')
             break
+
 
 def Branch():
     if isExist('git branch'):

@@ -5,6 +5,7 @@ import sys
 from . import issues
 from contextlib import suppress
 
+
 class CursorOff(object):
     def __enter__(self):
         cursor.hide()
@@ -12,9 +13,10 @@ class CursorOff(object):
 #        print(f'\33[{vsize};0f', end='')
 #        for i in range(vsize+1):
 #            print(f'\033[1F\033[2K', end ='')
-         
+
     def __exit__(self, *args):
         cursor.show()
+
 
 def wait_key():
     ''' Wait for a key press on the console and return it. '''
