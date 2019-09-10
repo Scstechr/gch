@@ -31,9 +31,9 @@ if path.exists(defaultspath):
                 k, v = line.replace('\n', '').split(":")
                 if v != 'None':
                     defaults[str(k)] = str(v)
-                elif v == 'True':
+                if v == 'True':
                     defaults[str(k)] = True
-                elif v == 'False':
+                if v == 'False':
                     defaults[str(k)] = False
 
 
@@ -86,7 +86,7 @@ def ArgSet(lst):
         if lst[4] in [True, False]:
             d['Default'] = lst[4]
         else:
-            print('ERROR! on Default!', d)
+            print('ERROR! on Default', d, lst)
             sys.exit(1)
     else:
         d['Default'] = lst[4]

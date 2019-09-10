@@ -17,7 +17,7 @@ def CheckState():
     if isExist(f'git status --short'):
         return True
     else:
-        issues.ok('Clean State')
+        issues.ok('Clean!')
         return False
 
 
