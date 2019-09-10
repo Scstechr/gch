@@ -33,7 +33,8 @@ def Commit():
 def getCurrentBranch(lst=False):
     ''' Returns current branch name w or w/o branch list '''
     output = sp.getoutput('git branch').split('\n')
-    current_branch = ''.join(branch[2:] for branch in output if branch[0] == '*')
+    current_branch = ''.join(branch[2:]
+                             for branch in output if branch[0] == '*')
     branch_list = [branch[2:] for branch in output]
     if lst:
         return current_branch, branch_list
