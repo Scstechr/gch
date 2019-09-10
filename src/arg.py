@@ -20,7 +20,7 @@ defaults['version'] = False
 defaults['checkout'] = False
 defaults['ls'] = False
 defaultspath = path.join(".", ".defaults.txt")
-gitpath = path.join(".", ".git")
+gitpath = path.join(defaults['gitpath'], ".git")
 if path.exists(defaultspath):
     if not path.exists(gitpath):
         if path.exists(".defaults.txt"):
