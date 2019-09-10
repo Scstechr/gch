@@ -1,13 +1,11 @@
 import sys
 import subprocess as sp
-from os import path, chdir, getcwd
-from pathlib import Path
+from os import path, getcwd
 from urllib.parse import urlparse
-
 from . import issues
 from .qs import getAnswer, isExist, confirm, prompt, echo
 from . import diff
-from .util import *
+from .util import CursorOff, wait_key
 
 
 def b(string):
@@ -34,9 +32,9 @@ def Commit():
 
 def getCurrentBranch(lst=False):
     ''' Returns current branch name w or w/o branch list '''
-    l = sp.getoutput('git branch').split('\n')
-    current_branch = ''.join(branch[2:] for branch in l if branch[0] == '*')
-    branch_list = [branch[2:] for branch in l]
+    output = sp.getoutput('git branch').split('\n')
+    current_branch = ''.join(branch[2:] for branch in output if branch[0] == '*')
+    branch_list = [branch[2:] for branch in output]
     if lst:
         return current_branch, branch_list
     else:
@@ -214,8 +212,8 @@ def Reset():
 def url_valid(x):
     try:
         result = urlparse(x)
-        return all([result.scheme, result.netloc, result.path])
-    except:
+        return all([result.scheme, result.netloc])
+    except ValueError:
         return False
 
 
@@ -288,7 +286,6 @@ def RenameBranch():
 
         if new_branch in branch_list:
             issues.warning(f'Branch `{new_branch}` already exists!')
-            #print(f"\033[4F", end='')
         else:
             issues.execute([f'git branch -m {new_branch}'])
             issues.ok(f'Branch `{current_branch}` is now `{new_branch}`')

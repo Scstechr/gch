@@ -1,5 +1,4 @@
 from . import issues
-from os import path
 import sys
 from .arg import ReturnArgdict, Help
 

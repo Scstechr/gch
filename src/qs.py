@@ -1,7 +1,6 @@
 import subprocess as sp
 from . import issues
-from .util import *
-import sys
+from .util import CursorOff, wait_key
 from contextlib import suppress
 
 

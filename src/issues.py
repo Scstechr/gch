@@ -37,7 +37,7 @@ def execute(command_list, run=True, verbose=True):
     for command in command_list:
         if verbose:
             echo(f'\033[94m>> execute: {command}\033[0m')
-        if run == True:
+        if run:
             sp.run(command, shell=True)
 
 
@@ -46,8 +46,7 @@ def version(version):
     try:
         version = int(version)
         if not six.PY3:
-            sp.call(
-                'echo "VERSION ERROR! PLEASE USE PYTHON 3.6.X or later"', shell=True)
+            sp.call('echo "Error! Please use Python 3.X"', shell=True)
             sys.exit()
-    except:
+    except ValueError:
         sys.exit()

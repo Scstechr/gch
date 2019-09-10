@@ -1,15 +1,8 @@
-from . import issues
-from .qs import getAnswer, isExist
-from .git import *
-from .util import *
+from .util import CursorOff, wait_key
 
 import sys
-import cursor
-import termios
 import shutil
-import random
-import string
-import os
+import subprocess as sp
 
 
 def hr():
@@ -33,7 +26,7 @@ def decorate(string):
         ret += f' \033[36m{line[0][1:]}>\033[0m '
         line = '>'.join(line[1:])
         ret += f'\033[3m{line}\033[0m'
-    except:
+    except (IndexError):
         ret = string
         chash = ''
     return ret, chash
@@ -41,13 +34,10 @@ def decorate(string):
 
 def page(option):
     vsize = shutil.get_terminal_size()[1]
-    hsize = shutil.get_terminal_size()[0]
     lpp = int(vsize / 2)  # lines per page
     select = 0
-    pagenum = 0
     start = 0
     end = lpp if len(option) > lpp else len(option)
-    check = [idx for idx, _ in enumerate(option) if _.count('*')]
     selected = []
     while(1):
         hr()
@@ -95,7 +85,8 @@ def page(option):
 
 
 def displog():
-    logcmd2 = "git log --graph --all --pretty=format:'(%cr) [%h] <%an> %s' --abbrev-commit --date=relative --decorate=full "
-    logout = sp.getoutput(logcmd2).split('\n')
+    cmd = "git log --graph --all --pretty=format:'(%cr) [%h] <%an>\
+            %s' --abbrev-commit --date=relative --decorate=full "
+    logout = sp.getoutput(cmd).split('\n')
     with CursorOff():
         page(logout)

@@ -1,8 +1,6 @@
 import cursor
 import termios
-import shutil
 import sys
-from . import issues
 from contextlib import suppress
 
 
