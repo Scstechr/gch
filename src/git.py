@@ -228,10 +228,14 @@ def url_valid(x):
         return False
 
 
-def Remote(remote):
+def getRemoteList():
     remotelst = sp.getoutput(f'git remote -v').split('\n')
     remotelst = [r.split('\t')[0]
                  for idx, r in enumerate(remotelst) if idx % 2]
+    return remotelst
+
+def Remote(remote):
+    remotelst = getRemoteList()
     if remote in remotelst:
         pass
     else:

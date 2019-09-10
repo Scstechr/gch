@@ -2,6 +2,7 @@ from os import path
 import sys
 from .version import VERSION, DATE
 from . import issues
+from .git import getCurrentBranch, getRemoteList
 
 defaults = {}
 defaults['init'] = False
@@ -154,15 +155,16 @@ def ReturnArgdict(mode):
 
 
 def status_bar(d):
-    d = {k:v for k, v in d.items() if k not in IGNORE}
-    print(d)
-    flags = {k[0]:v for k, v in d.items() if v in [True, False]}
-    flags_str = '\033[m'.join([f'\033[92m{k}' if v else f'\033[2m{k}' for k, v in flags.items()])
-    flags_str = '[' + flags_str + '\033[m]'
-    print(flags_str)
-    strings = {k:v for k, v in d.items() if k[0] not in flags.keys()}
-    print(strings)
-    pass
+    """ ONLY FOR GCH """
+    print(f"GCH v{VERSION}: ",end='')
+    string = f"\033[31m[GITDIR: \'{d['gitpath']}\']\033[m"
+    _, branch_list = getCurrentBranch(lst=True)
+    if len(branch_list) > 0:
+        string += f"\033[32m[BRANCH: \'{d['branch']}\']\033[m"
+    remote_list = getRemoteList()
+    if len(remote_list) > 0:
+        string += f"\033[33m[REMOTE: \'{d['remote']}\']\033[m"
+    print(string)
 
 
 def Help(mode):

@@ -52,7 +52,7 @@ def main():
     if version:
         Version('GCH - Git Commit Handler')
 
-    ShortVersion('GCH - Git Commit Handler')
+#    ShortVersion('GCH - Git Commit Handler')
 
     status_bar(d)
 
