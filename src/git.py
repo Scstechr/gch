@@ -25,8 +25,13 @@ def Commit():
     ''' Commit '''
     commit_message = prompt("Commit Message [v:vim mode]")
     if commit_message.count('`'):
-        issues.warning('\"`\" will be replaced with \"\'\"')
-        commit_message = commit_message.replace('`', "'")
+        issues.warning('\"`\" is not acceptable in this mode.')
+        if confirm('Replace \" ` \" with \" \' \"'):
+            issues.warning('\"`\" is now replaced with \"\'\"...')
+            commit_message = commit_message.replace('`', "'")
+        else:
+            issues.warning('Now entering vim mode...')
+            commit_message = 'v'
     if commit_message in ['v', 'vi', 'vim']:
         issues.execute([f'git commit'])
     else:

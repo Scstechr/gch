@@ -35,7 +35,7 @@ def execute(command_list, run=True, verbose=True):
     ''' Execute bash commands through shell '''
     for command in command_list:
         if verbose:
-            print(f'\033[94m>> execute: {command}\033[0m')
+            print(f'\033[2m>> execute: {command}\033[0m')
         if run:
             sp.run(command, shell=True)
 
