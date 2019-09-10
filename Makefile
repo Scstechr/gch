@@ -4,18 +4,19 @@ main:
 install:
 	pip install -r requirements.txt
 
+pep:
+	autopep8 -i *.py
+	autopep8 -i src/*.py
+
 commit:
-	autopep8 -i gch.py
-	autopep8 -i gdiff.py
-	autopep8 -i src/git.py
-	autopep8 -i src/arg.py
-	autopep8 -i src/diff.py
-	autopep8 -i src/git.py
-	autopep8 -i src/issues.py
-	autopep8 -i src/log.py
-	autopep8 -i src/parse.py
-	autopep8 -i src/qs.py
-	autopep8 -i src/util.py
-	autopep8 -i src/version.py
 	gch -cv
 
+pfc:
+	autopep8 -i *.py
+	autopep8 -i src/*.py
+	flake8 --ignore=E501,E241 *.py
+	flake8 --ignore=E501,E241 src/*.py
+	gch -cv
+
+flake:
+	

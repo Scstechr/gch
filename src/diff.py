@@ -2,18 +2,17 @@ import subprocess as sp
 import sys
 import random
 import string
-import os
+import shutil
 
 from . import issues
-from .qs import getAnswer, isExist, confirm, prompt
-from .git import *
-from .util import *
+from .qs import isExist, confirm, prompt
+from .util import CursorOff, wait_key
 
 
 def ch_gen(string):
     ''' returns hash of commits'''
     if string != 'HEAD':
-        return string[string.find('[')+1:string.find(']')]
+        return string[string.find('[') + 1:string.find(']')]
     else:
         return 'HEAD'
 
@@ -36,7 +35,7 @@ def decorate(string):
         ret += f'\033[36m{line[0][1:]}>\033[0m'
         line = '>'.join(line[1:])
         ret += f'\033[3m{line}\033[0m'
-    except:
+    except IndexError:
         ret = string
         chash = ''
         if string.count('HEAD'):
@@ -51,16 +50,14 @@ def setlength():
     vsize = shutil.get_terminal_size()[1]
     hsize = shutil.get_terminal_size()[0]
     width = hsize - 10
-    return int(vsize-8), width
+    return int(vsize - 8), width
 
 
 def contpage(verbose, selected, option):
     lpp, width = setlength()
     select = 0
-    pagenum = 0
     start = 0
     end = lpp if len(option) > lpp else len(option)
-    check = [idx for idx, _ in enumerate(option) if _.count('*')]
     while(1):
         lpp, width = setlength()
         hr()
@@ -69,7 +66,7 @@ def contpage(verbose, selected, option):
         hr()
         for idx, line in enumerate(option[start:end]):
             print('\033[2K\033[0m', end='')
-            print('> ', end='') if start+idx == select else print('  ', end='')
+            print('> ', end='') if start + idx == select else print('  ', end='')
             line = line if len(line) < width else f'{line[:int(width)]} ...'
             orig = line
             line, chash = decorate(line)
@@ -77,9 +74,9 @@ def contpage(verbose, selected, option):
                 print(f'\033[2m{orig}\033[0m')
             else:
                 print(line)
-            #print(line, end='\033[0m\n')
+            # print(line, end='\033[0m\n')
         if len(option) < lpp:
-            for i in range(lpp-len(option)):
+            for i in range(lpp - len(option)):
                 print('\033[2K')
 
         hr()
@@ -151,7 +148,6 @@ def logviewer(verbose, head):
 
     while(1):
         vsize = shutil.get_terminal_size()[1]
-        hsize = shutil.get_terminal_size()[0]
         selected = []
         if head:
             selected += ['HEAD']
@@ -184,7 +180,7 @@ def page(verbose, selected, pages):
         hr()
         for idx, opt in enumerate(pages[pagenum]):
             if len(opt) > width:
-                opt = opt[:width-5] + '...'
+                opt = opt[:width - 5] + '...'
             line, chash = decorate(opt)
             print('\033[2K', end='')
             print('>', end=' ') if idx == select else print(' ', end=' ')
@@ -192,7 +188,7 @@ def page(verbose, selected, pages):
                 print(f'\033[2m{opt}\033[0m')
             else:
                 print(line)
-        for i in range(lpp-pagelen):
+        for i in range(lpp - pagelen):
             print('\033[2K')
         hr()
         print(f'[{pagenum+1}/{len(pages)}]', end=' ')
@@ -248,7 +244,7 @@ def book(verbose, selected, options):
     pages = []
     if len(options) > lpp:
         for i in range(0, len(options), lpp):
-            pages.append(options[i:i+lpp])
+            pages.append(options[i:i + lpp])
     else:
         pages = [options]
     return page(verbose, selected, pages)

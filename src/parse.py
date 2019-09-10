@@ -38,13 +38,13 @@ def DictSet(mode, d, argdict, argv, arg, idx):
         d[arg] = True
     else:
         d[arg] = argdict[arg]['Default']
-        if idx+1 < len(argv):
-            next_arg = argv[idx+1]
+        if idx + 1 < len(argv):
+            next_arg = argv[idx + 1]
             if len(next_arg):
-                if argv[idx+1][0] != '-' and argv[idx+1][:2] != '--':
-                    d[arg] = argv[idx+1]
+                if argv[idx + 1][0] != '-' and argv[idx + 1][:2] != '--':
+                    d[arg] = argv[idx + 1]
             else:
-                d[arg] = argv[idx+1]
+                d[arg] = argv[idx + 1]
 
         else:
             if arg == 'b' or arg == 'branch':

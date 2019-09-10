@@ -13,7 +13,7 @@ def hr():
 def decorate(string):
     hsize = shutil.get_terminal_size()[0]
     line = string if len(string) < hsize * \
-        0.8 else print(string[:int(hsize*0.95)])
+        0.8 else print(string[:int(hsize * 0.95)])
     line = string.split(')')
     try:
         ret = f'{line[0].split("(")[0]}\033[32m({line[0].split("(")[1]})\033[0m '
@@ -45,7 +45,7 @@ def page(option):
         hr()
         for idx, line in enumerate(option[start:end]):
             print('\033[2K\033[0m', end='')
-            print('> ', end='') if start+idx == select else print('  ', end='')
+            print('> ', end='') if start + idx == select else print('  ', end='')
             line, chash = decorate(line)
             print(line, end='\033[0m\n')
         hr()

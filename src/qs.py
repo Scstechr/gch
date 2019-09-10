@@ -7,7 +7,7 @@ from . import issues
 def cinput(string):
     ret = ''
     with suppress(KeyboardInterrupt):
-        ret = input(string+': ')
+        ret = input(string + ': ')
 
     return ret
 
@@ -29,7 +29,7 @@ def getAnswer(lst):
         while(1):
             [print(f' {chr(97+idx)}) {option}')
              for idx, option in enumerate(lst)]
-            ans = [chr(97+idx) for idx, _ in enumerate(lst)]
+            ans = [chr(97 + idx) for idx, _ in enumerate(lst)]
         #    print("Type the answer:")
             answer = wait_key()
             if answer in ans:
@@ -59,5 +59,5 @@ def confirm(string):
             flag = False
             break
         print('\033[1A', end='')
-        ret = input(string+' [Y/n]:').lower()
+        ret = input(string + ' [Y/n]:').lower()
     return flag
