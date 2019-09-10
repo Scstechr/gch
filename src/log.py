@@ -45,7 +45,8 @@ def page(option):
         hr()
         for idx, line in enumerate(option[start:end]):
             print('\033[2K\033[0m', end='')
-            print('> ', end='') if start + idx == select else print('  ', end='')
+            print('> ', end='') if start + \
+                idx == select else print('  ', end='')
             line, chash = decorate(line)
             print(line, end='\033[0m\n')
         hr()

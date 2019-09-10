@@ -1,6 +1,6 @@
 import sys
 
-VERSION = '1.29'
+VERSION = '1.30'
 DATE = "2019-09-03 13:37:12 UTC"
 PYTHON_VERSION = '3.7.3'
 PLATFM_VERSION = 'Darwin-18.0.0-x86_64-i386-64bit'

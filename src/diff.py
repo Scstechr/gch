@@ -66,7 +66,8 @@ def contpage(verbose, selected, option):
         hr()
         for idx, line in enumerate(option[start:end]):
             print('\033[2K\033[0m', end='')
-            print('> ', end='') if start + idx == select else print('  ', end='')
+            print('> ', end='') if start + \
+                idx == select else print('  ', end='')
             line = line if len(line) < width else f'{line[:int(width)]} ...'
             orig = line
             line, chash = decorate(line)
