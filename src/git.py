@@ -68,7 +68,8 @@ def setBranch(branch, filepath):
             if not isExist(f'git status --short'):
                 issues.execute([f'git checkout {branch}'])
             else:
-                print(f'\nTheres some changes in branch `{b(current_branch)}`.')
+                print(
+                    f'\nTheres some changes in branch `{b(current_branch)}`.')
                 issues.execute([f'git diff --stat'])
                 qs = [f'Commit changes of branch `{b(current_branch)}`']
                 qs.append(f'Stash changes of branch `{b(current_branch)}` ')
