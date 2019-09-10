@@ -8,12 +8,10 @@ install:
 	pip install -r requirements.txt
 
 pep: $(PROGRAM) $(SRC)
-	autopep8 -i *.py
-	autopep8 -i src/*.py
+	autopep8 -i gch.py gdiff.py src/*.py
 
 flake: $(PROGRAM) $(SRC)
-	flake8 --ignore=E501,E241 *.py
-	flake8 --ignore=E501,E241 src/*.py
+	flake8 --ignore=E501,E241 --exclude=__init__.py,build.py gch.py gdiff.py src/*.py
 
 commit:
 	gch -cv

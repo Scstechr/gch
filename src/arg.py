@@ -20,21 +20,19 @@ defaults['version'] = False
 defaults['checkout'] = False
 defaults['ls'] = False
 defaultspath = path.join(".", ".defaults.txt")
-gitpath = path.join(defaults['gitpath'], ".git")
 if path.exists(defaultspath):
+    with open(defaultspath, 'r') as readfile:
+        for line in readfile:
+            k, v = line.replace('\n', '').split(":")
+            if v != 'None':
+                defaults[str(k)] = str(v)
+            if v == 'True':
+                defaults[str(k)] = True
+            if v == 'False':
+                defaults[str(k)] = False
+    gitpath = path.join(defaults['gitpath'], ".git")
     if not path.exists(gitpath):
-        if path.exists(".defaults.txt"):
-            issues.execute([f'rm .defaults.txt'])
-    else:
-        with open(defaultspath, 'r') as readfile:
-            for line in readfile:
-                k, v = line.replace('\n', '').split(":")
-                if v != 'None':
-                    defaults[str(k)] = str(v)
-                if v == 'True':
-                    defaults[str(k)] = True
-                if v == 'False':
-                    defaults[str(k)] = False
+        issues.execute([f'rm .defaults.txt'])
 
 
 # Explanation of the options showed in --help flag
@@ -151,6 +149,11 @@ def ReturnArgdict(mode):
             key_s = arg['ShortName']
             argdict[key_s] = arg
     return argdict
+
+
+def status_bar(d):
+    print(d)
+    pass
 
 
 def Help(mode):

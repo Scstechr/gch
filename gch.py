@@ -7,7 +7,7 @@ Git Commit Handler
 
 from src.qs import isExist, confirm
 import sys
-from src.arg import Help, defaultspath
+from src.arg import Help, defaultspath, status_bar
 from src.version import Version, ShortVersion
 from src.parse import Parser
 from src.diff import diffhash, logviewer
@@ -54,6 +54,7 @@ def main():
 
     ShortVersion('GCH - Git Commit Handler')
 
+    status_bar(d)
     if type(branch) == bool:
         branch = Branch()
 
