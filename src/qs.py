@@ -1,11 +1,7 @@
 import subprocess as sp
-from . import issues
-from .util import CursorOff, wait_key
 from contextlib import suppress
-
-
-def echo(string, end='\n'):
-    print(string, end=end)
+from .util import CursorOff, wait_key
+from . import issues
 
 
 def cinput(string):
@@ -31,7 +27,7 @@ def getAnswer(lst):
     with CursorOff():
         lst.append("exit")
         while(1):
-            [echo(f' {chr(97+idx)}) {option}')
+            [print(f' {chr(97+idx)}) {option}')
              for idx, option in enumerate(lst)]
             ans = [chr(97+idx) for idx, _ in enumerate(lst)]
         #    print("Type the answer:")

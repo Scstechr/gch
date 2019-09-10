@@ -3,7 +3,7 @@ import subprocess as sp
 from os import path, getcwd
 from urllib.parse import urlparse
 from . import issues
-from .qs import getAnswer, isExist, confirm, prompt, echo
+from .qs import getAnswer, isExist, confirm, prompt
 from . import diff
 from .util import CursorOff, wait_key
 
@@ -52,23 +52,23 @@ def setBranch(branch, filepath):
         if answer == 1:
             issues.execute([f'git checkout -b {branch}'])
         else:
-            echo(f'Commiting branch set to {b(current_branch)}')
+            print(f'Commiting branch set to {b(current_branch)}')
             branch = current_branch
     else:
-        echo(
+        print(
             f'Currently on branch `{b(current_branch)}` but tried to commit to branch `{b(branch)}`.')
         qs = [f'Merge branch `{b(current_branch)}` => branch `{b(branch)}`']
         qs.append(f'Stay on branch `{b(current_branch)}`                   ')
         qs.append(f'Checkout to branch `{b(branch)}`                       ')
         answer = getAnswer(qs)
         if answer == 2:
-            echo(f'Commiting branch is now set to `{b(current_branch)}`')
+            print(f'Commiting branch is now set to `{b(current_branch)}`')
             branch = current_branch
         else:
             if not isExist(f'git status --short'):
                 issues.execute([f'git checkout {branch}'])
             else:
-                echo(f'\nTheres some changes in branch `{b(current_branch)}`.')
+                print(f'\nTheres some changes in branch `{b(current_branch)}`.')
                 issues.execute([f'git diff --stat'])
                 qs = [f'Commit changes of branch `{b(current_branch)}`']
                 qs.append(f'Stash changes of branch `{b(current_branch)}` ')
@@ -95,7 +95,7 @@ def setBranch(branch, filepath):
 
 
 def globalsetting():
-    echo("** Configureation of global settings **")
+    print("** Configureation of global settings **")
     issues.execute(['git config --global credential.helper osxkeychain',
                     'git config --global core.excludesfile ~/.gitignore_global'])
     name, email = prompt("name"), prompt("email")
@@ -127,7 +127,7 @@ def Init(flag=False):
     # git config
     gitconfigpath = path.join(path.expanduser('~'), '.gitconfig')
     if not path.exists(gitconfigpath):
-        echo("~/.gitconfig file does not exist. => Start Initialization!")
+        print("~/.gitconfig file does not exist. => Start Initialization!")
         globalsetting()
 
     issues.execute(['git init'])
@@ -153,61 +153,60 @@ def Init(flag=False):
 
 
 def Reset():
-    if confirm("Are you sure you want to reset?"):
-        issues.warning('Options with `--hard` must be done with caution')
-        opt = []
-        opt.append(
-            '\033[3mgit commit --amend\033[0m          > Change message of last commit')
-        opt.append(
-            '\033[3mgit reset --soft HEAD^\033[0m      > Undo last commit (soft)')
-        opt.append(
-            '\033[3mgit reset \033[91m--hard\033[0m\033[3m HEAD^\033[0m      > Undo last commit')
-        opt.append(
-            '\033[3mgit reset \033[91m--hard\033[0m\033[3m HEAD\033[0m       > Undo changes from last commit')
-        opt.append(
-            '\033[3mgit reset \033[91m--hard\033[0m\033[3m <hash>\033[0m     > Undo changes from past commit')
-        opt.append(
-            '\033[3mgit reset \033[91m--hard\033[0m\033[3m ORIG_HEAD\033[0m  > Undo most recent reset')
-        ans = getAnswer(opt)
-        if ans == 1:
-            issues.execute(['git commit --amend'])
-        elif ans == 2:
-            issues.execute(['git reset --soft HEAD^'])
-        elif ans == 3:
-            issues.execute(['git reset --hard HEAD^'])
-        elif ans == 4:
-            issues.execute(['git reset --hard HEAD'])
-        elif ans == 5:
-            issues.warning('Select hash from diff tool...')
-            flag = False
-            if confirm('Do you want to name specific author?'):
-                flag = True
+    issues.warning('Options with `--hard` must be done with caution')
+    opt = []
+    opt.append(
+        '\033[3mgit commit --amend\033[0m          > Change message of last commit')
+    opt.append(
+        '\033[3mgit reset --soft HEAD^\033[0m      > Undo last commit (soft)')
+    opt.append(
+        '\033[3mgit reset \033[91m--hard\033[0m\033[3m HEAD^\033[0m      > Undo last commit')
+    opt.append(
+        '\033[3mgit reset \033[91m--hard\033[0m\033[3m HEAD\033[0m       > Undo changes from last commit')
+    opt.append(
+        '\033[3mgit reset \033[91m--hard\033[0m\033[3m <hash>\033[0m     > Undo changes from past commit')
+    opt.append(
+        '\033[3mgit reset \033[91m--hard\033[0m\033[3m ORIG_HEAD\033[0m  > Undo most recent reset')
+    ans = getAnswer(opt)
+    if ans == 1:
+        issues.execute(['git commit --amend'])
+    elif ans == 2:
+        issues.execute(['git reset --soft HEAD^'])
+    elif ans == 3:
+        issues.execute(['git reset --hard HEAD^'])
+    elif ans == 4:
+        issues.execute(['git reset --hard HEAD'])
+    elif ans == 5:
+        issues.warning('Select hash from diff tool...')
+        flag = False
+        if confirm('Do you want to name specific author?'):
+            flag = True
+        dhash = diff.diffhash(verbose=True, head=True, author=flag)
+        while(1):
+            if confirm("Is this the correct hash you want to go back?"):
+                break
             dhash = diff.diffhash(verbose=True, head=True, author=flag)
-            while(1):
-                if confirm("Is this the correct hash you want to go back?"):
-                    break
-                dhash = diff.diffhash(verbose=True, head=True, author=flag)
-            if confirm(f"Go back (reset) to {dhash}?"):
-                if not isExist(f'git status --short'):
+        if confirm(f"Go back (reset) to {dhash}?"):
+            if not isExist(f'git status --short'):
+                issues.execute([f'git reset --hard {dhash}'])
+            else:
+                print(f'\nTheres some changes not commited..')
+                issues.execute([f'git diff --stat'])
+                qs = [f'Commit changes before reset']
+                qs.append(f'Stash changes before reset')
+                qs.append(f'Force Checkout before reset')
+                ans = getAnswer(qs)
+                if ans == 1:
+                    issues.execute([f'git add .', f'git diff --stat'])
+                    Commit()
                     issues.execute([f'git reset --hard {dhash}'])
+                elif ans == 2:
+                    issues.execute(
+                        [f'git stash', f'git reset --hard {dhash}'])
                 else:
-                    echo(f'\nTheres some changes not commited..')
-                    issues.execute([f'git diff --stat'])
-                    qs = [f'Commit changes before reset']
-                    qs.append(f'Stash changes before reset')
-                    qs.append(f'Force Checkout before reset')
-                    ans = getAnswer(qs)
-                    if ans == 1:
-                        issues.execute([f'git add .', f'git diff --stat'])
-                        Commit()
-                        issues.execute([f'git reset --hard {dhash}'])
-                    elif ans == 2:
-                        issues.execute(
-                            [f'git stash', f'git reset --hard {dhash}'])
-                    else:
-                        issues.execute([f'git reset --hard {dhash}'])
-        elif ans == 5:
-            issues.execute([f'git reset --hard ORIG_HEAD'])
+                    issues.execute([f'git reset --hard {dhash}'])
+    elif ans == 5:
+        issues.execute([f'git reset --hard ORIG_HEAD'])
 
 
 def url_valid(x):
@@ -266,7 +265,7 @@ def Checkout():
         if confirm(f"Make new branch?"):
             MakeNewBranch(branch_list)
     else:
-        echo(f'\n\033[0m\033[1mWhich branch do you want to checkout?\033[0m')
+        print(f'\n\033[0m\033[1mWhich branch do you want to checkout?\033[0m')
         answer = getAnswer(branch)
         if answer == len(branch):
             MakeNewBranch(branch_list)

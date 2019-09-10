@@ -35,8 +35,6 @@ if path.exists(defaultspath):
                     defaults[str(k)] = True
                 elif v == 'False':
                     defaults[str(k)] = False
-                elif k in ['save', 'help']:
-                    defaults[str(k)] = False
 
 
 # Explanation of the options showed in --help flag

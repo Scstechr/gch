@@ -58,10 +58,12 @@ def main():
         branch = Branch()
 
     if save:
-        issues.execute([f'rm {defaultspath}'], verbose=False)
+        if path.exists(defaultspath):
+            issues.execute([f'rm {defaultspath}'], verbose=False)
         for k, v in d.items():
-            cmd = f'echo "{str(k)}:{str(v)}" >> {defaultspath}'
-            issues.execute([cmd], verbose=False)
+            if k not in ['save']:
+                cmd = f'echo "{str(k)}:{str(v)}" >> {defaultspath}'
+                issues.execute([cmd], verbose=False)
         issues.ok('Saved!')
 
     if checkout:
