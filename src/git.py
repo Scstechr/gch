@@ -37,7 +37,10 @@ def Commit():
     if commit_message in ['v', 'vi', 'vim']:
         issues.execute([f'git commit'])
     else:
-        issues.execute([f'git commit -m "{commit_message}"'])
+        if len(commit_message):
+            issues.execute([f'git commit -m "{commit_message}"'])
+        else:
+            issues.abort()
 
 
 def getCurrentBranch(lst=False):

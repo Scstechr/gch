@@ -4,7 +4,7 @@ import urllib.error as err
 from . import issues
 
 VERSION = '1.33'
-DATE = "2019-09-12 14:38:38 UTC"
+DATE = "2019-09-12 14:46:09 UTC"
 PYTHON_VERSION = '3.7.3'
 PLATFM_VERSION = 'Darwin-18.0.0-x86_64-i386-64bit'
 PYINST_VERSION = '3.5'
@@ -39,12 +39,13 @@ def CheckVersion():
         latest = text.split('tag_name')[1].split(',')[
             0].replace('":"v', '')[:-1]
         if VERSION != latest:
-            msg = f"Update to v.{latest} found!\n"
+            msg = f"[UPDATE] Update to v.{latest} found!\n"
             msg += "   \u2937 `brew upgrade gch` for updating `gch`."
             issues.ok(msg)
         else:
-            msg = f"`gch` is up-to-date\n"
+            msg = f"[UPDATE] `gch` is up-to-date\n"
             issues.ok(msg)
 
     except (err.HTTPError, err.URLError):
-        pass
+        msg = f"[UPDATE] No internet connection"
+        issues.warning(msg)

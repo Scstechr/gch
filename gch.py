@@ -137,8 +137,6 @@ def main():
         if remote:
             Remote(remote)
         Push(remote, branch)
-    else:
-        issues.ok('No push')
 
     if check:
         CheckVersion()
