@@ -20,6 +20,7 @@ defaults['diff'] = False
 defaults['version'] = False
 defaults['checkout'] = False
 defaults['ls'] = False
+defaults['check'] = False
 defaultspath = path.join(".", ".defaults.txt")
 if path.exists(defaultspath):
     with open(defaultspath, 'r') as readfile:
@@ -54,6 +55,7 @@ gch_exp_s = f'Save settings'
 gch_exp_d = f'Open diff tool'
 gch_exp_v2 = f'Check version of gch'
 gch_exp_c2 = f'Handling checkouts'
+gch_exp_c3 = f'Check for updates'
 gch_exp_l2 = f'List up tracking files/directories'
 
 gdiff_exp_v = f'Detailed diff.'
@@ -64,7 +66,7 @@ gdiff_exp_v2 = f'Check version of gdiff.'
 
 
 IGNORE = ['init', 'log', 'version', 'help', 'reset',
-          'save', 'diff', 'checkout', 'ls', 'pull']
+          'save', 'diff', 'checkout', 'ls', 'pull', 'check']
 
 
 def ArgSet(lst):
@@ -142,6 +144,8 @@ def ReturnArgdict(mode):
             ArgSet(['',   '--pull',     'flag',   gch_exp_p2, defaults['pull']]))
         arglist.append(
             ArgSet(['',   '--ls',       'flag',   gch_exp_l2, defaults['ls']]))
+        arglist.append(
+            ArgSet(['',   '--check',    'flag',   gch_exp_c3, defaults['check']]))
         arglist.append(
             ArgSet(['',   '--version',  'flag',   gch_exp_v2, defaults['version']]))
         arglist.append(ArgSet(['-h', '--help', 'flag', exp_h, False]))
