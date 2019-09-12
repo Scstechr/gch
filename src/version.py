@@ -2,6 +2,7 @@ import subprocess as sp
 import sys
 import urllib.request as req
 import urllib.error as err
+from . import issues
 
 VERSION = '1.33'
 DATE = "2019-09-10 15:57:09 UTC"
@@ -37,7 +38,9 @@ def CheckVersion():
         text = req.urlopen(url).read().decode('utf-8')
         latest = text.split('tag_name')[1].split(',')[0].replace('":"v','')[:-1]
         if VERSION != latest:
-            print(f"\033[90mPlease upgrade to latest version (v{VERSION} -> v.{latest})\033[m")
+            msg = f"Update to v.{latest} found!\n"
+            msg += "   \u2937 `brew upgrade gch` for updating `gch`."
+            issues.ok(msg)
 
     except (err.HTTPError, err.URLError):
         pass

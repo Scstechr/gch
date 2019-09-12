@@ -45,6 +45,7 @@ def main():
     save = d['save']
     checkout = d['checkout']
     ls = d['ls']
+    check = d['check']
 
     if d['help']:
         Help(MODE)
@@ -139,11 +140,13 @@ def main():
     else:
         issues.ok('No push')
 
+    if check:
+        CheckVersion()
+
 
 if __name__ == "__main__":
     # main()
     try:
         main()
-        CheckVersion()
     except (IOError, EOFError, KeyboardInterrupt):
         issues.abort()
