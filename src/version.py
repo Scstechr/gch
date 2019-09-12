@@ -4,7 +4,7 @@ import urllib.error as err
 from . import issues
 
 VERSION = '1.33'
-DATE = "2019-09-12 14:32:43 UTC"
+DATE = "2019-09-12 14:38:38 UTC"
 PYTHON_VERSION = '3.7.3'
 PLATFM_VERSION = 'Darwin-18.0.0-x86_64-i386-64bit'
 PYINST_VERSION = '3.5'
@@ -41,6 +41,9 @@ def CheckVersion():
         if VERSION != latest:
             msg = f"Update to v.{latest} found!\n"
             msg += "   \u2937 `brew upgrade gch` for updating `gch`."
+            issues.ok(msg)
+        else:
+            msg = f"`gch` is up-to-date\n"
             issues.ok(msg)
 
     except (err.HTTPError, err.URLError):
