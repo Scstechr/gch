@@ -2,18 +2,6 @@ import cursor
 import termios
 import sys
 from contextlib import suppress
-import urllib.request as req
-import urllib.error as err
-
-def Connected():
-    """ Check user's internet connection """
-    flag = True
-    try:
-        req.urlopen('http://google.com')
-    except (err.HTTPError, URLError):
-        flag = False
-    return flag
-
 
 class CursorOff(object):
     def __enter__(self):

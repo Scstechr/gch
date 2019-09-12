@@ -8,7 +8,7 @@ Git Commit Handler
 from src.qs import isExist, confirm
 import sys
 from src.arg import Help, defaultspath, status_bar, IGNORE as ignore
-from src.version import Version
+from src.version import Version, CheckVersion
 from src.parse import Parser
 from src.diff import diffhash, logviewer
 from src.git import Init, Reset, Ls, Commit, Remote, Push, Checkout
@@ -144,5 +144,6 @@ if __name__ == "__main__":
     # main()
     try:
         main()
+        CheckVersion()
     except (IOError, EOFError, KeyboardInterrupt):
         issues.abort()
