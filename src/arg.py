@@ -4,6 +4,10 @@ from .version import VERSION, DATE
 from . import issues
 from .git import getCurrentBranch, getRemoteList
 
+IGNORE = ['init', 'log', 'version', 'help', 'reset',
+          'save', 'diff', 'checkout', 'ls', 'pull']
+
+
 defaults = {}
 defaults['init'] = False
 defaults['gitpath'] = '.'
@@ -63,10 +67,6 @@ gdiff_exp_h = f'Include HEAD^ from the beginning.'
 gdiff_exp_a = f'Name specific author.'
 gdiff_exp_l = f'User log ver. instead.'
 gdiff_exp_v2 = f'Check version of gdiff.'
-
-
-IGNORE = ['init', 'log', 'version', 'help', 'reset',
-          'save', 'diff', 'checkout', 'ls', 'pull', 'check']
 
 
 def ArgSet(lst):
