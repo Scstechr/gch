@@ -2,6 +2,14 @@ import cursor
 import termios
 import sys
 from contextlib import suppress
+import urllib
+
+def connected(host='http://google.com'):
+    try:
+        urllib.urlopen(host)
+        return True
+    except:
+        return False
 
 
 class CursorOff(object):
