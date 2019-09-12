@@ -3,6 +3,7 @@ import termios
 import sys
 from contextlib import suppress
 
+
 class CursorOff(object):
     def __enter__(self):
         cursor.hide()
