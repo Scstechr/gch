@@ -311,6 +311,14 @@ def RenameBranch():
             break
 
 
+def DeleteBranch():
+    print('DELETE')
+    current_branch, branch_list = getCurrentBranch(lst=True)
+    print(branch_list)
+    answer = getAnswer(branch_list)
+    print(answer)
+
+
 def Branch():
     if isExist('git branch'):
         issues.execute([f'git branch'])
@@ -336,7 +344,7 @@ def Branch():
             issues.ok('Making new branch!')
             MakeNewBranch(branch_list)
         elif answer == 'd':
-            print("DELETE!")
+            DeleteBranch()
     else:
         issues.warning('branch not found!')
         branch = 'master'
