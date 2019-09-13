@@ -27,7 +27,7 @@ def main():
 
     
     if d['check'] and result != None:
-        print(ShowVersion(result.result()))
+        ShowVersion(result.result())
 
 
 
