@@ -4,7 +4,7 @@ from os import path, chdir
 from . import issues
 from .qs import isExist, confirm
 from .arg import Help, defaultspath, status_bar, IGNORE as ignore
-from .version import Version, CheckVersion
+from .version import Version
 from .diff import diffhash, logviewer
 from .git import Init, Reset, Ls, Commit, Remote, Push, Checkout
 from .git import Branch, getCurrentBranch, setBranch
@@ -14,7 +14,8 @@ from .git import CheckState
 diffcmd = 'git diff --cached --ignore-all-space --ignore-blank-lines'
 logcmd = 'git log --stat --oneline --graph --decorate'
 
-def proc(d):
+
+def proc(d, MODE=0):
     init = d['init']
     gitpath = d['gitpath']
     filepath = d['filepath']
@@ -31,7 +32,6 @@ def proc(d):
     save = d['save']
     checkout = d['checkout']
     ls = d['ls']
-    check = d['check']
 
     if d['help']:
         Help(MODE)

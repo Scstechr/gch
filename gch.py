@@ -5,7 +5,6 @@ Git Commit Handler
 ==================
 '''
 
-import threading
 from concurrent.futures import ThreadPoolExecutor as Executor
 from src import issues
 from src.proc import proc
@@ -25,10 +24,8 @@ def main():
         result = executor.submit(CheckVersion)
         executor.submit(proc, d)
 
-    
-    if d['check'] and result != None:
+    if d['check'] and result:
         ShowVersion(result.result())
-
 
 
 if __name__ == "__main__":

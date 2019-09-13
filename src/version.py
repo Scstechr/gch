@@ -39,14 +39,15 @@ def CheckVersion():
         latest = text.split('tag_name')[1].split(',')[
             0].replace('":"v', '')[:-1]
         if VERSION != latest:
-            return 0
+            return 0, latest
         else:
             return 1
 
     except (err.HTTPError, err.URLError):
         return 2
 
-def ShowVersion(i):
+
+def ShowVersion(i, latest=''):
     if i == 0:
         msg = f"[UPDATE] Update to v.{latest} found!\n"
         msg += "   \u2937 `brew upgrade gch` for updating `gch`."
