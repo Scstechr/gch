@@ -11,14 +11,19 @@ from src.proc import proc
 from src.parse import Parser
 from src.version import CheckVersion, ShowVersion
 MODE = 0
+DEBUG = True
 
 
 issues.version(3)
 
 
+def debug():
+    d = Parser(MODE)
+    proc(d)
+    CheckVersion()
+
 def main():
     d = Parser(MODE)
-
     result = None
     with Executor() as executor:
         if d['check']:
@@ -30,8 +35,8 @@ def main():
 
 
 if __name__ == "__main__":
-    # main()
     try:
-        main()
+        debug()
+        # main()
     except (IOError, EOFError, KeyboardInterrupt):
         issues.abort()

@@ -313,16 +313,17 @@ def RenameBranch():
 
 def DeleteBranch():
     current_branch, branch_list = getCurrentBranch(lst=True)
-    print(f'Currently on branch: `{b(current_branch)}`')
-    msg = f"\n    You are not allowed to delete your current branch via `gch`.\n"
-    msg +=f"    \u2937 Please checkout before deleting branch `{current_branch}`."
-    issues.warning(msg)
+    print(f'\nCurrently on branch: `{b(current_branch)}`...\n')
 
-    branch_list = [branch for branch in branch_list if branch != current_branch]
-    answer = getAnswer(branch_list) - 1
+    branch_list = [branch for branch in branch_list]
+    print("Which branch do you want to delete?:\n")
+    answer = getAnswer(branch_list, exit=False) - 1
     branch = branch_list[answer]
     if branch == 'master':
-        issues.warning('You cannot delete master branch with gch.')
+        issues.warning('You cannot delete master branch via gch.')
+    elif branch == current_branch:
+        msg = f"\n    You tried to delete branch you are currently on"
+        issues.warning(msg)
     else:
         if confirm(f"Delete branch {branch}?"):
             issues.execute([f'git branch --delete {branch}'])

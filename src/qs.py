@@ -22,10 +22,11 @@ def prompt(string, _type=str):
     return ret
 
 
-def getAnswer(lst):
+def getAnswer(lst, exit=True):
     ''' Generates selection list and answering sequence '''
     with CursorOff():
-        lst.append("exit")
+        if exit:
+            lst.append("exit")
         while(1):
             [print(f' {chr(97+idx)}) {option}')
              for idx, option in enumerate(lst)]
@@ -38,7 +39,7 @@ def getAnswer(lst):
             else:
                 print(f"What you entered: `{answer}`")
                 issues.warning('Please choose right answer from above!')
-        if answer == len(lst):
+        if answer == len(lst) and exit:
             issues.exit()
     return answer
 
