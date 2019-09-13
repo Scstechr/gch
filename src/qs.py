@@ -36,6 +36,8 @@ def getAnswer(lst, exit=False):
             if answer in ans:
                 answer = ord(answer) - 97 + 1
                 break
+            elif answer == None:
+                issues.abort()
             else:
                 print(f"What you entered: `{answer}`")
                 issues.warning('Please choose right answer from above!')
