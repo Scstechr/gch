@@ -55,6 +55,37 @@ def getCurrentBranch(lst=False):
         return current_branch
 
 
+def checkoutBranch(branch):
+    current_branch, branch_list = getCurrentBranch(lst=True)
+    if not isExist(f'git status --short'):
+        issues.execute([f'git checkout {b(branch)}'])
+    else:
+        print(
+            f'\nTheres some changes in branch {b(current_branch)}.')
+        issues.execute([f'git diff --stat'])
+        qs = [f'Commit changes of branch {b(current_branch)}']
+        qs.append(f'Stash changes of branch {b(current_branch)} ')
+        qs.append(f'Force Checkout to branch {b(branch)}        ')
+        answer_2 = getAnswer(qs)
+        if answer_2 == 1:
+            issues.execute([f'git add .', f'git diff --stat'])
+            Commit()
+            issues.execute([f'git checkout {branch}'])
+        elif answer_2 == 2:
+            issues.execute([f'git stash', f'git checkout {branch}'])
+        else:
+            issues.execute([f'git checkout -f {branch}'])
+    if answer == 1:
+        issues.execute(
+            [f'git format-patch {branch}..{current_branch} --stdout | git apply --check'])
+        if isExist('git format-patch {branch}..{current_branch} --stdout | git apply --check'):
+            issues.execute([f'git merge {current_branch}'])
+        else:
+            issues.warning(
+                "Aborting Merge because conflict is likely to occur.")
+            issues.abort()
+
+
 def setBranch(branch, filepath):
     current_branch, branch_list = getCurrentBranch(lst=True)
     if branch not in branch_list:
@@ -78,33 +109,7 @@ def setBranch(branch, filepath):
             print(f'Commiting branch is now set to {b(current_branch)}')
             branch = current_branch
         else:
-            if not isExist(f'git status --short'):
-                issues.execute([f'git checkout {b(branch)}'])
-            else:
-                print(
-                    f'\nTheres some changes in branch {b(current_branch)}.')
-                issues.execute([f'git diff --stat'])
-                qs = [f'Commit changes of branch {b(current_branch)}']
-                qs.append(f'Stash changes of branch {b(current_branch)} ')
-                qs.append(f'Force Checkout to branch {b(branch)}        ')
-                answer_2 = getAnswer(qs)
-                if answer_2 == 1:
-                    issues.execute([f'git add .', f'git diff --stat'])
-                    Commit()
-                    issues.execute([f'git checkout {branch}'])
-                elif answer_2 == 2:
-                    issues.execute([f'git stash', f'git checkout {branch}'])
-                else:
-                    issues.execute([f'git checkout -f {branch}'])
-            if answer == 1:
-                issues.execute(
-                    [f'git format-patch {branch}..{current_branch} --stdout | git apply --check'])
-                if isExist('git format-patch {branch}..{current_branch} --stdout | git apply --check'):
-                    issues.execute([f'git merge {current_branch}'])
-                else:
-                    issues.warning(
-                        "Aborting Merge because conflict is likely to occur.")
-                    issues.abort()
+            checkoutBranch(branch)
     return branch
 
 
@@ -325,7 +330,8 @@ def DeleteBranch():
         msg = f"You tried to delete branch you are currently on"
         issues.warning(msg)
         next_list = [b for b in branch_list if b != current_branch]
-        print(f"Please choose the branch to checkout before deleting {b(branch)}:\n")
+        print(
+            f"Please choose the branch to checkout before deleting {b(branch)}:\n")
         answer = getAnswer(next_list, exit=False) - 1
     else:
         if confirm(f"Delete branch {b(branch)}?"):

@@ -22,7 +22,7 @@ def prompt(string, _type=str):
     return ret
 
 
-def getAnswer(lst, exit=True):
+def getAnswer(lst, exit=False):
     ''' Generates selection list and answering sequence '''
     with CursorOff():
         if exit:
