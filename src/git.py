@@ -10,7 +10,7 @@ from .util import CursorOff, wait_key
 
 def b(string):
     ''' String Format for Branch Name '''
-    return f'\033[3m\033[33m{string}\033[0m'
+    return f'`\033[3m{string}`'
 
 
 def CheckState():
@@ -58,9 +58,9 @@ def getCurrentBranch(lst=False):
 def setBranch(branch, filepath):
     current_branch, branch_list = getCurrentBranch(lst=True)
     if branch not in branch_list:
-        issues.warning(f'Branch `{b(branch)}` not found.')
-        qs = [f'Make new branch `{b(branch)}`               ']
-        qs.append(f'Stay on current branch `{b(current_branch)}`')
+        issues.warning(f'Branch {b(branch)} not found.')
+        qs = [f'Make new branch {b(branch)}               ']
+        qs.append(f'Stay on current branch {b(current_branch)}')
         answer = getAnswer(qs)
         if answer == 1:
             issues.execute([f'git checkout -b {branch}'])
@@ -69,24 +69,24 @@ def setBranch(branch, filepath):
             branch = current_branch
     else:
         print(
-            f'Currently on branch `{b(current_branch)}` but tried to commit to branch `{b(branch)}`.')
-        qs = [f'Merge branch `{b(current_branch)}` => branch `{b(branch)}`']
-        qs.append(f'Stay on branch `{b(current_branch)}`                   ')
-        qs.append(f'Checkout to branch `{b(branch)}`                       ')
+            f'Currently on branch {b(current_branch)} but tried to commit to branch {b(branch)}.')
+        qs = [f'Merge branch {b(current_branch)} => branch {b(branch)}']
+        qs.append(f'Stay on branch {b(current_branch)}                   ')
+        qs.append(f'Checkout to branch {b(branch)}                       ')
         answer = getAnswer(qs)
         if answer == 2:
-            print(f'Commiting branch is now set to `{b(current_branch)}`')
+            print(f'Commiting branch is now set to {b(current_branch)}')
             branch = current_branch
         else:
             if not isExist(f'git status --short'):
-                issues.execute([f'git checkout {branch}'])
+                issues.execute([f'git checkout {b(branch)}'])
             else:
                 print(
-                    f'\nTheres some changes in branch `{b(current_branch)}`.')
+                    f'\nTheres some changes in branch {b(current_branch)}.')
                 issues.execute([f'git diff --stat'])
-                qs = [f'Commit changes of branch `{b(current_branch)}`']
-                qs.append(f'Stash changes of branch `{b(current_branch)}` ')
-                qs.append(f'Force Checkout to branch `{b(branch)}`        ')
+                qs = [f'Commit changes of branch {b(current_branch)}']
+                qs.append(f'Stash changes of branch {b(current_branch)} ')
+                qs.append(f'Force Checkout to branch {b(branch)}        ')
                 answer_2 = getAnswer(qs)
                 if answer_2 == 1:
                     issues.execute([f'git add .', f'git diff --stat'])
@@ -170,17 +170,17 @@ def Reset():
     issues.warning('Options with `--hard` must be done with caution')
     opt = []
     opt.append(
-        '\033[3mgit commit --amend\033[0m          > Change message of last commit')
+        '\033[3mgit commit --amend\033[m          > Change message of last commit')
     opt.append(
-        '\033[3mgit reset --soft HEAD^\033[0m      > Undo last commit (soft)')
+        '\033[3mgit reset --soft HEAD^\033[m      > Undo last commit (soft)')
     opt.append(
-        '\033[3mgit reset \033[91m--hard\033[0m\033[3m HEAD^\033[0m      > Undo last commit')
+        '\033[3mgit reset \033[91m--hard\033[m\033[3m HEAD^\033[m      > Undo last commit')
     opt.append(
-        '\033[3mgit reset \033[91m--hard\033[0m\033[3m HEAD\033[0m       > Undo changes from last commit')
+        '\033[3mgit reset \033[91m--hard\033[m\033[3m HEAD\033[m       > Undo changes from last commit')
     opt.append(
-        '\033[3mgit reset \033[91m--hard\033[0m\033[3m <hash>\033[0m     > Undo changes from past commit')
+        '\033[3mgit reset \033[91m--hard\033[m\033[3m <hash>\033[m     > Undo changes from past commit')
     opt.append(
-        '\033[3mgit reset \033[91m--hard\033[0m\033[3m ORIG_HEAD\033[0m  > Undo most recent reset')
+        '\033[3mgit reset \033[91m--hard\033[m\033[3m ORIG_HEAD\033[m  > Undo most recent reset')
     ans = getAnswer(opt)
     if ans == 1:
         issues.execute(['git commit --amend'])
@@ -284,7 +284,7 @@ def Checkout():
         if confirm(f"Make new branch?"):
             MakeNewBranch(branch_list)
     else:
-        print(f'\n\033[0m\033[1mWhich branch do you want to checkout?\033[0m')
+        print(f'\n\033[m\033[1mWhich branch do you want to checkout?\033[m')
         answer = getAnswer(branch)
         if answer == len(branch):
             MakeNewBranch(branch_list)
@@ -313,7 +313,7 @@ def RenameBranch():
 
 def DeleteBranch():
     current_branch, branch_list = getCurrentBranch(lst=True)
-    print(f'\nCurrently on branch: `{b(current_branch)}`...\n')
+    print(f'\nCurrently on branch: {b(current_branch)}...\n')
 
     branch_list = [branch for branch in branch_list]
     print("Which branch do you want to delete?:\n")
@@ -322,10 +322,13 @@ def DeleteBranch():
     if branch == 'master':
         issues.warning('You cannot delete master branch via gch.')
     elif branch == current_branch:
-        msg = f"\n    You tried to delete branch you are currently on"
+        msg = f"You tried to delete branch you are currently on"
         issues.warning(msg)
+        next_list = [b for b in branch_list if b != current_branch]
+        print(f"Please choose the branch to checkout before deleting {b(branch)}:\n")
+        answer = getAnswer(next_list, exit=False) - 1
     else:
-        if confirm(f"Delete branch {branch}?"):
+        if confirm(f"Delete branch {b(branch)}?"):
             issues.execute([f'git branch --delete {branch}'])
             issues.ok('You deleted branch!')
 
@@ -339,7 +342,7 @@ def Branch():
             options.append('(r) rename')
             options.append('(n) new branch')
             options.append('(d) delete')
-            print(f"\n\033[1mOptions:\033[0m\n {' '.join(options)} (e) exit")
+            print(f"\n\033[1mOptions:\033[m\n {' '.join(options)} (e) exit")
             answer = wait_key()
             while 1:
                 if answer in ['c', 'r', 'n', 'd', 'e']:
@@ -359,7 +362,7 @@ def Branch():
     else:
         issues.warning('branch not found!')
         branch = 'master'
-        issues.ok('Branch set to `master`...')
+        issues.ok('Branch set to {b(master)}...')
     branch = getCurrentBranch()
-    issues.ok(f'Branch set to `{branch}`...')
+    issues.ok(f'Branch set to {b(branch)}...')
     return branch

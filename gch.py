@@ -22,6 +22,7 @@ def debug():
     proc(d)
     CheckVersion()
 
+
 def main():
     d = Parser(MODE)
     result = None

@@ -166,7 +166,9 @@ def status_bar(d):
     string = f"\033[31m[GITDIR: \'{d['gitpath']}\']\033[m"
     _, branch_list = getCurrentBranch(lst=True)
     if len(branch_list) > 0:
-        string += f"\033[32m[BRANCH: \'{d['branch']}\']\033[m"
+        current_branch = getCurrentBranch()
+        branch = d['branch'] if d['branch'] != True else current_branch
+        string += f"\033[32m[BRANCH: \'{branch}\']\033[m"
     remote_list = getRemoteList()
     if len(remote_list) > 0:
         string += f"\033[33m[REMOTE: \'{d['remote']}\']\033[m"
