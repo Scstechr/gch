@@ -21,7 +21,8 @@ def main():
 
     result = None
     with Executor() as executor:
-        result = executor.submit(CheckVersion)
+        if d['check']:
+            result = executor.submit(CheckVersion)
         executor.submit(proc, d)
 
     if d['check'] and result:
