@@ -39,13 +39,24 @@ def CheckVersion():
         latest = text.split('tag_name')[1].split(',')[
             0].replace('":"v', '')[:-1]
         if VERSION != latest:
-            msg = f"[UPDATE] Update to v.{latest} found!\n"
-            msg += "   \u2937 `brew upgrade gch` for updating `gch`."
-            issues.ok(msg)
+            return 0
         else:
-            msg = f"[UPDATE] `gch` is up-to-date\n"
-            issues.ok(msg)
+            return 1
 
     except (err.HTTPError, err.URLError):
+        return 2
+
+def ShowVersion(i):
+    if i == 0:
+        msg = f"[UPDATE] Update to v.{latest} found!\n"
+        msg += "   \u2937 `brew upgrade gch` for updating `gch`."
+        issues.ok(msg)
+    elif i == 1:
+        msg = f"[UPDATE] `gch` is up-to-date\n"
+        issues.ok(msg)
+    elif i == 2:
         msg = f"[UPDATE] No internet connection"
+        issues.warning(msg)
+    else:
+        msg = f"Undefined flag for ShowVersion()"
         issues.warning(msg)
