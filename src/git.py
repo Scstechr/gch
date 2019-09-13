@@ -319,11 +319,11 @@ def Branch():
             options = ['(c) checkout']
             options.append('(r) rename')
             options.append('(n) new branch')
-#            options.append('(d) delete')
+            options.append('(d) delete')
             print(f"\n\033[1mOptions:\033[0m\n {' '.join(options)} (e) exit")
             answer = wait_key()
             while 1:
-                if answer in ['c', 'r', 'n', 'e']:
+                if answer in ['c', 'r', 'n', 'd', 'e']:
                     break
                 answer = wait_key()
         if answer == 'c':
@@ -335,8 +335,8 @@ def Branch():
         elif answer == 'n':
             issues.ok('Making new branch!')
             MakeNewBranch(branch_list)
-#        elif answer == 'd':
-#            print("DELETE!")
+        elif answer == 'd':
+            print("DELETE!")
     else:
         issues.warning('branch not found!')
         branch = 'master'
