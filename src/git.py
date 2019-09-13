@@ -318,7 +318,7 @@ def RenameBranch():
 
 def DeleteBranch():
     current_branch, branch_list = getCurrentBranch(lst=True)
-    print(f'\nCurrently on branch: {b(current_branch)}...\n')
+    print(f'\nCurrently on branch: {b(current_branch)}...\033[m\n')
 
     branch_list = [branch for branch in branch_list]
     print("Which branch do you want to delete?:\n")
