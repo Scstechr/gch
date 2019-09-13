@@ -53,7 +53,7 @@ def isExist(command):
 def confirm(string):
     flag = True
     with suppress(KeyboardInterrupt):
-        ret = input("\033[96m>> " + string + ' [Y/n]:\033[0m').lower()
+        ret = input("\033[36m>> " + string + ' [Y/n]:\033[0m').lower()
         while(1):
             if ret in ['yes', 'y']:
                 break
