@@ -3,8 +3,8 @@ import urllib.request as req
 import urllib.error as err
 from . import issues
 
-VERSION = '1.35'
-DATE = "2019-09-13 15:48:27 UTC"
+VERSION = '1.36'
+DATE = "2019-09-14 12:40:44 UTC"
 PYTHON_VERSION = '3.7.3'
 PLATFM_VERSION = 'Darwin-18.0.0-x86_64-i386-64bit'
 PYINST_VERSION = '3.5'

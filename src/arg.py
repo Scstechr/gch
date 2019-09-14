@@ -168,7 +168,7 @@ def status_bar(d):
     _, branch_list = getBranch(lst=True)
     if len(branch_list) > 0:
         current_branch = getBranch()
-        branch = d['branch'] if d['branch'] != True else current_branch
+        branch = d['branch'] if d['branch'] is not True else current_branch
         string += f"\033[32m[BRANCH: \'{branch}\']\033[m"
     remote_list = getRemote()
     if len(remote_list) > 0:

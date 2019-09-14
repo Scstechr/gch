@@ -37,7 +37,7 @@ def main():
 
 if __name__ == "__main__":
     try:
-        debug()
-        # main()
+        # debug()
+        main()
     except (IOError, EOFError, KeyboardInterrupt):
         issues.abort()
