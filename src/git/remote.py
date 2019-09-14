@@ -5,7 +5,7 @@ from ..issues import warning, execute, exit
 from ..qs import confirm
 from ..util import validateURL
 
-def getRemoteList():
+def getRemote():
     remotelst = sp.getoutput(f'git remote -v').split('\n')
     remotelst = [r.split('\t')[0]
                  for idx, r in enumerate(remotelst) if idx % 2]
@@ -13,7 +13,7 @@ def getRemoteList():
 
 
 def Remote(remote):
-    remotelst = getRemoteList()
+    remotelst = getRemote()
     if remote in remotelst:
         pass
     else:

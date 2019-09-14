@@ -1,6 +1,6 @@
 import subprocess as sp
 from ..issues import warning, execute, abort
-from ..qs import getAnswer
+from ..qs import getAnswer, prompt
 
 def B(string):
     ''' String Format for Branch Name '''
@@ -8,7 +8,7 @@ def B(string):
 
 
 
-def getCurrentBranch(lst=False):
+def getBranch(lst=False):
     ''' Returns current branch name w or w/o branch list '''
     output = sp.getoutput('git branch').split('\n')
     current_branch = ''.join(branch[2:]
@@ -21,7 +21,7 @@ def getCurrentBranch(lst=False):
 
 
 def setBranch(branch, filepath):
-    current_branch, branch_list = getCurrentBranch(lst=True)
+    current_branch, branch_list = getBranch(lst=True)
     if branch not in branch_list:
         warning(f'Branch {B(branch)} not found.')
         qs = [f'Make new branch {B(branch)}               ']
@@ -43,6 +43,7 @@ def setBranch(branch, filepath):
             print(f'Committing branch is now set to {B(current_branch)}')
             branch = current_branch
         else:
+            Checkout()
             checkoutBranch(branch)
             if answer == 1:
                 execute(
@@ -55,3 +56,18 @@ def setBranch(branch, filepath):
                     abort()
 
     return branch
+
+
+def newBranch(branch_list):
+    while 1:
+        new_branch = prompt(
+            '\nEnter new branch name (spaces will be replaced with `-`)').replace(' ', '-')
+        if new_branch in branch_list:
+            issues.warning(f'Branch `{new_branch}` already exists!')
+        else:
+            issues.ok(f'\bBranch `{new_branch}` successfully created!')
+            if confirm(f'Checkout to `{new_branch}`'):
+                issues.execute([f'git checkout -b {new_branch}'])
+            else:
+                issues.execute([f'git branch {new_branch}'])
+            break

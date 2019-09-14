@@ -2,8 +2,8 @@ from os import path
 import sys
 from .version import VERSION, DATE
 from . import issues
-from .gits import getCurrentBranch
-from .git.remote import getRemoteList
+from .git.remote import getRemote
+from .git.branch import getBranch
 
 IGNORE = ['init', 'log', 'version', 'help', 'reset',
           'save', 'diff', 'checkout', 'ls', 'pull']
@@ -165,12 +165,12 @@ def status_bar(d):
     """ ONLY FOR GCH """
     print(f"GCH v{VERSION}: ", end='')
     string = f"\033[31m[GITDIR: \'{d['gitpath']}\']\033[m"
-    _, branch_list = getCurrentBranch(lst=True)
+    _, branch_list = getBranch(lst=True)
     if len(branch_list) > 0:
-        current_branch = getCurrentBranch()
+        current_branch = getBranch()
         branch = d['branch'] if d['branch'] != True else current_branch
         string += f"\033[32m[BRANCH: \'{branch}\']\033[m"
-    remote_list = getRemoteList()
+    remote_list = getRemote()
     if len(remote_list) > 0:
         string += f"\033[33m[REMOTE: \'{d['remote']}\']\033[m"
     print(string)

@@ -7,7 +7,7 @@ from .arg import Help, defaultspath, status_bar, IGNORE as ignore
 from .version import Version
 from .diff import diffhash, logviewer
 from .gits import Checkout
-from .gits import Branch, getCurrentBranch, setBranch
+from .gits import Branch
 from .git.commit import Commit
 from .git.status import CheckState
 from .git.init import Init
@@ -17,6 +17,7 @@ from .git.push import Push
 from .git.reset import Reset
 from .git.log import Log
 from .git.remote import Remote
+from .git.branch import getBranch, setBranch
 
 # git commands
 diffcmd = 'git diff --cached --ignore-all-space --ignore-blank-lines'
@@ -76,7 +77,7 @@ def proc(d, MODE=0):
     if init:
         Init(flag=True)
 
-    current_branch, _ = getCurrentBranch(lst=True)
+    current_branch, _ = getBranch(lst=True)
     if diff:
         if confirm('Do you want to use diff-column viewer?'):
             flag = False
