@@ -75,6 +75,7 @@ def proc(d, MODE=0):
     if init:
         Init(flag=True)
 
+    current_branch, _ = getCurrentBranch(lst=True)
     if diff:
         if confirm('Do you want to use diff-column viewer?'):
             flag = False
@@ -85,7 +86,6 @@ def proc(d, MODE=0):
             logviewer(verbose=verbose, head=False)
 
     if checkout:
-        current_branch, _ = getCurrentBranch(lst=True)
         print(f'\n\033[1mCurrently on branch `\033[3m{current_branch}`')
         Checkout()
 
@@ -100,13 +100,13 @@ def proc(d, MODE=0):
         Ls()
 
     if isExist('git branch'):
-        current_branch = getCurrentBranch()
         if len(branch):
             if current_branch != branch:
                 issues.branch()
                 branch = setBranch(branch, filepath)
 
-    issues.execute(['git status --short'])
+    CheckState()
+    # issues.execute(['git status --short'])
 
     if log:
         issues.execute([logcmd])
