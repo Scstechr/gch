@@ -2,15 +2,12 @@ import cursor
 import termios
 import sys
 from contextlib import suppress
+from urllib.parse import urlparse
 
 
 class CursorOff(object):
     def __enter__(self):
         cursor.hide()
-#        vsize = shutil.get_terminal_size()[1]
-#        print(f'\33[{vsize};0f', end='')
-#        for i in range(vsize+1):
-#            print(f'\033[1F\033[2K', end ='')
 
     def __exit__(self, *args):
         cursor.show()
@@ -31,3 +28,13 @@ def wait_key():
         termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
 
     return result
+
+
+def validateURL(x):
+    try:
+        result = urlparse(x)
+        return all([result.scheme, result.netloc])
+    except ValueError:
+        return False
+
+

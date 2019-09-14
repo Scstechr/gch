@@ -1,17 +1,9 @@
 import sys
 import subprocess as sp
-from urllib.parse import urlparse
 
 from ..issues import warning, execute, exit
 from ..qs import confirm
-
-def url_valid(x):
-    try:
-        result = urlparse(x)
-        return all([result.scheme, result.netloc])
-    except ValueError:
-        return False
-
+from ..util import validateURL
 
 def getRemoteList():
     remotelst = sp.getoutput(f'git remote -v').split('\n')
@@ -29,7 +21,7 @@ def Remote(remote):
         if confirm(f'Add?'):
             while(1):
                 remote_url = prompt("URL")
-                if url_valid(remote_url):
+                if validateURL(remote_url):
                     execute([f'git remote add {remote} {remote_url}'])
                     break
                 else:
