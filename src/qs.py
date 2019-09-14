@@ -36,7 +36,7 @@ def getAnswer(lst, exit=False):
             if answer in ans:
                 answer = ord(answer) - 97 + 1
                 break
-            elif answer == None:
+            elif answer is None:
                 issues.abort()
             else:
                 print(f"What you entered: `{answer}`")

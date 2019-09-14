@@ -40,6 +40,4 @@ def validateURL(x):
 
 def B(string):
     ''' String Format for Branch Name '''
-    return f'`\033[3m{string}\033[m`'
-
-
+    return f'`{string}`'

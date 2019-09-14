@@ -1,5 +1,5 @@
 PROGRAM = gch.py gdiff.py 
-SRC = src/arg.py src/diff.py src/git.py src/issues.py src/log.py src/parse.py src/qs.py src/util.py src/version.py
+SRC = src/arg.py src/diff.py src/git/branch.py src/git/checkout.py src/git/commit.py src/git/init.py src/git/log.py src/git/ls_files.py src/git/pull.py src/git/push.py src/git/remote.py src/git/reset.py src/git/status.py src/issues.py src/log.py src/parse.py src/proc.py src/qs.py src/util.py src/version.py
 
 main: gch.py $(SRC)
 	python gch.py

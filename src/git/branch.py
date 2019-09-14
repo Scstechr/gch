@@ -1,8 +1,43 @@
 import subprocess as sp
 from ..issues import warning, execute, abort, ok
-from ..util import B
-from ..qs import getAnswer, prompt
+from ..util import CursorOff, wait_key, B
+from ..qs import getAnswer, prompt, isExist
 from .checkout import Checkout
+
+
+def Branch():
+    if isExist('git branch'):
+        execute([f'git branch'])
+        current_branch, branch_list = getBranch(lst=True)
+        with CursorOff():
+            options = ['(c) checkout']
+            options.append('(r) rename')
+            options.append('(n) new branch')
+            options.append('(d) delete')
+            print(f"\n\033[1mOptions:\033[m\n {' '.join(options)} (e) exit")
+            answer = wait_key()
+            while 1:
+                if answer in ['c', 'r', 'n', 'd', 'e']:
+                    break
+                answer = wait_key()
+        if answer == 'c':
+            ok('Checking out branch!')
+            Checkout(current_branch, branch)
+        elif answer == 'r':
+            ok('Renaming current branch!')
+            renameBranch()
+        elif answer == 'n':
+            ok('Making new branch!')
+            newBranch(branch_list)
+        elif answer == 'd':
+            deleteBranch()
+    else:
+        warning('Branch not found!')
+        branch = 'master'
+    branch = getBranch()
+    ok(f'Branch set to {B(branch)}')
+    return branch
+
 
 def checkoutBranch():
     current_branch, branch_list = getBranch(lst=True)
@@ -73,13 +108,13 @@ def newBranch(branch_list):
         new_branch = prompt(
             '\nEnter new branch name (spaces will be replaced with `-`)').replace(' ', '-')
         if new_branch in branch_list:
-            issues.warning(f'Branch `{new_branch}` already exists!')
+            warning(f'Branch `{new_branch}` already exists!')
         else:
-            issues.ok(f'\bBranch `{new_branch}` successfully created!')
+            ok(f'\bBranch `{new_branch}` successfully created!')
             if confirm(f'Checkout to `{new_branch}`'):
-                issues.execute([f'git checkout -b {new_branch}'])
+                execute([f'git checkout -b {new_branch}'])
             else:
-                issues.execute([f'git branch {new_branch}'])
+                execute([f'git branch {new_branch}'])
             break
 
 
@@ -96,4 +131,26 @@ def renameBranch():
             ok(f'Branch `{current_branch}` is now `{new_branch}`')
             break
 
+
+def deleteBranch():
+    current_branch, branch_list = getBranch(lst=True)
+    print(f'\nCurrently on branch: {B(current_branch)}...\033[m\n')
+
+    branch_list = [branch for branch in branch_list]
+    print("Which branch do you want to delete?:\n")
+    answer = getAnswer(branch_list, exit=False) - 1
+    branch = branch_list[answer]
+    if branch == 'master':
+        warning('You cannot delete master branch via gch.')
+    elif branch == current_branch:
+        msg = f"You tried to delete branch you are currently on"
+        warning(msg)
+        next_list = [b for b in branch_list if b != current_branch]
+        print(
+            f"Please choose the branch to checkout before deleting {B(branch)}:\n")
+        answer = getAnswer(next_list, exit=False) - 1
+    else:
+        if confirm(f"Delete branch {B(branch)}?"):
+            execute([f'git branch --delete {branch}'])
+            ok('You deleted branch!')
 
