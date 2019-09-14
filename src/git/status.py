@@ -1,7 +1,7 @@
 from .. import issues
 from .. import qs
 
-def CheckState():
+def Status():
     if qs.isExist(f'git status --short'):
         return True
     else:

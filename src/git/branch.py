@@ -1,12 +1,23 @@
 import subprocess as sp
 from ..issues import warning, execute, abort
+from ..util import B
 from ..qs import getAnswer, prompt
+from .checkout import Checkout
 
-def B(string):
-    ''' String Format for Branch Name '''
-    return f'`\033[3m{string}\033[m`'
-
-
+def checkoutBranch():
+    current_branch, branch_list = getBranch(lst=True)
+    branch_list.append('Make new branch')
+    branch = [b for b in branch_list if b != current_branch]
+    if len(branch) == 1:
+        if confirm(f"Make new branch?"):
+            newBranch(branch_list)
+    else:
+        print(f'\n\033[m\033[1mWhich branch do you want to checkout?\033[m')
+        answer = getAnswer(branch)
+        if answer == len(branch):
+            newBranch(branch_list)
+        else:
+            Checkout(current_branch, branch[answer-1])
 
 def getBranch(lst=False):
     ''' Returns current branch name w or w/o branch list '''
@@ -43,8 +54,7 @@ def setBranch(branch, filepath):
             print(f'Committing branch is now set to {B(current_branch)}')
             branch = current_branch
         else:
-            Checkout()
-            checkoutBranch(branch)
+            Checkout(current_branch, branch)
             if answer == 1:
                 execute(
                     [f'git format-patch {branch}..{current_branch} --stdout | git apply --check'])

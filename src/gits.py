@@ -14,38 +14,6 @@ def b(string):
 
 
 
-def Checkout():
-    current_branch, branch_list = getBranch(lst=True)
-    branch_list.append('Make new branch')
-    branch = [b for b in branch_list if b != current_branch]
-    if len(branch) == 1:
-        if confirm(f"Make new branch?"):
-            newBranch(branch_list)
-    else:
-        print(f'\n\033[m\033[1mWhich branch do you want to checkout?\033[m')
-        answer = getAnswer(branch)
-        if answer == len(branch):
-            newBranch(branch_list)
-        else:
-            branch = branch[answer-1]
-            if isExist(f'git status --short'):
-                print(
-                    f'\nTheres some changes in branch {b(current_branch)}.')
-                issues.execute([f'git diff --stat'])
-                qs = [f'Commit changes of branch {b(current_branch)}']
-                qs.append(f'Stash changes of branch {b(current_branch)} ')
-                qs.append(f'Force Checkout to branch {b(branch)}        ')
-                answer = getAnswer(qs)
-                if answer == 1:
-                    issues.execute([f'git add .', f'git diff --stat'])
-                    Commit()
-                    issues.execute([f'git checkout {branch}'])
-                elif answer == 2:
-                    issues.execute([f'git stash', f'git checkout {branch}'])
-                else:
-                    issues.execute([f'git checkout -f {branch}'])
-            else:
-                issues.execute([f'git checkout {b(branch)}'])
 
 
 

@@ -6,10 +6,9 @@ from .qs import isExist, confirm
 from .arg import Help, defaultspath, status_bar, IGNORE as ignore
 from .version import Version
 from .diff import diffhash, logviewer
-from .gits import Checkout
 from .gits import Branch
 from .git.commit import Commit
-from .git.status import CheckState
+from .git.status import Status
 from .git.init import Init
 from .git.ls_files import Ls
 from .git.pull import Pull
@@ -17,7 +16,7 @@ from .git.push import Push
 from .git.reset import Reset
 from .git.log import Log
 from .git.remote import Remote
-from .git.branch import getBranch, setBranch
+from .git.branch import getBranch, setBranch, checkoutBranch
 
 # git commands
 diffcmd = 'git diff --cached --ignore-all-space --ignore-blank-lines'
@@ -89,7 +88,7 @@ def proc(d, MODE=0):
 
     if checkout:
         print(f'\n\033[1mCurrently on branch `\033[3m{current_branch}`')
-        Checkout()
+        checkoutBranch()
 
     if reset:
         Reset()
@@ -110,7 +109,7 @@ def proc(d, MODE=0):
     if log:
         Log()
 
-    if CheckState():
+    if Status():
         issues.execute([f'git diff --stat'])
         if verbose:
             issues.execute([f'git add .', diffcmd, f'git reset'])
