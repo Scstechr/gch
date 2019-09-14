@@ -2,7 +2,7 @@ from os import path
 import sys
 from .version import VERSION, DATE
 from . import issues
-from .git import getCurrentBranch, getRemoteList
+from .gits import getCurrentBranch, getRemoteList
 
 IGNORE = ['init', 'log', 'version', 'help', 'reset',
           'save', 'diff', 'checkout', 'ls', 'pull']

@@ -13,13 +13,6 @@ def b(string):
     return f'`\033[3m{string}\033[m`'
 
 
-def CheckState():
-    if isExist(f'git status --short'):
-        return True
-    else:
-        issues.ok('Clean!')
-        return False
-
 
 def Commit():
     ''' Commit '''
