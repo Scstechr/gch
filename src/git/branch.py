@@ -1,7 +1,7 @@
 import subprocess as sp
 from ..issues import warning, execute, abort, ok
 from ..util import CursorOff, wait_key, B
-from ..qs import getAnswer, prompt, isExist
+from ..qs import getAnswer, prompt, isExist, confirm
 from .checkout import Checkout
 
 
