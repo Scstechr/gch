@@ -152,6 +152,9 @@ def deleteBranch():
             answer = getAnswer(next_list, exit=False) - 1
             Checkout(current_branch, next_list[answer])
         if confirm(f"Delete branch {B(branch)}?"):
-            execute([f'git branch --delete {branch}'])
-            ok('You deleted branch!')
+            out = sp.getoutput([f'git branch --delete {branch}'])
+            print(out)
+            # execute([f'git branch --delete {branch}'])
+            # sp.getoutput
+            # ok('You deleted branch!')
 
