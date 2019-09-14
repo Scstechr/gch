@@ -56,7 +56,7 @@ def isExist(command):
 def confirm(string):
     flag = True
     with suppress(KeyboardInterrupt):
-        ret = input(f"m{C}>> " + string + f' [Y/n]:{M}').lower()
+        ret = input(f"{C}>> " + string + f' [Y/n]:{M}').lower()
         while(1):
             if ret in ['yes', 'y']:
                 break
