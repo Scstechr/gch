@@ -15,10 +15,10 @@ from .git.ls_files import Ls
 from .git.pull import Pull
 from .git.push import Push
 from .git.reset import Reset
+from .git.log import Log
 
 # git commands
 diffcmd = 'git diff --cached --ignore-all-space --ignore-blank-lines'
-logcmd = 'git log --stat --oneline --graph --decorate'
 
 
 def proc(d, MODE=0):
@@ -105,11 +105,8 @@ def proc(d, MODE=0):
                 issues.branch()
                 branch = setBranch(branch, filepath)
 
-    CheckState()
-    # issues.execute(['git status --short'])
-
     if log:
-        issues.execute([logcmd])
+        Log()
 
     if CheckState():
         issues.execute([f'git diff --stat'])
