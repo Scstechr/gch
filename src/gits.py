@@ -178,10 +178,6 @@ def Remote(remote):
             sys.exit()
 
 
-def Push(remote, branch):
-    Remote(remote)
-    issues.execute([f'git push -u {remote} {branch}'])
-
 
 def MakeNewBranch(branch_list):
     while 1:

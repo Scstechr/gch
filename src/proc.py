@@ -6,13 +6,14 @@ from .qs import isExist, confirm
 from .arg import Help, defaultspath, status_bar, IGNORE as ignore
 from .version import Version
 from .diff import diffhash, logviewer
-from .gits import Reset, Remote, Push, Checkout
+from .gits import Reset, Remote, Checkout
 from .gits import Branch, getCurrentBranch, setBranch
 from .git.commit import Commit
 from .git.status import CheckState
 from .git.init import Init
 from .git.ls_files import Ls
 from .git.pull import Pull
+from .git.push import Push
 
 # git commands
 diffcmd = 'git diff --cached --ignore-all-space --ignore-blank-lines'
@@ -42,8 +43,6 @@ def proc(d, MODE=0):
 
     if version:
         Version('GCH - Git Commit Handler')
-
-#    ShortVersion('GCH - Git Commit Handler')
 
     status_bar(d)
 
@@ -122,8 +121,6 @@ def proc(d, MODE=0):
     if pull:
         Pull(remote, branch)
 
-    # Push or not
     if push:
-        if remote:
-            Remote(remote)
         Push(remote, branch)
+
