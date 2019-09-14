@@ -6,9 +6,10 @@ from .qs import isExist, confirm
 from .arg import Help, defaultspath, status_bar, IGNORE as ignore
 from .version import Version
 from .diff import diffhash, logviewer
-from .gits import Init, Reset, Ls, Commit, Remote, Push, Checkout
+from .gits import Reset, Ls, Commit, Remote, Push, Checkout
 from .gits import Branch, getCurrentBranch, setBranch
 from .git.status import CheckState
+from .git.init import Init
 
 # git commands
 diffcmd = 'git diff --cached --ignore-all-space --ignore-blank-lines'
