@@ -22,7 +22,7 @@ def Branch():
                 answer = wait_key()
         if answer == 'c':
             ok('Checking out branch!')
-            Checkout(current_branch, branch)
+            checkoutBranch()
         elif answer == 'r':
             ok('Renaming current branch!')
             renameBranch()
