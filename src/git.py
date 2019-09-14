@@ -10,7 +10,7 @@ from .util import CursorOff, wait_key
 
 def b(string):
     ''' String Format for Branch Name '''
-    return f'`\033[3m{string}`'
+    return f'`\033[3m{string}\033[m`'
 
 
 def CheckState():
@@ -66,24 +66,15 @@ def checkoutBranch(branch):
         qs = [f'Commit changes of branch {b(current_branch)}']
         qs.append(f'Stash changes of branch {b(current_branch)} ')
         qs.append(f'Force Checkout to branch {b(branch)}        ')
-        answer_2 = getAnswer(qs)
-        if answer_2 == 1:
+        answer = getAnswer(qs)
+        if answer == 1:
             issues.execute([f'git add .', f'git diff --stat'])
             Commit()
             issues.execute([f'git checkout {branch}'])
-        elif answer_2 == 2:
+        elif answer == 2:
             issues.execute([f'git stash', f'git checkout {branch}'])
         else:
             issues.execute([f'git checkout -f {branch}'])
-    if answer == 1:
-        issues.execute(
-            [f'git format-patch {branch}..{current_branch} --stdout | git apply --check'])
-        if isExist('git format-patch {branch}..{current_branch} --stdout | git apply --check'):
-            issues.execute([f'git merge {current_branch}'])
-        else:
-            issues.warning(
-                "Aborting Merge because conflict is likely to occur.")
-            issues.abort()
 
 
 def setBranch(branch, filepath):
@@ -106,15 +97,25 @@ def setBranch(branch, filepath):
         qs.append(f'Checkout to branch {b(branch)}                       ')
         answer = getAnswer(qs)
         if answer == 2:
-            print(f'Commiting branch is now set to {b(current_branch)}')
+            print(f'Committing branch is now set to {b(current_branch)}')
             branch = current_branch
         else:
             checkoutBranch(branch)
+            if answer == 1:
+                issues.execute(
+                    [f'git format-patch {branch}..{current_branch} --stdout | git apply --check'])
+                if isExist('git format-patch {branch}..{current_branch} --stdout | git apply --check'):
+                    issues.execute([f'git merge {current_branch}'])
+                else:
+                    issues.warning(
+                        "Aborting Merge because conflict is likely to occur.")
+                    issues.abort()
+
     return branch
 
 
 def globalsetting():
-    print("** Configureation of global settings **")
+    print("** Configuration of global settings **")
     issues.execute(['git config --global credential.helper osxkeychain',
                     'git config --global core.excludesfile ~/.gitignore_global'])
     name, email = prompt("name"), prompt("email")
