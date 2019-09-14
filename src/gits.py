@@ -215,9 +215,6 @@ def Checkout():
             issues.execute([f'git diff {current_branch}..{branch[answer-1]}'])
 
 
-def Ls():
-    issues.execute([f'git ls-files'])
-
 
 def RenameBranch():
     current_branch, branch_list = getCurrentBranch(lst=True)
