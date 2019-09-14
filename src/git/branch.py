@@ -142,14 +142,15 @@ def deleteBranch():
     branch = branch_list[answer]
     if branch == 'master':
         warning('You cannot delete master branch via gch.')
-    elif branch == current_branch:
-        msg = f"You tried to delete branch you are currently on"
-        warning(msg)
-        next_list = [b for b in branch_list if b != current_branch]
-        print(
-            f"Please choose the branch to checkout before deleting {B(branch)}:\n")
-        answer = getAnswer(next_list, exit=False) - 1
     else:
+        if branch == current_branch:
+            msg = f"You tried to delete branch you are currently on!"
+            warning(msg)
+            next_list = [b for b in branch_list if b != current_branch]
+            print(
+                f"Please choose the branch to checkout before deleting {B(branch)}:\n")
+            answer = getAnswer(next_list, exit=False) - 1
+            Checkout(current_branch, next_list[answer])
         if confirm(f"Delete branch {B(branch)}?"):
             execute([f'git branch --delete {branch}'])
             ok('You deleted branch!')
