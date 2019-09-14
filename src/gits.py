@@ -5,24 +5,13 @@ from . import issues
 from .qs import getAnswer, isExist, confirm, prompt
 from . import diff
 from .util import CursorOff, wait_key
+from .git.branch import getCurrentBranch, setBranch
 
 
 def b(string):
     ''' String Format for Branch Name '''
     return f'`\033[3m{string}\033[m`'
 
-
-
-def getCurrentBranch(lst=False):
-    ''' Returns current branch name w or w/o branch list '''
-    output = sp.getoutput('git branch').split('\n')
-    current_branch = ''.join(branch[2:]
-                             for branch in output if branch[0] == '*')
-    branch_list = [branch[2:] for branch in output]
-    if lst:
-        return current_branch, branch_list
-    else:
-        return current_branch
 
 
 def checkoutBranch(branch):
@@ -47,41 +36,6 @@ def checkoutBranch(branch):
             issues.execute([f'git checkout -f {branch}'])
 
 
-def setBranch(branch, filepath):
-    current_branch, branch_list = getCurrentBranch(lst=True)
-    if branch not in branch_list:
-        issues.warning(f'Branch {b(branch)} not found.')
-        qs = [f'Make new branch {b(branch)}               ']
-        qs.append(f'Stay on current branch {b(current_branch)}')
-        answer = getAnswer(qs)
-        if answer == 1:
-            issues.execute([f'git checkout -b {branch}'])
-        else:
-            print(f'Commiting branch set to {b(current_branch)}')
-            branch = current_branch
-    else:
-        print(
-            f'Currently on branch {b(current_branch)} but tried to commit to branch {b(branch)}.')
-        qs = [f'Merge branch {b(current_branch)} => branch {b(branch)}']
-        qs.append(f'Stay on branch {b(current_branch)}                   ')
-        qs.append(f'Checkout to branch {b(branch)}                       ')
-        answer = getAnswer(qs)
-        if answer == 2:
-            print(f'Committing branch is now set to {b(current_branch)}')
-            branch = current_branch
-        else:
-            checkoutBranch(branch)
-            if answer == 1:
-                issues.execute(
-                    [f'git format-patch {branch}..{current_branch} --stdout | git apply --check'])
-                if isExist('git format-patch {branch}..{current_branch} --stdout | git apply --check'):
-                    issues.execute([f'git merge {current_branch}'])
-                else:
-                    issues.warning(
-                        "Aborting Merge because conflict is likely to occur.")
-                    issues.abort()
-
-    return branch
 
 
 
