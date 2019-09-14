@@ -7,6 +7,7 @@ import shutil
 from . import issues
 from .qs import isExist, confirm, prompt
 from .util import CursorOff, wait_key
+from .colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
 
 
 def ch_gen(string):
@@ -25,16 +26,16 @@ def hr():
 def decorate(string):
     line = string.split(')')
     try:
-        ret = f'{line[0].split("(")[0]}\033[0m({line[0].split("(")[1]})\033[0m '
+        ret = f'{line[0].split("(")[0]}{M}({line[0].split("(")[1]}){M} '
         line = ')'.join(line[1:])
         line = line.split(']')
         chash = f'{line[0][2:]}'
-        ret += f'\033[30G\033[31m{line[0][1:]}]\033[0m '
+        ret += f'\033[30G{R}{line[0][1:]}]{M} '
         line = ']'.join(line[1:])
         line = line.split('>')
-        ret += f'\033[36m{line[0][1:]}>\033[0m'
+        ret += f'{C}{line[0][1:]}>{M}'
         line = '>'.join(line[1:])
-        ret += f'\033[3m{line}\033[0m'
+        ret += f'{IT}{line}{M}'
     except IndexError:
         ret = string
         chash = ''
@@ -42,7 +43,7 @@ def decorate(string):
             chash = 'HEAD'
 
     ast = ret.find('*') + 1
-    ret = ret[:ast].replace('*', '\033[1m*\033[0m') + ret[ast:]
+    ret = ret[:ast].replace('*', f'{BL}*{M}') + ret[ast:]
     return ret, chash
 
 
@@ -61,28 +62,28 @@ def contpage(verbose, selected, option):
     while(1):
         lpp, width = setlength()
         hr()
-        print('\033[2K\033[92mSELECTED:', selected, end='\033[0m ')
-        print('| \033[91m[VERBOSE]\033[0m') if verbose else print()
+        print(f'\033[2K{G}SELECTED:', selected, end=f'{M} ')
+        print(f'| {R}[VERBOSE]{M}') if verbose else print()
         hr()
         for idx, line in enumerate(option[start:end]):
-            print('\033[2K\033[0m', end='')
+            print(f'\033[2K{M}', end='')
             print('> ', end='') if start + \
                 idx == select else print('  ', end='')
             line = line if len(line) < width else f'{line[:int(width)]} ...'
             orig = line
             line, chash = decorate(line)
             if chash in selected:
-                print(f'\033[2m{orig}\033[0m')
+                print(f'\033[2m{orig}{M}')
             else:
                 print(line)
-            # print(line, end='\033[0m\n')
+            # print(line, end='{M}\n')
         if len(option) < lpp:
             for i in range(lpp - len(option)):
                 print('\033[2K')
 
         hr()
-        print(f'| \033[93m[hj]:[\u2190\u2193]', end='')
-        print(f',q:QUIT,v:VERBOSE,s/Enter:SELECT\033[0m')
+        print(f'| {Y}[hj]:[\u2190\u2193]', end='')
+        print(f',q:QUIT,v:VERBOSE,s/Enter:SELECT{M}')
         hr()
         if len(selected) == 2:
             break
@@ -176,8 +177,8 @@ def page(verbose, selected, pages):
         lpp, width = setlength()
         hr()
         pagelen = len(pages[pagenum])
-        print('\033[2K\033[92mSELECTED:', selected, end='\033[0m ')
-        print('| \033[91m[VERBOSE]\033[0m') if verbose else print()
+        print(f'\033[2K{G}SELECTED:', selected, end='{M} ')
+        print(f'| {R}[VERBOSE]{M}') if verbose else print()
         hr()
         for idx, opt in enumerate(pages[pagenum]):
             if len(opt) > width:
@@ -186,15 +187,15 @@ def page(verbose, selected, pages):
             print('\033[2K', end='')
             print('>', end=' ') if idx == select else print(' ', end=' ')
             if chash in selected:
-                print(f'\033[2m{opt}\033[0m')
+                print(f'\033[2m{opt}{M}')
             else:
                 print(line)
         for i in range(lpp - pagelen):
             print('\033[2K')
         hr()
         print(f'[{pagenum+1}/{len(pages)}]', end=' ')
-        print(f'| \033[93m[hjkl]:[\u2190\u2193\u2191\u2192]', end='')
-        print(f',q:QUIT,v:VERBOSE,s/Enter:SELECT\033[0m')
+        print(f'| {Y}[hjkl]:[\u2190\u2193\u2191\u2192]', end='')
+        print(f',q:QUIT,v:VERBOSE,s/Enter:SELECT{M}')
         hr()
         if len(selected) != 2:
             ret = wait_key()

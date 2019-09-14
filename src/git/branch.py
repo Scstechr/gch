@@ -3,6 +3,7 @@ from ..issues import warning, execute, abort, ok
 from ..util import CursorOff, wait_key, B
 from ..qs import getAnswer, prompt, isExist, confirm
 from .checkout import Checkout
+from ..colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
 
 
 def Branch():
@@ -14,7 +15,7 @@ def Branch():
             options.append('(r) rename')
             options.append('(n) new branch')
             options.append('(d) delete')
-            print(f"\n\033[1mOptions:\033[m\n {' '.join(options)} (e) exit")
+            print(f"\n{BL}Options:{M}\n {' '.join(options)} (e) exit")
             answer = wait_key()
             while 1:
                 if answer in ['c', 'r', 'n', 'd', 'e']:
@@ -47,7 +48,7 @@ def checkoutBranch():
         if confirm(f"Make new branch?"):
             newBranch(branch_list)
     else:
-        print(f'\n\033[m\033[1mWhich branch do you want to checkout?\033[m')
+        print(f'\n{M}{BL}Which branch do you want to checkout?{M}')
         answer = getAnswer(branch)
         if answer == len(branch):
             newBranch(branch_list)
@@ -134,10 +135,10 @@ def renameBranch():
 
 def deleteBranch():
     current_branch, branch_list = getBranch(lst=True)
-    print(f'\nCurrently on branch: {B(current_branch)}...\033[m\n')
+    print(f'\nCurrently on branch: {B(current_branch)}...\n')
 
     branch_list = [branch for branch in branch_list]
-    print("Which branch do you want to delete?:\n")
+    print(f"Which branch do you want to delete?:\n")
     answer = getAnswer(branch_list, exit=False) - 1
     branch = branch_list[answer]
     if branch == 'master':
@@ -153,8 +154,14 @@ def deleteBranch():
             Checkout(current_branch, next_list[answer])
         if confirm(f"Delete branch {B(branch)}?"):
             out = sp.getoutput([f'git branch --delete {branch}'])
-            print(out)
-            # execute([f'git branch --delete {branch}'])
-            # sp.getoutput
-            # ok('You deleted branch!')
+            if out.count('error'):
+                warning('Could not delete branch since its not fully merged.')
+                if confirm(f"Delete branch {B(branch)} anyway?"):
+                    execute([f'git branch -D {branch}'])
+                    ok('You deleted branch!')
+                else:
+                    ok('Branch not deleted.')
+            else:
+                execute([f'git branch --delete {branch}'], run=False)
+                ok('You deleted branch!')
 

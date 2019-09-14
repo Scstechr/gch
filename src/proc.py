@@ -3,7 +3,7 @@ from os import path, chdir
 
 from . import issues
 from .qs import isExist, confirm
-from .arg import Help, defaultspath, status_bar, IGNORE as ignore
+from .arg import Help, defaultspath, StatusBar, IGNORE as ignore
 from .version import Version
 from .diff import diffhash, logviewer
 from .git.commit import Commit
@@ -16,6 +16,7 @@ from .git.reset import Reset
 from .git.log import Log
 from .git.branch import Branch, getBranch, setBranch, checkoutBranch
 from .util import B
+from .colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
 
 # git commands
 diffcmd = 'git diff --cached --ignore-all-space --ignore-blank-lines'
@@ -45,7 +46,7 @@ def proc(d, MODE=0):
     if version:
         Version('GCH - Git Commit Handler')
 
-    status_bar(d)
+    StatusBar(d)
 
     if type(branch) == bool:
         branch = Branch()
@@ -86,7 +87,7 @@ def proc(d, MODE=0):
             logviewer(verbose=verbose, head=False)
 
     if checkout:
-        print(f'\n\033[1mCurrently on branch {B(current_branch)}')
+        print(f'\n{BL}Currently on branch {B(current_branch)}')
         checkoutBranch()
 
     if reset:

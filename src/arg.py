@@ -4,6 +4,7 @@ from .version import VERSION, DATE
 from . import issues
 from .git.remote import getRemote
 from .git.branch import getBranch
+from .colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
 
 IGNORE = ['init', 'log', 'version', 'help', 'reset',
           'save', 'diff', 'checkout', 'ls', 'pull']
@@ -161,18 +162,18 @@ def ReturnArgdict(mode):
     return argdict
 
 
-def status_bar(d):
+def StatusBar(d):
     """ ONLY FOR GCH """
     print(f"GCH v{VERSION}: ", end='')
-    string = f"\033[31m[GITDIR: \'{d['gitpath']}\']\033[m"
+    string = f"{R}[GITDIR: \'{d['gitpath']}\']{M}"
     _, branch_list = getBranch(lst=True)
     if len(branch_list) > 0:
         current_branch = getBranch()
         branch = d['branch'] if d['branch'] is not True else current_branch
-        string += f"\033[32m[BRANCH: \'{branch}\']\033[m"
+        string += f"{G}[BRANCH: \'{branch}\']{M}"
     remote_list = getRemote()
     if len(remote_list) > 0:
-        string += f"\033[33m[REMOTE: \'{d['remote']}\']\033[m"
+        string += f"{Y}[REMOTE: \'{d['remote']}\']{M}"
     print(string)
 
 
@@ -180,8 +181,8 @@ def Help(mode):
     argdict = ReturnArgdict(mode)
     command = 'gdiff' if mode else 'gch'
 
-    print(f"\033[1m{command} v{VERSION} (compiled: {DATE})\033[0m")
-    print(f"\033[1mUsage: {command} [OPTION]\n\nOptions:\033[0m")
+    print(f"{BL}{command} v{VERSION} (compiled: {DATE}){M}")
+    print(f"{BL}Usage: {command} [OPTION]\n\nOptions:{M}")
     for key, value in argdict.items():
         if len(key) > 1:
             string = '  '
@@ -190,7 +191,7 @@ def Help(mode):
                     ', --' + value['ProperName']
             else:
                 string += '--' + value['ProperName']
-            string = '\033[1m' + \
-                f'{string}'.ljust(20) + f"| \033[0m{value['ExplainString']}"
+            string = '{BL}' + \
+                f'{string}'.ljust(20) + f"| {M}{value['ExplainString']}"
             print(string)
     sys.exit()

@@ -2,6 +2,7 @@ import sys
 import urllib.request as req
 import urllib.error as err
 from . import issues
+from .colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
 
 VERSION = '1.36'
 DATE = "2019-09-14 12:40:44 UTC"
@@ -11,23 +12,23 @@ PYINST_VERSION = '3.5'
 
 
 def ShortVersion(string):
-    print(f"\033[1m{string} v{VERSION} (compiled: {DATE})\033[0m")
+    print(f"{BL}{string} v{VERSION} (compiled: {DATE}){M}")
 
 
 def Version(string):
-    print(f"\033[1m{string} v{VERSION} (compiled: {DATE})\033[0m")
-    print(f"\033[0mBUILD INFO: \033[0m")
+    print(f"{BL}{string} v{VERSION} (compiled: {DATE}){M}")
+    print(f"{M}BUILD INFO: {M}")
     # Python version
     version = PYTHON_VERSION
-    print(f"\033[0m Python      :\033[0m", version)
+    print(f"{M} Python      :{M}", version)
 
     # PyInstaller version
     version = PYINST_VERSION
-    print(f"\033[0m PyInstaller :\033[0m", version)
+    print(f"{M} PyInstaller :{M}", version)
 
     # Platform version (Kernel)
     version = PLATFM_VERSION
-    print(f"\033[0m Platform    :\033[0m", version)
+    print(f"{M} Platform    :{M}", version)
 
     sys.exit(0)
 

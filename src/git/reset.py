@@ -2,22 +2,23 @@ from ..issues import warning, execute
 from ..qs import getAnswer, isExist, confirm, prompt
 from ..diff import diffhash
 from .commit import Commit
+from ..colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
 
 def Reset():
     warning('Options with `--hard` must be done with caution')
     opt = []
     opt.append(
-        '\033[3mgit commit --amend\033[m          > Change message of last commit')
+        '{IT}git commit --amend{M}          > Change message of last commit')
     opt.append(
-        '\033[3mgit reset --soft HEAD^\033[m      > Undo last commit (soft)')
+        '{IT}git reset --soft HEAD^{M}      > Undo last commit (soft)')
     opt.append(
-        '\033[3mgit reset \033[91m--hard\033[m\033[3m HEAD^\033[m      > Undo last commit')
+        '{IT}git reset {R}--hard{M}{IT} HEAD^{M}      > Undo last commit')
     opt.append(
-        '\033[3mgit reset \033[91m--hard\033[m\033[3m HEAD\033[m       > Undo changes from last commit')
+        '{IT}git reset {R}--hard{M}{IT} HEAD{M}       > Undo changes from last commit')
     opt.append(
-        '\033[3mgit reset \033[91m--hard\033[m\033[3m <hash>\033[m     > Undo changes from past commit')
+        '{IT}git reset {R}--hard{M}{IT} <hash>{M}     > Undo changes from past commit')
     opt.append(
-        '\033[3mgit reset \033[91m--hard\033[m\033[3m ORIG_HEAD\033[m  > Undo most recent reset')
+        '{IT}git reset {R}--hard{M}{IT} ORIG_HEAD{M}  > Undo most recent reset')
     ans = getAnswer(opt)
     if ans == 1:
         execute(['git commit --amend'])
