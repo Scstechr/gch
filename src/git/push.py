@@ -1,4 +1,4 @@
-from ..gits import Remote
+from .remote import Remote
 
 def Push(remote, branch):
     Remote(remote)

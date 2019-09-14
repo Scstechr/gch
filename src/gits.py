@@ -1,7 +1,6 @@
 import sys
 import subprocess as sp
 from os import path, getcwd
-from urllib.parse import urlparse
 from . import issues
 from .qs import getAnswer, isExist, confirm, prompt
 from . import diff
@@ -89,37 +88,6 @@ def setBranch(branch, filepath):
 
 
 
-def url_valid(x):
-    try:
-        result = urlparse(x)
-        return all([result.scheme, result.netloc])
-    except ValueError:
-        return False
-
-
-def getRemoteList():
-    remotelst = sp.getoutput(f'git remote -v').split('\n')
-    remotelst = [r.split('\t')[0]
-                 for idx, r in enumerate(remotelst) if idx % 2]
-    return remotelst
-
-
-def Remote(remote):
-    remotelst = getRemoteList()
-    if remote in remotelst:
-        pass
-    else:
-        issues.warning(f'Remote branch `{remote}` not found')
-        if confirm(f'Add?'):
-            while(1):
-                remote_url = prompt("URL")
-                if url_valid(remote_url):
-                    issues.execute([f'git remote add {remote} {remote_url}'])
-                    break
-                else:
-                    issues.warning('Not valid URL')
-        else:
-            sys.exit()
 
 
 
