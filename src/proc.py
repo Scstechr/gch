@@ -17,6 +17,7 @@ from .git.reset import Reset
 from .git.log import Log
 from .git.remote import Remote
 from .git.branch import getBranch, setBranch, checkoutBranch
+from .util import B
 
 # git commands
 diffcmd = 'git diff --cached --ignore-all-space --ignore-blank-lines'
@@ -87,7 +88,7 @@ def proc(d, MODE=0):
             logviewer(verbose=verbose, head=False)
 
     if checkout:
-        print(f'\n\033[1mCurrently on branch `\033[3m{current_branch}`')
+        print(f'\n\033[1mCurrently on branch {B(current_branch)}')
         checkoutBranch()
 
     if reset:

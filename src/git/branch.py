@@ -1,5 +1,5 @@
 import subprocess as sp
-from ..issues import warning, execute, abort
+from ..issues import warning, execute, abort, ok
 from ..util import B
 from ..qs import getAnswer, prompt
 from .checkout import Checkout
@@ -81,3 +81,19 @@ def newBranch(branch_list):
             else:
                 issues.execute([f'git branch {new_branch}'])
             break
+
+
+def renameBranch():
+    current_branch, branch_list = getBranch(lst=True)
+    while 1:
+        new_branch = prompt(
+            '\n\033[2KEnter new branch name (spaces will be replaced with `-`)').replace(' ', '-')
+
+        if new_branch in branch_list:
+            warning(f'Branch `{new_branch}` already exists!')
+        else:
+            execute([f'git branch -m {new_branch}'])
+            ok(f'Branch `{current_branch}` is now `{new_branch}`')
+            break
+
+

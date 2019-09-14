@@ -4,36 +4,13 @@ from os import path, getcwd
 from . import issues
 from .qs import getAnswer, isExist, confirm, prompt
 from . import diff
-from .util import CursorOff, wait_key
-from .git.branch import getBranch, setBranch, newBranch
-
-
-def b(string):
-    ''' String Format for Branch Name '''
-    return f'`\033[3m{string}\033[m`'
-
-
-
-
-
-
-def RenameBranch():
-    current_branch, branch_list = getBranch(lst=True)
-    while 1:
-        new_branch = prompt(
-            '\n\033[2KEnter new branch name (spaces will be replaced with `-`)').replace(' ', '-')
-
-        if new_branch in branch_list:
-            issues.warning(f'Branch `{new_branch}` already exists!')
-        else:
-            issues.execute([f'git branch -m {new_branch}'])
-            issues.ok(f'Branch `{current_branch}` is now `{new_branch}`')
-            break
+from .util import CursorOff, wait_key, B
+from .git.branch import getBranch, setBranch, newBranch, renameBranch
 
 
 def DeleteBranch():
     current_branch, branch_list = getBranch(lst=True)
-    print(f'\nCurrently on branch: {b(current_branch)}...\033[m\n')
+    print(f'\nCurrently on branch: {B(current_branch)}...\033[m\n')
 
     branch_list = [branch for branch in branch_list]
     print("Which branch do you want to delete?:\n")
@@ -46,10 +23,10 @@ def DeleteBranch():
         issues.warning(msg)
         next_list = [b for b in branch_list if b != current_branch]
         print(
-            f"Please choose the branch to checkout before deleting {b(branch)}:\n")
+            f"Please choose the branch to checkout before deleting {B(branch)}:\n")
         answer = getAnswer(next_list, exit=False) - 1
     else:
-        if confirm(f"Delete branch {b(branch)}?"):
+        if confirm(f"Delete branch {B(branch)}?"):
             issues.execute([f'git branch --delete {branch}'])
             issues.ok('You deleted branch!')
 
@@ -71,10 +48,10 @@ def Branch():
                 answer = wait_key()
         if answer == 'c':
             issues.ok('Checking out branch!')
-            Checkout()
+            Checkout(current_branch, branch)
         elif answer == 'r':
             issues.ok('Renaming current branch!')
-            RenameBranch()
+            renameBranch()
         elif answer == 'n':
             issues.ok('Making new branch!')
             newBranch(branch_list)
@@ -83,7 +60,6 @@ def Branch():
     else:
         issues.warning('branch not found!')
         branch = 'master'
-        issues.ok('Branch set to {b(master)}...')
     branch = getBranch()
-    issues.ok(f'Branch set to {b(branch)}...')
+    issues.ok(f'Branch set to {B(branch)}...')
     return branch
