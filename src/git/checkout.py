@@ -1,6 +1,6 @@
 from ..qs import confirm, getAnswer
 from ..issues import execute
-from ..util import B
+from ..util import br
 from .commit import Commit
 from .status import Status
 
@@ -10,10 +10,10 @@ def Checkout(current_branch, branch):
     else:
         execute([f'git diff --stat'])
         print(
-            f'\nTheres some changes in branch {B(current_branch)}.')
-        qs = [f'Commit changes of branch {B(current_branch)}']
-        qs.append(f'Stash changes of branch {B(current_branch)} ')
-        qs.append(f'Force Checkout to branch {B(branch)}        ')
+            f'\nTheres some changes in branch {br(current_branch)}.')
+        qs = [f'Commit changes of branch {br(current_branch)}']
+        qs.append(f'Stash changes of branch {br(current_branch)} ')
+        qs.append(f'Force Checkout to branch {br(branch)}        ')
         answer = getAnswer(qs)
         if answer == 1:
             execute([f'git add .', f'git diff --stat'])

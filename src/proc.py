@@ -15,7 +15,7 @@ from .git.push import Push
 from .git.reset import Reset
 from .git.log import Log
 from .git.branch import Branch, getBranch, setBranch, checkoutBranch
-from .util import B
+from .util import br
 from .colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
 
 # git commands
@@ -87,7 +87,7 @@ def proc(d, MODE=0):
             logviewer(verbose=verbose, head=False)
 
     if checkout:
-        print(f'\n{BL}Currently on branch {B(current_branch)}')
+        print(f'\n{BL}Currently on branch {br(current_branch)}')
         checkoutBranch()
 
     if reset:

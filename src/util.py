@@ -38,6 +38,6 @@ def validateURL(x):
         return False
 
 
-def B(string):
+def br(string):
     ''' String Format for Branch Name '''
     return f'`{string}`'

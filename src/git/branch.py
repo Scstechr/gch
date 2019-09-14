@@ -1,6 +1,6 @@
 import subprocess as sp
 from ..issues import warning, execute, abort, ok
-from ..util import CursorOff, wait_key, B
+from ..util import CursorOff, wait_key, br
 from ..qs import getAnswer, prompt, isExist, confirm
 from .checkout import Checkout
 from ..colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
@@ -36,7 +36,7 @@ def Branch():
         warning('Branch not found!')
         branch = 'master'
     branch = getBranch()
-    ok(f'Branch set to {B(branch)}')
+    ok(f'Branch set to {br(branch)}')
     return branch
 
 
@@ -70,24 +70,24 @@ def getBranch(lst=False):
 def setBranch(branch, filepath):
     current_branch, branch_list = getBranch(lst=True)
     if branch not in branch_list:
-        warning(f'Branch {B(branch)} not found.')
-        qs = [f'Make new branch {B(branch)}               ']
-        qs.append(f'Stay on current branch {B(current_branch)}')
+        warning(f'Branch {br(branch)} not found.')
+        qs = [f'Make new branch {br(branch)}               ']
+        qs.append(f'Stay on current branch {br(current_branch)}')
         answer = getAnswer(qs)
         if answer == 1:
             execute([f'git checkout -b {branch}'])
         else:
-            print(f'Commiting branch set to {B(current_branch)}')
+            print(f'Commiting branch set to {br(current_branch)}')
             branch = current_branch
     else:
         print(
-            f'Currently on branch {B(current_branch)} but tried to commit to branch {B(branch)}.')
-        qs = [f'Merge branch {B(current_branch)} => branch {B(branch)}']
-        qs.append(f'Stay on branch {B(current_branch)}                   ')
-        qs.append(f'Checkout to branch {B(branch)}                       ')
+            f'Currently on branch {br(current_branch)} but tried to commit to branch {br(branch)}.')
+        qs = [f'Merge branch {br(current_branch)} => branch {br(branch)}']
+        qs.append(f'Stay on branch {br(current_branch)}                   ')
+        qs.append(f'Checkout to branch {br(branch)}                       ')
         answer = getAnswer(qs)
         if answer == 2:
-            print(f'Committing branch is now set to {B(current_branch)}')
+            print(f'Committing branch is now set to {br(current_branch)}')
             branch = current_branch
         else:
             Checkout(current_branch, branch)
@@ -135,7 +135,7 @@ def renameBranch():
 
 def deleteBranch():
     current_branch, branch_list = getBranch(lst=True)
-    print(f'\nCurrently on branch: {B(current_branch)}...\n')
+    print(f'\nCurrently on branch: {br(current_branch)}...\n')
 
     branch_list = [branch for branch in branch_list]
     print(f"Which branch do you want to delete?:\n")
@@ -149,14 +149,14 @@ def deleteBranch():
             warning(msg)
             next_list = [b for b in branch_list if b != current_branch]
             print(
-                f"Please choose the branch to checkout before deleting {B(branch)}:\n")
+                f"Please choose the branch to checkout before deleting {br(branch)}:\n")
             answer = getAnswer(next_list, exit=False) - 1
             Checkout(current_branch, next_list[answer])
-        if confirm(f"Delete branch {B(branch)}?"):
+        if confirm(f"Delete branch {br(branch)}?"):
             out = sp.getoutput([f'git branch --delete {branch}'])
             if out.count('error'):
                 warning('Could not delete branch since its not fully merged.')
-                if confirm(f"Delete branch {B(branch)} anyway?"):
+                if confirm(f"Delete branch {br(branch)} anyway?"):
                     execute([f'git branch -D {branch}'])
                     ok('You deleted branch!')
                 else:
