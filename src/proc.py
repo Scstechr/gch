@@ -12,6 +12,7 @@ from .git.commit import Commit
 from .git.status import CheckState
 from .git.init import Init
 from .git.ls_files import Ls
+from .git.pull import Pull
 
 # git commands
 diffcmd = 'git diff --cached --ignore-all-space --ignore-blank-lines'
@@ -119,7 +120,7 @@ def proc(d, MODE=0):
             Commit()
 
     if pull:
-        issues.execute([f'git pull {remote} {branch}'])
+        Pull(remote, branch)
 
     # Push or not
     if push:
