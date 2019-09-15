@@ -39,6 +39,7 @@ def proc(d, MODE=0):
     save = d['save']
     checkout = d['checkout']
     ls = d['ls']
+    patch = d['patch']
 
     if d['help']:
         Help(MODE)
