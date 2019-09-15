@@ -191,7 +191,7 @@ def Help(mode):
                     ', --' + value['ProperName']
             else:
                 string += '--' + value['ProperName']
-            string = '{BL}' + \
+            string = f'{BL}' + \
                 f'{string}'.ljust(20) + f"| {M}{value['ExplainString']}"
             print(string)
     sys.exit()
