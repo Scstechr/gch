@@ -27,6 +27,7 @@ defaults['version'] = False
 defaults['checkout'] = False
 defaults['ls'] = False
 defaults['check'] = False
+defaults['patch'] = False
 defaultspath = path.join(".", ".defaults.txt")
 if path.exists(defaultspath):
     with open(defaultspath, 'r') as readfile:
@@ -57,12 +58,13 @@ gch_exp_l = f'Git log with option.'
 gch_exp_r = f'Reset.'
 gch_exp_e = f'Choose which remote repository for push.'
 gch_exp_p2 = f'Pull from remote repository.'
-gch_exp_s = f'Save settings'
-gch_exp_d = f'Open diff tool'
-gch_exp_v2 = f'Check version of gch'
-gch_exp_c2 = f'Handling checkouts'
-gch_exp_c3 = f'Check for updates'
-gch_exp_l2 = f'List up tracking files/directories'
+gch_exp_s = f'Save settings of gch.'
+gch_exp_d = f'Open diff tool.'
+gch_exp_v2 = f'Check version of gch.'
+gch_exp_c2 = f'Handling checkouts.'
+gch_exp_c3 = f'Check for updates.'
+gch_exp_l2 = f'List up tracking files/directories.'
+gch_exp_p3 = f'Activate -p/--patch of git.'
 
 gdiff_exp_v = f'Detailed diff.'
 gdiff_exp_h = f'Include HEAD^ from the beginning.'
@@ -135,11 +137,9 @@ def ReturnArgdict(mode):
         arglist.append(
             ArgSet(['-p', '--push',     'flag',   gch_exp_p,  defaults['push'], ]))
         arglist.append(
-            ArgSet(['-s', '--save',     'flag',   gch_exp_s,  False]))
-        arglist.append(
             ArgSet(['-d', '--diff',     'flag',   gch_exp_d,  defaults['diff']]))
         arglist.append(
-            ArgSet(['',   '--checkout', 'flag',   gch_exp_c2, defaults['checkout']]))
+             ArgSet(['',   '--checkout', 'flag',   gch_exp_c2, defaults['checkout']]))
         arglist.append(
             ArgSet(['',   '--reset',    'flag',   gch_exp_r,  defaults['reset']]))
         arglist.append(
@@ -147,9 +147,13 @@ def ReturnArgdict(mode):
         arglist.append(
             ArgSet(['',   '--ls',       'flag',   gch_exp_l2, defaults['ls']]))
         arglist.append(
+            ArgSet(['',   '--patch',    'flag',   gch_exp_p3, defaults['patch']]))
+        arglist.append(
             ArgSet(['',   '--check',    'flag',   gch_exp_c3, defaults['check']]))
         arglist.append(
             ArgSet(['',   '--version',  'flag',   gch_exp_v2, defaults['version']]))
+        arglist.append(
+            ArgSet(['-s', '--save',     'flag',   gch_exp_s,  False]))
         arglist.append(ArgSet(['-h', '--help', 'flag', exp_h, False]))
 
     argdict = {}
