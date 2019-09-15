@@ -2,8 +2,10 @@ import subprocess as sp
 from contextlib import suppress
 from .util import CursorOff, wait_key
 from . import issues
-from .colors import C, M
+from .colors import M, BL
 
+
+CONF = BL
 
 def cinput(string):
     ret = ''
@@ -56,7 +58,7 @@ def isExist(command):
 def confirm(string):
     flag = True
     with suppress(KeyboardInterrupt):
-        ret = input(f"{C}>> " + string + f' [Y/n]:{M}').lower()
+        ret = input(f"{CONF}>> " + string + f' [Y/n]:{M}').lower()
         while(1):
             if ret in ['yes', 'y']:
                 break

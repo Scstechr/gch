@@ -5,7 +5,7 @@ from . import issues
 from .colors import BL, M
 
 VERSION = '1.37'
-DATE = "2019-09-15 15:32:32 UTC"
+DATE = "2019-09-15 16:20:52 UTC"
 PYTHON_VERSION = '3.7.3'
 PLATFM_VERSION = 'Darwin-18.0.0-x86_64-i386-64bit'
 PYINST_VERSION = '3.5'
