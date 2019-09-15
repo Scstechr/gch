@@ -2,7 +2,7 @@ import subprocess as sp
 from contextlib import suppress
 from .util import CursorOff, wait_key
 from . import issues
-from .colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
+from .colors import C, M
 
 
 def cinput(string):

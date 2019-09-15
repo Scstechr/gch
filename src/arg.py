@@ -4,7 +4,7 @@ from .version import VERSION, DATE
 from . import issues
 from .git.remote import getRemote
 from .git.branch import getBranch
-from .colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
+from .colors import R, G, Y, BL, M
 
 IGNORE = ['init', 'log', 'version', 'help', 'reset',
           'save', 'diff', 'checkout', 'ls', 'pull']

@@ -2,7 +2,7 @@ import sys
 import subprocess as sp
 import os
 import cursor
-from .colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
+from .colors import R, G, Y, C, M
 
 
 def branch():

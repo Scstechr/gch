@@ -23,11 +23,11 @@ pfc: $(PROGRAM) $(SRC)
 	flake8 --ignore=E501,E241 src/*.py
 	gch -cv
 
-dist: $(PROGRAM) $(SRC)
+dist:
 	pyinstaller gch.py --onefile
 	pyinstaller gdiff.py --onefile
 	rm -r build
 	rm gch.spec
 
-build:	$(PROGRAM) $(SRC)
+build:
 	python build.py

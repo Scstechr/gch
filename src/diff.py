@@ -7,7 +7,7 @@ import shutil
 from . import issues
 from .qs import isExist, confirm, prompt
 from .util import CursorOff, wait_key
-from .colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
+from .colors import R, G, Y, C, BL, IT, M
 
 
 def ch_gen(string):

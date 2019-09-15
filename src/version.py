@@ -2,7 +2,7 @@ import sys
 import urllib.request as req
 import urllib.error as err
 from . import issues
-from .colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
+from .colors import BL, M
 
 VERSION = '1.37'
 DATE = "2019-09-15 15:32:32 UTC"

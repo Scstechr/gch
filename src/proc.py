@@ -16,7 +16,7 @@ from .git.reset import Reset
 from .git.log import Log
 from .git.branch import Branch, getBranch, setBranch, checkoutBranch
 from .util import br
-from .colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
+from .colors import BL
 
 # git commands
 diffcmd = 'git diff --cached --ignore-all-space --ignore-blank-lines'
