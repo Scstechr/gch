@@ -6,6 +6,7 @@ Git Commit Handler
 '''
 
 from concurrent.futures import ThreadPoolExecutor as Executor
+from contextlib import suppress
 from src import issues
 from src.proc import proc
 from src.parse import Parser
@@ -26,10 +27,11 @@ def debug():
 def main():
     d = Parser(MODE)
     result = None
-    with Executor() as executor:
-        if d['check']:
-            result = executor.submit(CheckVersion)
-        executor.submit(proc, d)
+    with suppress(IOError, EOFError, KeyboardInterrupt):
+        with Executor() as executor:
+            if d['check']:
+                result = executor.submit(CheckVersion)
+            executor.submit(proc, d)
 
     if d['check'] and result:
         ShowVersion(result.result())
