@@ -4,7 +4,7 @@ from ..diff import diffhash
 from .commit import Commit
 from ..colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
 
-def Reset():
+def Reset(patch):
     warning('Options with `--hard` must be done with caution')
     opt = []
     opt.append(
@@ -50,7 +50,7 @@ def Reset():
                 ans = getAnswer(qs)
                 if ans == 1:
                     execute([f'git add .', f'git diff --stat'])
-                    Commit()
+                    Commit(patch)
                     execute([f'git reset --hard {dhash}'])
                 elif ans == 2:
                     execute(

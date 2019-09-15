@@ -92,7 +92,7 @@ def proc(d, MODE=0):
         checkoutBranch()
 
     if reset:
-        Reset()
+        Reset(patch)
 
     if len(branch) == 0:
         issues.execute(['git branch'])
@@ -116,7 +116,7 @@ def proc(d, MODE=0):
             issues.execute([f'git add .', diffcmd, f'git reset'])
         if commit:
             issues.execute([f'git add {filepath}'])
-            Commit()
+            Commit(patch)
 
     if pull:
         Pull(remote, branch)

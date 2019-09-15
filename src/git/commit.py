@@ -2,9 +2,10 @@ from ..issues import warning, execute, abort
 from ..qs import prompt, confirm
 from ..colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
 
-def Commit():
+def Commit(patch=False):
     ''' Commit '''
     commit_message = prompt("Commit Message [v:vim mode]")
+    p = " -p" if patch else ""
     if commit_message.count('`'):
         warning(
             '{M}{BL}`{M}{R} is not acceptable in this mode.')
@@ -16,10 +17,10 @@ def Commit():
             warning('Now entering vim mode...')
             commit_message = 'v'
     if commit_message in ['v', 'vi', 'vim']:
-        execute([f'git commit'])
+        execute([f'git commit{p}'])
     else:
         if len(commit_message):
-            execute([f'git commit -m "{commit_message}"'])
+            execute([f'git commit -m "{commit_message}"{p}'])
         else:
             abort()
 
