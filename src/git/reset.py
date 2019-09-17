@@ -1,7 +1,6 @@
 from ..issues import warning, execute
 from ..qs import getAnswer, isExist, confirm, prompt
 from ..diff import diffhash
-from .commit import Commit
 from ..colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
 
 def Reset(patch):
@@ -50,7 +49,7 @@ def Reset(patch):
                 ans = getAnswer(qs)
                 if ans == 1:
                     execute([f'git add .', f'git diff --stat'])
-                    Commit(patch)
+                    Commit()
                     execute([f'git reset --hard {dhash}'])
                 elif ans == 2:
                     execute(

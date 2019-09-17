@@ -7,6 +7,7 @@ from .colors import M, BL
 
 CONF = BL
 
+
 def cinput(string):
     ret = ''
     with suppress(KeyboardInterrupt):

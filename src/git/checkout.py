@@ -17,7 +17,7 @@ def Checkout(current_branch, branch):
         answer = getAnswer(qs)
         if answer == 1:
             execute([f'git add .', f'git diff --stat'])
-            Commit(False)
+            Commit()
             execute([f'git checkout {branch}'])
         elif answer == 2:
             execute([f'git stash', f'git checkout {branch}'])

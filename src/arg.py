@@ -139,7 +139,7 @@ def ReturnArgdict(mode):
         arglist.append(
             ArgSet(['-d', '--diff',     'flag',   gch_exp_d,  defaults['diff']]))
         arglist.append(
-             ArgSet(['',   '--checkout', 'flag',   gch_exp_c2, defaults['checkout']]))
+            ArgSet(['',   '--checkout', 'flag',   gch_exp_c2, defaults['checkout']]))
         arglist.append(
             ArgSet(['',   '--reset',    'flag',   gch_exp_r,  defaults['reset']]))
         arglist.append(
