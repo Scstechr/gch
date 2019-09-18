@@ -10,7 +10,7 @@ def branch():
 
 
 def abort():
-    print(f'\n{R}>> abort!\n{M}', end='')
+    print(f'\n{R}>> abort!\n{M}', end='', file=sys.stderr)
     cursor.show()
     sp.call('stty sane', shell=True)
     os._exit(1)
