@@ -3,16 +3,16 @@ import sys
 from .arg import ReturnArgdict, Help
 
 
-def Require(mode, a):
+def Require(a):
     f = 'Argument "' + a + '" requires additional string afterwards.'
     issues.warning(f)
-    Help(mode)
+    Help()
 
 
-def NotFound(mode, a):
+def NotFound(a):
     f = 'Argument "' + a + '" not found.'
     issues.warning(f)
-    Help(mode)
+    Help()
 
 
 def Error():
@@ -31,7 +31,7 @@ def branch_exception():
     pass
 
 
-def DictSet(mode, d, argdict, argv, arg, idx):
+def DictSet(d, argdict, argv, arg, idx):
     names = genname(argdict, arg)
     arg = argdict[arg]['ProperName']
     if argdict[arg]['ArgType'] == 'flag':
@@ -50,11 +50,11 @@ def DictSet(mode, d, argdict, argv, arg, idx):
             if arg == 'b' or arg == 'branch':
                 d[arg] = True
             else:
-                Require(mode, names)
+                Require(names)
 
 
-def Parser(mode):
-    argdict = ReturnArgdict(mode)
+def Parser():
+    argdict = ReturnArgdict()
 
     argv = sys.argv[1:]
     d = {}
@@ -63,13 +63,13 @@ def Parser(mode):
 
         if arg.count('--') == 1 and arg[:2] == '--':
             if arg[2:] not in argdict.keys():
-                NotFound(mode, arg)
+                NotFound(arg)
             if arg.count('branch'):
                 branch_exception()
-            DictSet(mode, d, argdict, argv, arg[2:], idx)
+            DictSet(d, argdict, argv, arg[2:], idx)
         elif arg.count('-') == 1 and arg[0] == '-':
             arg = [a for a in arg[1:]]
-            [NotFound(mode, '-' + a) for a in arg if a not in argdict.keys()]
+            [NotFound('-' + a) for a in arg if a not in argdict.keys()]
             sarg = [a for a in arg if argdict[a]['ArgType'] == 'string']
             if len(sarg) > 1:
                 Error()
@@ -77,7 +77,7 @@ def Parser(mode):
                 Error()
 
             for a in arg:
-                DictSet(mode, d, argdict, argv, a, idx)
+                DictSet(d, argdict, argv, a, idx)
     for key, val in argdict.items():
         ProperName = val['ProperName']
         if ProperName not in d.keys():

@@ -66,12 +66,6 @@ gch_exp_c3 = f'Check for updates.'
 gch_exp_l2 = f'List up tracking files/directories.'
 gch_exp_p3 = f'Activate -p/--patch of git.'
 
-gdiff_exp_v = f'Detailed diff.'
-gdiff_exp_h = f'Include HEAD^ from the beginning.'
-gdiff_exp_a = f'Name specific author.'
-gdiff_exp_l = f'User log ver. instead.'
-gdiff_exp_v2 = f'Check version of gdiff.'
-
 
 def ArgSet(lst):
     d = {}
@@ -103,58 +97,45 @@ def ArgSet(lst):
     return d
 
 
-def ReturnArgdict(mode):
+def ReturnArgdict():
     arglist = []
-    if mode:
-        arglist.append(
-            ArgSet(['-v', '--verbose', 'flag', gdiff_exp_v,  False]))
-        arglist.append(
-            ArgSet(['-h', '--head',    'flag', gdiff_exp_h,  False]))
-        arglist.append(
-            ArgSet(['-a', '--author',  'flag', gdiff_exp_a,  False]))
-        arglist.append(
-            ArgSet(['-l', '--log',     'flag', gdiff_exp_l,  False]))
-        arglist.append(
-            ArgSet(['',   '--version', 'flag', gdiff_exp_v2, False]))
-        arglist.append(ArgSet(['', '--help', 'flag', exp_h, False]))
-    else:
-        arglist.append(
-            ArgSet(['-i', '--init',     'flag',   gch_exp_i,  defaults['init']]))
-        arglist.append(
-            ArgSet(['-v', '--verbose',  'flag',   gch_exp_v,  defaults['verbose']]))
-        arglist.append(
-            ArgSet(['-l', '--log',      'flag',   gch_exp_l,  defaults['log']]))
-        arglist.append(
-            ArgSet(['-r', '--remote',   'string', gch_exp_e,  defaults['remote']]))
-        arglist.append(
-            ArgSet(['-g', '--gitpath',  'string', gch_exp_g,  defaults['gitpath']]))
-        arglist.append(
-            ArgSet(['-f', '--filepath', 'string', gch_exp_f,  defaults['filepath']]))
-        arglist.append(
-            ArgSet(['-b', '--branch',   'string', gch_exp_b,  defaults['branch']]))
-        arglist.append(
-            ArgSet(['-c', '--commit',   'flag',   gch_exp_c,  defaults['commit']]))
-        arglist.append(
-            ArgSet(['-p', '--push',     'flag',   gch_exp_p,  defaults['push'], ]))
-        arglist.append(
-            ArgSet(['-d', '--diff',     'flag',   gch_exp_d,  defaults['diff']]))
-        arglist.append(
-            ArgSet(['',   '--checkout', 'flag',   gch_exp_c2, defaults['checkout']]))
-        arglist.append(
-            ArgSet(['',   '--reset',    'flag',   gch_exp_r,  defaults['reset']]))
-        arglist.append(
-            ArgSet(['',   '--pull',     'flag',   gch_exp_p2, defaults['pull']]))
-        arglist.append(
-            ArgSet(['',   '--ls',       'flag',   gch_exp_l2, defaults['ls']]))
-        arglist.append(
-            ArgSet(['',   '--patch',    'flag',   gch_exp_p3, defaults['patch']]))
-        arglist.append(
-            ArgSet(['',   '--check',    'flag',   gch_exp_c3, defaults['check']]))
-        arglist.append(
-            ArgSet(['',   '--version',  'flag',   gch_exp_v2, defaults['version']]))
-        arglist.append(
-            ArgSet(['-s', '--save',     'flag',   gch_exp_s,  False]))
-        arglist.append(ArgSet(['-h', '--help', 'flag', exp_h, False]))
+    arglist.append(
+        ArgSet(['-i', '--init',     'flag',   gch_exp_i,  defaults['init']]))
+    arglist.append(
+        ArgSet(['-v', '--verbose',  'flag',   gch_exp_v,  defaults['verbose']]))
+    arglist.append(
+        ArgSet(['-l', '--log',      'flag',   gch_exp_l,  defaults['log']]))
+    arglist.append(
+        ArgSet(['-r', '--remote',   'string', gch_exp_e,  defaults['remote']]))
+    arglist.append(
+        ArgSet(['-g', '--gitpath',  'string', gch_exp_g,  defaults['gitpath']]))
+    arglist.append(
+        ArgSet(['-f', '--filepath', 'string', gch_exp_f,  defaults['filepath']]))
+    arglist.append(
+        ArgSet(['-b', '--branch',   'string', gch_exp_b,  defaults['branch']]))
+    arglist.append(
+        ArgSet(['-c', '--commit',   'flag',   gch_exp_c,  defaults['commit']]))
+    arglist.append(
+        ArgSet(['-p', '--push',     'flag',   gch_exp_p,  defaults['push'], ]))
+    arglist.append(
+        ArgSet(['-d', '--diff',     'flag',   gch_exp_d,  defaults['diff']]))
+    arglist.append(
+        ArgSet(['',   '--checkout', 'flag',   gch_exp_c2, defaults['checkout']]))
+    arglist.append(
+        ArgSet(['',   '--reset',    'flag',   gch_exp_r,  defaults['reset']]))
+    arglist.append(
+        ArgSet(['',   '--pull',     'flag',   gch_exp_p2, defaults['pull']]))
+    arglist.append(
+        ArgSet(['',   '--ls',       'flag',   gch_exp_l2, defaults['ls']]))
+    arglist.append(
+        ArgSet(['',   '--patch',    'flag',   gch_exp_p3, defaults['patch']]))
+    arglist.append(
+        ArgSet(['',   '--check',    'flag',   gch_exp_c3, defaults['check']]))
+    arglist.append(
+        ArgSet(['',   '--version',  'flag',   gch_exp_v2, defaults['version']]))
+    arglist.append(
+        ArgSet(['-s', '--save',     'flag',   gch_exp_s,  False]))
+    arglist.append(ArgSet(['-h', '--help', 'flag', exp_h, False]))
 
     argdict = {}
     for arg in arglist:
@@ -167,7 +148,6 @@ def ReturnArgdict(mode):
 
 
 def StatusBar(d):
-    """ ONLY FOR GCH """
     print(f"GCH v{VERSION}: ", end='')
     string = f"{R}[GITDIR: \'{d['gitpath']}\']{M}"
     _, branch_list = getBranch(lst=True)
@@ -181,12 +161,11 @@ def StatusBar(d):
     print(string)
 
 
-def Help(mode):
-    argdict = ReturnArgdict(mode)
-    command = 'gdiff' if mode else 'gch'
+def Help():
+    argdict = ReturnArgdict()
 
-    print(f"{BL}{command} v{VERSION} (compiled: {DATE}){M}")
-    print(f"{BL}Usage: {command} [OPTION]\n\nOptions:{M}")
+    print(f"{BL}gch v{VERSION} (compiled: {DATE}){M}")
+    print(f"{BL}Usage: gch [OPTION]\n\nOptions:{M}")
     for key, value in argdict.items():
         if len(key) > 1:
             string = '  '
