@@ -100,6 +100,9 @@ def validateRef(x):
 
     if sum(a):
         print("   \u2937 `man git-check-ref-format` for more information.")
+        return False
+    else:
+        return True
 
 def br(string):
     ''' String Format for Branch Name '''
