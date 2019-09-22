@@ -85,14 +85,17 @@ def validateRef(x):
 
     a.append(sum([1 if x[0] == r else 0 for r in ['.','/']]))
     if a[-1]:
-        warning(f'Must not start with: {M}{GB}.{M},{GB}/{M}')
+        warning('')
+        print(f'>> Must not start with: {M}{GB}.{M},{GB}/{M}')
     a.append(sum([1 if x[-1] == r else 0 for r in ['.','/']]))
     if a[-1]:
-        warning(f'Must not end with: {M}{GB}.{M},{GB}/{M},{GB}.lock{M}')
+        warning('')
+        print(f'>> Must not end with: {M}{GB}.{M},{GB}/{M},{GB}.lock{M}')
 
     if len(x) > 4 and x[-5:] == '.lock':
         a.append(1)
-        warning(f'Must not end with: {M}{GB}.{M},{GB}/{M},{GB}.lock{M}')
+        warning('')
+        print(f'>> Must not end with: {M}{GB}.{M},{GB}/{M},{GB}.lock{M}')
 
     if x == '@':
         a.append(1)

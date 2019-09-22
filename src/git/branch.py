@@ -1,6 +1,6 @@
 import subprocess as sp
 from ..issues import warning, execute, abort, ok
-from ..util import CursorOff, wait_key, br
+from ..util import CursorOff, wait_key, br, validateRef
 from ..qs import getAnswer, prompt, isExist, confirm
 from .checkout import Checkout
 from ..colors import R, G, Y, B, P, C, GR, BL, TH, IT, M
@@ -106,17 +106,17 @@ def setBranch(branch, filepath):
 
 def newBranch(branch_list):
     while 1:
-        new_branch = prompt(
-            '\nEnter new branch name (spaces will be replaced with `-`)').replace(' ', '-')
+        new_branch = prompt('\nEnter new branch name')
         if new_branch in branch_list:
             warning(f'Branch `{new_branch}` already exists!')
         else:
-            ok(f'\bBranch `{new_branch}` successfully created!')
-            if confirm(f'Checkout to `{new_branch}`'):
-                execute([f'git checkout -b {new_branch}'])
-            else:
-                execute([f'git branch {new_branch}'])
-            break
+            if validateRef(new_branch):
+                ok(f'\bBranch `{new_branch}` successfully created!')
+                if confirm(f'Checkout to `{new_branch}`'):
+                    execute([f'git checkout -b {new_branch}'])
+                else:
+                    execute([f'git branch {new_branch}'])
+                break
 
 
 def renameBranch():
