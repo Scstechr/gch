@@ -8,3 +8,4 @@ release
 *.sh
 *.pyc
 *.log
+test*

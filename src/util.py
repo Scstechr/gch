@@ -41,22 +41,24 @@ def validateURL(x):
 
 
 def validateRefPrint(string, lst):
-    blank = ''.join([' ' for _ in range(len(string)+2)])
+    warning(f'{string} must not be included!')
+    blank = ''.join([' ' for _ in range(len(string)+5)])
     _list = []
     for idx, item in enumerate(lst):
-        if idx%10 == 0:
+        if idx%9 == 0:
             _list.append('')
             _list[-1] += ',' + f'{GB}{item}{M}'
         else:
             _list[-1] += ',' + f'{GB}{item}{M}'
     for idx, col in enumerate(_list):
         if not idx:
-            print(string, ':', col[1:])
+            print('>>', string, ':', col[1:])
         else:
             print(blank, col[1:])
 
 
 def validateRef(x):
+    a = []
     control = ['\x00', '\x01', '\x02', '\x03', '\x04', '\x05', '\x06']
     control += ['\x07', '\x08', '\x09', '\x0a', '\x0b', '\x0c', '\x0d']
     control += ['\x0e', '\x0f', '\x10', '\x11', '\x12', '\x13', '\x14']
@@ -67,19 +69,37 @@ def validateRef(x):
     _control += ['\\x0e', '\\x0f', '\\x10', '\\x11', '\\x12', '\\x13', '\\x14']
     _control += ['\\x15', '\\x16', '\\x17', '\\x18', '\\x19', '\\x1a', '\\x1b']
     _control += ['\\x1c', '\\x1d', '\\x1e', '\\x1f', '\\x7f']
-    if sum([1 if x.count(r) else 0 for r in control]):
-        warning('Control code must not be included')
+    a.append(sum([1 if x.count(r) else 0 for r in control]))
+    if a[-1]:
         validateRefPrint('Control codes', _control)
 
     # na = not allowed
     na_char = [' ', '~', '^', ':', '?', '*', '[', '\\']
-    if sum([1 if x.count(r) else 0 for r in na_char]):
-        warning('Special characters code must not be included')
+    a.append(sum([1 if x.count(r) else 0 for r in na_char]))
+    if a[-1]:
         validateRefPrint('Special characters', na_char)
     na_str = ['..', '@{', '//']
-    if sum([1 if x.count(r) else 0 for r in na_str]):
-        warning('Special strings code must not be included')
+    a.append(sum([1 if x.count(r) else 0 for r in na_str]))
+    if a[-1]:
         validateRefPrint('Special strings', na_str)
+
+    a.append(sum([1 if x[0] == r else 0 for r in ['.','/']]))
+    if a[-1]:
+        warning(f'Must not start with: {M}{GB}.{M},{GB}/{M}')
+    a.append(sum([1 if x[-1] == r else 0 for r in ['.','/']]))
+    if a[-1]:
+        warning(f'Must not end with: {M}{GB}.{M},{GB}/{M},{GB}.lock{M}')
+
+    if len(x) > 4 and x[-5:] == '.lock':
+        a.append(1)
+        warning(f'Must not end with: {M}{GB}.{M},{GB}/{M},{GB}.lock{M}')
+
+    if x == '@':
+        a.append(1)
+        warning(f'Must not be: {M}{GB}@{M}')
+
+    if sum(a):
+        print("   \u2937 `man git-check-ref-format` for more information.")
 
 def br(string):
     ''' String Format for Branch Name '''
