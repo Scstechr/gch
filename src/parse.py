@@ -1,6 +1,7 @@
 from . import issues
 import sys
 from .arg import ReturnArgdict, Help
+from .git.branch import getBranch
 
 
 def Require(a):
@@ -82,6 +83,8 @@ def Parser():
         ProperName = val['ProperName']
         if ProperName not in d.keys():
             d[ProperName] = val['Default']
+    if d['branch'] == '@':
+        d['branch'] = getBranch()
     return d
 
 
