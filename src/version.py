@@ -4,8 +4,8 @@ import urllib.error as err
 from . import issues
 from .colors import BL, M
 
-VERSION = '1.40'
-DATE = "2019-09-22 20:17:17 UTC"
+VERSION = '1.41'
+DATE = "2019-09-24 08:41:44 UTC"
 PYTHON_VERSION = '3.7.3'
 PLATFM_VERSION = 'Darwin-18.0.0-x86_64-i386-64bit'
 PYINST_VERSION = '3.5'
