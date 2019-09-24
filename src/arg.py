@@ -177,4 +177,9 @@ def Help():
             string = f'{BL}' + \
                 f'{string}'.ljust(20) + f"| {M}{value['ExplainString']}"
             print(string)
+    print(f"{BL}Macro(s):{M}")
+    # string = f'{BL}' + \
+    #     f'@'.ljust(20) + f"| {M}Current branch."
+    # print(string)
+
     sys.exit()
