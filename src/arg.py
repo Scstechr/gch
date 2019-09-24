@@ -4,7 +4,7 @@ from .version import VERSION, DATE
 from . import issues
 from .git.remote import getRemote
 from .git.branch import getBranch
-from .colors import R, G, Y, BL, M
+from .colors import R, G, Y, BL, M, UL
 
 IGNORE = ['init', 'log', 'version', 'help', 'reset',
           'save', 'diff', 'checkout', 'ls', 'pull']
@@ -163,9 +163,10 @@ def StatusBar(d):
 
 def Help():
     argdict = ReturnArgdict()
+    bar = '\u2502'
 
     print(f"{BL}gch v{VERSION} (compiled: {DATE}){M}")
-    print(f"{BL}Usage: gch [OPTION]\n\nOptions:{M}")
+    print(f"{BL}Usage: gch [OPTION]\n\n{UL}Options:{M}")
     for key, value in argdict.items():
         if len(key) > 1:
             string = '  '
@@ -175,11 +176,11 @@ def Help():
             else:
                 string += '--' + value['ProperName']
             string = f'{BL}' + \
-                f'{string}'.ljust(20) + f"| {M}{value['ExplainString']}"
+                f'{string}'.ljust(20) + f"{bar} {M}{value['ExplainString']}"
             print(string)
-    print(f"{BL}Macro(s):{M}")
-    # string = f'{BL}' + \
-    #     f'@'.ljust(20) + f"| {M}Current branch."
-    # print(string)
+    print(f"\n{BL}{UL}Macro(s):{M}")
+    string = f'{BL}' + \
+        f'  @'.ljust(20) + f"{bar} {M}Current branch."
+    print(string)
 
     sys.exit()
