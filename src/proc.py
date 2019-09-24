@@ -22,7 +22,7 @@ from .colors import BL
 diffcmd = 'git diff --cached --ignore-all-space --ignore-blank-lines'
 
 
-def proc(d, MODE=0):
+def proc(d):
     init = d['init']
     gitpath = d['gitpath']
     filepath = d['filepath']
@@ -42,7 +42,7 @@ def proc(d, MODE=0):
     patch = d['patch']
 
     if d['help']:
-        Help(MODE)
+        Help()
 
     if version:
         Version('GCH - Git Commit Handler')
