@@ -7,17 +7,17 @@ def Reset(patch):
     warning('Options with `--hard` must be done with caution')
     opt = []
     opt.append(
-        '{IT}git commit --amend{M}          > Change message of last commit')
+        f'{IT}git commit --amend{M}          > Change message of last commit')
     opt.append(
-        '{IT}git reset --soft HEAD^{M}      > Undo last commit (soft)')
+        f'{IT}git reset --soft HEAD^{M}      > Undo last commit (soft)')
     opt.append(
-        '{IT}git reset {R}--hard{M}{IT} HEAD^{M}      > Undo last commit')
+        f'{IT}git reset {R}--hard{M}{IT} HEAD^{M}      > Undo last commit')
     opt.append(
-        '{IT}git reset {R}--hard{M}{IT} HEAD{M}       > Undo changes from last commit')
+        f'{IT}git reset {R}--hard{M}{IT} HEAD{M}       > Undo changes from last commit')
     opt.append(
-        '{IT}git reset {R}--hard{M}{IT} <hash>{M}     > Undo changes from past commit')
+        f'{IT}git reset {R}--hard{M}{IT} <hash>{M}     > Undo changes from past commit')
     opt.append(
-        '{IT}git reset {R}--hard{M}{IT} ORIG_HEAD{M}  > Undo most recent reset')
+        f'{IT}git reset {R}--hard{M}{IT} ORIG_HEAD{M}  > Undo most recent reset')
     ans = getAnswer(opt)
     if ans == 1:
         execute(['git commit --amend'])
