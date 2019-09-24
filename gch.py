@@ -19,16 +19,16 @@ issues.version(3)
 
 def main():
     d = Parser()
-    proc(d)
-    # result = None
-    # with suppress(IOError, EOFError, KeyboardInterrupt):
-    #     with Executor() as executor:
-    #         if d['check']:
-    #             result = executor.submit(CheckVersion)
-    #         executor.submit(proc, d)
+    # proc(d)
+    result = None
+    with suppress(IOError, EOFError, KeyboardInterrupt):
+        with Executor() as executor:
+            if d['check']:
+                result = executor.submit(CheckVersion)
+            executor.submit(proc, d)
 
-    # if d['check'] and result:
-    #     ShowVersion(result.result())
+    if d['check'] and result:
+        ShowVersion(result.result())
 
 
 if __name__ == "__main__":
