@@ -28,27 +28,32 @@ $ brew update; brew upgrade gch
 
 ```bash
 $ gch --help
-gch v1.30 (compiled: 2019-09-10 09:17:18 UTC)
+gch v1.42 (compiled: 2019-09-24 11:24:47 UTC)
 Usage: gch [OPTION]
 
 Options:
-  -i, --init        | Run initializer
-  -v, --verbose     | Verbose option.
-  -l, --log         | Git log with option.
-  -r, --remote      | Choose which remote repository for push.
-  -g, --gitpath     | Path of dir that contains `.git`.
-  -f, --filepath    | Path/Regex of staging file/dir.
-  -b, --branch      | Commiting branch.
-  -c, --commit      | Commit.
-  -p, --push        | Push.
-  -s, --save        | Save settings
-  -d, --diff        | Open diff tool
-  --checkout        | Handling checkouts
-  --reset           | Reset.
-  --pull            | Pull from remote repository. 
-  --ls              | List up tracking files/directories
-  --version         | Check version of gch
-  -h, --help        | Show this message and exit.
+  -i, --init        │ Run initializer
+  -v, --verbose     │ Verbose option.
+  -l, --log         │ Git log with option.
+  -r, --remote      │ Choose which remote repository for push.
+  -g, --gitpath     │ Path of dir that contains `.git`.
+  -f, --filepath    │ Path/Regex of staging file/dir.
+  -b, --branch      │ Commiting branch.
+  -c, --commit      │ Commit.
+  -p, --push        │ Push.
+  -d, --diff        │ Open diff tool.
+  --checkout        │ Handling checkouts.
+  --reset           │ Reset.
+  --pull            │ Pull from remote repository.
+  --ls              │ List up tracking files/directories.
+  --patch           │ Activate -p/--patch of git.
+  --check           │ Check for updates.
+  --version         │ Check version of gch.
+  -s, --save        │ Save settings of gch.
+  -h, --help        │ Show this message and exit.
+
+Macro(s):
+  @       
 ```
 ### Simple command
 
