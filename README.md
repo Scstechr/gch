@@ -53,7 +53,8 @@ Options:
   -h, --help        │ Show this message and exit.
 
 Macro(s):
-  @       
+  @                 │ Current branch.
+
 ```
 ### Simple command
 
