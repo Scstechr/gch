@@ -3,7 +3,7 @@ import termios
 import sys
 from contextlib import suppress
 from urllib.parse import urlparse
-from .issues import warning, execute, abort, ok
+from .issues import warning
 from .colors import M, GB
 
 
@@ -42,10 +42,10 @@ def validateURL(x):
 
 def validateRefPrint(string, lst):
     warning(f'{string} must not be included!')
-    blank = ''.join([' ' for _ in range(len(string)+5)])
+    blank = ''.join([' ' for _ in range(len(string) + 5)])
     _list = []
     for idx, item in enumerate(lst):
-        if idx%9 == 0:
+        if idx % 9 == 0:
             _list.append('')
             _list[-1] += ',' + f'{GB}{item}{M}'
         else:
@@ -83,11 +83,11 @@ def validateRef(x):
     if a[-1]:
         validateRefPrint('Special strings', na_str)
 
-    a.append(sum([1 if x[0] == r else 0 for r in ['.','/']]))
+    a.append(sum([1 if x[0] == r else 0 for r in ['.', '/']]))
     if a[-1]:
         warning('')
         print(f'>> Must not start with: {M}{GB}.{M},{GB}/{M}')
-    a.append(sum([1 if x[-1] == r else 0 for r in ['.','/']]))
+    a.append(sum([1 if x[-1] == r else 0 for r in ['.', '/']]))
     if a[-1]:
         warning('')
         print(f'>> Must not end with: {M}{GB}.{M},{GB}/{M},{GB}.lock{M}')
@@ -106,6 +106,7 @@ def validateRef(x):
         return False
     else:
         return True
+
 
 def br(string):
     ''' String Format for Branch Name '''
