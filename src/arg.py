@@ -7,7 +7,7 @@ from .git.branch import getBranch
 from .colors import R, G, Y, BL, M, UL
 
 IGNORE = ['init', 'log', 'version', 'help', 'reset',
-          'save', 'diff', 'checkout', 'ls', 'pull']
+          'save', 'diff', 'checkout', 'ls', 'pull', 'clone']
 
 
 defaults = {}
@@ -28,6 +28,7 @@ defaults['checkout'] = False
 defaults['ls'] = False
 defaults['check'] = False
 defaults['patch'] = False
+defaults['clone'] = False
 defaultspath = path.join(".", ".defaults.txt")
 if path.exists(defaultspath):
     with open(defaultspath, 'r') as readfile:
@@ -65,6 +66,7 @@ gch_exp_c2 = f'Handling checkouts.'
 gch_exp_c3 = f'Check for updates.'
 gch_exp_l2 = f'List up tracking files/directories.'
 gch_exp_p3 = f'Activate -p/--patch of git.'
+gch_exp_c2 = f'Clone remote repository.'
 
 
 def ArgSet(lst):
@@ -125,6 +127,8 @@ def ReturnArgdict():
         ArgSet(['',   '--reset',    'flag',   gch_exp_r,  defaults['reset']]))
     arglist.append(
         ArgSet(['',   '--pull',     'flag',   gch_exp_p2, defaults['pull']]))
+    arglist.append(
+        ArgSet(['',   '--clone',    'flag',   gch_exp_c2, defaults['clone']]))
     arglist.append(
         ArgSet(['',   '--ls',       'flag',   gch_exp_l2, defaults['ls']]))
     arglist.append(

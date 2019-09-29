@@ -10,6 +10,7 @@ from .git.commit import Commit
 from .git.status import Status
 from .git.init import Init
 from .git.ls_files import Ls
+from .git.clone import Clone
 from .git.pull import Pull
 from .git.push import Push
 from .git.reset import Reset
@@ -44,8 +45,11 @@ def proc(d):
     if d['help']:
         Help()
 
-    if version:
+    if d['version']:
         Version('GCH - Git Commit Handler')
+
+    if d['clone']:
+        Clone()
 
     StatusBar(d)
 

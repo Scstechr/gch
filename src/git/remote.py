@@ -24,7 +24,5 @@ def Remote(remote):
                 if validateURL(remote_url):
                     execute([f'git remote add {remote} {remote_url}'])
                     break
-                else:
-                    warning('Not valid URL')
         else:
             exit()

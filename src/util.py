@@ -37,6 +37,7 @@ def validateURL(x):
         result = urlparse(x)
         return all([result.scheme, result.netloc])
     except ValueError:
+        warning('Nor valid URL')
         return False
 
 
