@@ -2,7 +2,7 @@ import sys
 import subprocess as sp
 
 from ..issues import warning, execute, exit
-from ..qs import confirm
+from ..qs import confirm, prompt
 from ..util import validateURL
 
 def getRemote():
