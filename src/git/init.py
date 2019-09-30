@@ -8,13 +8,13 @@ from ..qs import prompt, confirm
 def Init(flag=False):
     if flag:
         execute([f'cat ~/.gitconfig'])
-        globalsetting()
+        GlobalSetting()
         sys.exit()
     # git config
     gitconfigpath = path.join(path.expanduser('~'), '.gitconfig')
     if not path.exists(gitconfigpath):
         print("~/.gitconfig file does not exist. => Start Initialization!")
-        globalsetting()
+        GlobalSetting()
 
     execute(['git init'])
 
