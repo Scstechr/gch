@@ -177,7 +177,7 @@ def page(verbose, selected, pages):
         lpp, width = setlength()
         hr()
         pagelen = len(pages[pagenum])
-        print(f'\033[2K{G}SELECTED:', selected, end='{M} ')
+        print(f'\033[2K{G}SELECTED:', selected, end=f'{M} ')
         print(f'| {R}[VERBOSE]{M}') if verbose else print()
         hr()
         for idx, opt in enumerate(pages[pagenum]):
