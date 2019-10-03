@@ -7,11 +7,11 @@ def Commit():
     commit_message = prompt("Commit Message [v:vim mode]")
     if commit_message.count('`'):
         warning(
-            '{M}{BL}`{M}{R} is not acceptable in this mode.')
-        if confirm('Replace {M}{BL}`{M}{C} with {M}{BL}\'{M}{C}'):
+            f'{M}{BL}`{M}{R} is not acceptable in this mode.')
+        if confirm(f'Replace {M}{BL}`{M}{C} with {M}{BL}\'{M}{C}'):
             commit_message = commit_message.replace('`', "'")
             warning(
-                '{M}{BL}`{M}{R} is now replaced with {M}{BL}\'{R}...')
+                f'{M}{BL}`{M}{R} is now replaced with {M}{BL}\'{R}...')
         else:
             warning('Now entering vim mode...')
             commit_message = 'v'
