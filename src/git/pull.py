@@ -1,4 +1,5 @@
 from ..issues import execute
+from .status import Status
 
 def Pull(remote, branch):
     if not Status():
