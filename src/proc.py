@@ -115,16 +115,15 @@ def proc(d):
         Log()
 
     p = ' -p' if patch else ''
-    if Status():
+    if pull:
+        Pull(remote, branch)
+    elif Status():
         issues.execute([f'git diff --stat'])
         if verbose:
             issues.execute([f'git add .{p}', diffcmd, f'git reset'])
         if commit:
             issues.execute([f'git add {filepath}{p}'])
             Commit()
-
-    if pull:
-        Pull(remote, branch)
 
     if push:
         Push(remote, branch)
