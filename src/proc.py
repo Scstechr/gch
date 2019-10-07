@@ -120,7 +120,8 @@ def proc(d):
     elif Status():
         issues.execute([f'git diff --stat'])
         if verbose:
-            issues.execute([f'git add .{p}', diffcmd, f'git reset'])
+            issues.execute([f'git add .{p}', diffcmd])
+        issues.execute(['git reset'])
         if commit:
             issues.execute([f'git add {filepath}{p}'])
             Commit()
