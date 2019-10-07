@@ -7,7 +7,9 @@ def Reset(patch):
     warning('Options with `--hard` must be done with caution')
     opt = []
     opt.append(
-        f'{IT}git commit --amend{M}          > Change message of last commit')
+        f'{IT}git commit --amend{M}          > Change message of last commit.')
+    opt.append(
+        f'{IT}git reset                      > Unstage all the files that are added.')
     opt.append(
         f'{IT}git reset --soft HEAD^{M}      > Undo last commit (soft)')
     opt.append(
@@ -22,12 +24,14 @@ def Reset(patch):
     if ans == 1:
         execute(['git commit --amend'])
     elif ans == 2:
-        execute(['git reset --soft HEAD^'])
+        execute(['git reset'])
     elif ans == 3:
-        execute(['git reset --hard HEAD^'])
+        execute(['git reset --soft HEAD^'])
     elif ans == 4:
-        execute(['git reset --hard HEAD'])
+        execute(['git reset --hard HEAD^'])
     elif ans == 5:
+        execute(['git reset --hard HEAD'])
+    elif ans == 6:
         warning('Select hash from diff tool...')
         flag = False
         if confirm('Do you want to name specific author?'):
