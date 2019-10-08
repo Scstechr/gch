@@ -9,7 +9,7 @@ def Reset(patch):
     opt.append(
         f'{IT}git commit --amend{M}          > Change message of last commit.')
     opt.append(
-        f'{IT}git reset                      > Unstage all the files that are added.')
+        f'{IT}git reset{M}                   > Unstage all the files that are added.')
     opt.append(
         f'{IT}git reset --soft HEAD^{M}      > Undo last commit (soft)')
     opt.append(
