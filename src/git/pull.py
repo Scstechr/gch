@@ -5,6 +5,7 @@ from ..util import br
 from .commit import Commit
 
 def Pull(remote, branch):
+    current_branch, _ = getBranch(lst=True)
     if not Status():
         execute([f'git pull {remote} {branch}'])
     else:
@@ -13,6 +14,7 @@ def Pull(remote, branch):
             f'\nTheres some changes in branch {br(current_branch)}.')
         qs = [f'Commit changes of branch {br(current_branch)}']
         qs.append(f'Stash changes of branch {br(current_branch)} ')
+        qs.append(f'Pull without commit/stash')
         answer = getAnswer(qs)
         if answer == 1:
             execute([f'git add .', f'git diff --stat'])
