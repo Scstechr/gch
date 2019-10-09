@@ -1,5 +1,8 @@
 from ..issues import execute
 from .status import Status
+from ..qs import getAnswer
+from ..util import br
+from .commit import Commit
 
 def Pull(remote, branch):
     if not Status():
