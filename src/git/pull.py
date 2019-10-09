@@ -3,6 +3,7 @@ from .status import Status
 from ..qs import getAnswer
 from ..util import br
 from .commit import Commit
+from .branch import getBranch
 
 def Pull(remote, branch):
     current_branch, _ = getBranch(lst=True)
