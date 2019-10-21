@@ -21,6 +21,7 @@ def main():
         proc(d)
 
     if d['check']:
+        result = CheckVersion()
         ShowVersion(result.result())
 
 
