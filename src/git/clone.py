@@ -13,6 +13,7 @@ def Clone():
         if validateURL(remote_url):
             break
     name = remote_url.split('/').pop()
+    name, ext = os.path.splitext(name)
     if confirm(f'Clone it in the directory `./{name}`?'):
         directory = name
     else:
