@@ -3,6 +3,7 @@ import subprocess as sp
 from ..issues import warning, execute, exit, ok
 from ..qs import confirm, prompt
 from ..util import validateRef, validateURL
+import os.path as path
 
 
 def Clone():
@@ -13,7 +14,7 @@ def Clone():
         if validateURL(remote_url):
             break
     name = remote_url.split('/').pop()
-    name, ext = os.path.splitext(name)
+    name, ext = path.splitext(name)
     if confirm(f'Clone it in the directory `./{name}`?'):
         directory = name
     else:

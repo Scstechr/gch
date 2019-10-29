@@ -6,7 +6,7 @@ from .git.remote import getRemote
 from .git.branch import getBranch
 from .colors import R, G, Y, BL, M, UL
 
-IGNORE = ['init', 'log', 'version', 'help', 'reset',
+IGNORE = ['push', 'commit', 'init', 'log', 'version', 'help', 'reset',
           'save', 'diff', 'checkout', 'ls', 'pull', 'clone']
 
 
